@@ -14,6 +14,6 @@ The purpose of this test suite is to provide comprehensive health checks that ru
 
 ## Status reports
 
-## Posting callbacks to Statuspage.io
+### Posting callbacks to Statuspage.io
 
-## E-mailing failures to development team
+### E-mailing failures to development team
