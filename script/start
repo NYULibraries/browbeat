@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# install gems if necessary
+bundle check || bundle install
+
+# run cucumber
+bundle exec cucumber
