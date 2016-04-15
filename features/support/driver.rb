@@ -33,7 +33,8 @@ else
       phantomjs_options: ['--load-images=no', '--ignore-ssl-errors=yes'],
       window_size: [1280, 1024],
       timeout: 120,
-      js_errors: false
+      js_errors: false,
+      phantomjs_logger: StringIO.new
     )
   end
   Capybara.default_driver    = :poltergeist
