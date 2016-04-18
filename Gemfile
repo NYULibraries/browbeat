@@ -5,9 +5,7 @@ group :test do
   gem 'factory_girl'
   gem 'capybara'
 
-  gem 'sauce-connect'
-  gem 'sauce-cucumber', :require => false
-  gem 'sauce'
+  gem 'cucumber'#, '~> 2.0'
   gem 'selenium-webdriver'
   gem 'phantomjs'
   gem 'poltergeist'

@@ -35,3 +35,6 @@ USER $USERNAME
 RUN touch /$USERNAME/.ssh/known_hosts
 # add github key
 RUN ssh-keyscan -t rsa github.com >> /$USERNAME/.ssh/known_hosts
+
+# prepend run commands with "bundle exec"
+ENTRYPOINT ["bundle", "exec"]

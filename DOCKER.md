@@ -40,9 +40,13 @@ You may need to run `docker login` for access to pre-built images.
 Build and run cucumber tests in a docker container:
 
 ```
-rake docker:up
+rake docker:browbeat:check:all
 ```
 
 ### Bundler
 
 Dockerfile configures bundler to install gems into a separate container "gembox" configured in docker-compose, based on a [blog post](https://medium.com/@fbzga/how-to-cache-bundle-install-with-docker-7bed453a5800#.bpd1rz5ya). This avoids having to reinstall all gems when the web container must be rebuilt.
+
+#### Tests in parallel
+
+Can we run tests in parallel with docker? http://palexander.posthaven.com/running-ruby-tests-in-parallel-using-rake-fork-and-docker

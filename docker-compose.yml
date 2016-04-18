@@ -3,6 +3,7 @@ services:
   web:
     build: .
     command: "script/start"
+    tty: true
     volumes:
       - .:/login
     volumes_from:
