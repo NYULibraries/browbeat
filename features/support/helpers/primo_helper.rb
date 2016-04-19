@@ -4,6 +4,14 @@ module Browbeat
       "/primo_library/libweb/action/search.do"
     end
 
+    # returns URL for given name; matches to _url methods in helper files
+    # via case-insensitive match, e.g.:
+    # url_to("BobCat") #=> bobcat_url
+    # url_to("BobCat staging") #=> bobcat_staging_url
+    def url_to(url_name)
+      send(:"#{url_name.downcase.gsub(/\s+/,'_')}_url")
+    end
+
     def bobcat_url
       "http://bobcat.library.nyu.edu/"
     end

@@ -3,7 +3,7 @@ Given(/^I visit "(.*?)"$/) do |url|
 end
 
 Given(/^I visit ([\w\s]+)$/) do |url_name|
-  visit send(:"#{url_name.downcase.gsub(/\s+/,'_')}_url")
+  visit url_to url_name
 end
 
 Then(/^my browser should resolve to BobCat$/) do
