@@ -9,5 +9,9 @@ namespace :browbeat do
     Cucumber::Rake::Task.new :primo do |t|
       t.cucumber_opts = "features/primo/"
     end
+
+    Cucumber::Rake::Task.new :login do |t|
+      t.cucumber_opts = "features/login/"
+    end
   end
 end
