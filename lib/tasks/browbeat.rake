@@ -4,14 +4,19 @@ require 'cucumber/rake/task'
 
 namespace :browbeat do
   namespace :check do
-    Cucumber::Rake::Task.new :all
-
-    Cucumber::Rake::Task.new :primo do |t|
-      t.cucumber_opts = "features/primo/"
+    desc "Run all cucumber features (ping.feature files first)"
+    task :all do
+      sh 'cucumber features/**/ping.feature features/'
     end
 
-    Cucumber::Rake::Task.new :login do |t|
-      t.cucumber_opts = "features/login/"
+    desc "Run all cucumber features for primo (ping.feature first)"
+    task :primo do
+      sh 'cucumber features/primo/ping.feature features/primo/'
+    end
+
+    desc "Run all cucumber features for login (ping.feature first)"
+    task :login do
+      sh 'cucumber features/login/ping.feature features/login/'
     end
   end
 end
