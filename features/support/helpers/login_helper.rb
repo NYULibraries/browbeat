@@ -1,5 +1,13 @@
 module Browbeat
   module LoginHelper
+    def login_username
+      ENV['LOGIN_USERNAME'] || raise("Must specify LOGIN_USERNAME to run login features")
+    end
+
+    def login_password
+      ENV['LOGIN_PASSWORD'] || raise("Must specify LOGIN_PASSWORD to run login features")
+    end
+
     def login_url
       "https://login.library.nyu.edu"
     end
