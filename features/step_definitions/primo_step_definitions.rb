@@ -1,8 +1,4 @@
-Given(/^I visit "(.*?)"$/) do |url|
-  visit url
-end
-
-Given(/^I visit ([\w\s]+)$/) do |url_name|
+Given(/^I visit (.+)$/) do |url_name|
   visit url_to url_name
 end
 
@@ -19,10 +15,6 @@ When(/^I search for "(.*?)"$/) do |search_term|
     fill_in("search_field", :with => search_term)
     click_on 'Search'
   end
-end
-
-Then(/^I should see results$/) do
-  expect(page_results).to have_content
 end
 
 Then(/^I should see results matching "(.+)"$/) do |content|
