@@ -1,3 +1,5 @@
+require 'yaml'
+
 module Browbeat
   module UrlHelper
     URL_CONFIG_FILEPATH = 'config/urls.yml'
