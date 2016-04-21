@@ -38,6 +38,18 @@ rake docker:browbeat:check:primo
 
 ### Run on SauceLabs
 
+#### Dependencies
+
+Sauce on Cucumber requires `sauce-cucumber` and `sauce-connect` gems. While bundler unhelpfully won't raise an error, these require `cucumber` version `< 2.0`.
+
+The `sauce-connect` gem requires installing the Sauce Connect 4 executable, which as its written in C can't be installed via bundler/gems. Its available via `npm`.
+
+#### "Swappable Sauce" on Cucumber
+
+Ideally, we'd like our cucumber tests to run either locally or on sauce (via different commands/flags). However, I can't find documentation on this.
+
+According to their [documentation](https://github.com/saucelabs/sauce_ruby/wiki/Cucumber-and-Capybara), Sauce looks for `@selenium` tags on Cucumber tests to determine which to run on Sauce; others are run locally. The documentation doesn't mention how to modify/configure this behavior. This complicates extending "Swappable Sauce" ([documented](https://github.com/saucelabs/sauce_ruby/wiki/Swappable-Sauce) for RSpec only) to Cucumber.
+
 ### Run on Jenkins
 
 ## Status reports
