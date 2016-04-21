@@ -11,12 +11,12 @@ namespace :browbeat do
 
     desc "Run all cucumber features for primo (ping.feature first)"
     task :primo do
-      sh 'cucumber features/primo/ping.feature features/primo/'
+      sh 'cucumber --require features/ features/primo/ping.feature features/primo/'
     end
 
     desc "Run all cucumber features for login (ping.feature first)"
     task :login do
-      sh 'cucumber features/login/ping.feature features/login/'
+      sh 'cucumber --require features/ features/login/ping.feature features/login/'
     end
   end
 end
