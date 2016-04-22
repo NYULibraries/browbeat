@@ -4,7 +4,9 @@ require 'capybara/poltergeist'
 require 'capybara'
 require 'rspec'
 require 'pry'
-require 'sauce/cucumber'
+if ENV["RUN_ON_SAUCE"]
+  require 'sauce/cucumber'
+end
 
 # if flagged to on sauce, set
 if ENV["RUN_ON_SAUCE"]
@@ -26,10 +28,12 @@ Dir["features/support/helpers/**/*.rb"].each do |helper|
   World(Kernel.const_get(helper_name))
 end
 
-# must configure sauce even if not running to avoid errors
-Sauce.config do |config|
-  # enable sauce-connect
-  config[:start_tunnel] = false
-  # point to npm-installed sauce-connect 4 executable
-  config[:sauce_connect_4_executable] = 'node_modules/sauce-connect/ext/Sauce-Connect.jar'
+if ENV["RUN_ON_SAUCE"]
+  # must configure sauce even if not running to avoid errors
+  Sauce.config do |config|
+    # enable sauce-connect
+    config[:start_tunnel] = false
+    # point to npm-installed sauce-connect 4 executable
+    config[:sauce_connect_4_executable] = 'node_modules/sauce-connect/ext/Sauce-Connect.jar'
+  end
 end
