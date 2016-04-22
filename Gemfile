@@ -11,7 +11,9 @@ group :test do
   gem 'poltergeist'
   gem 'figs', '2.0.0'
   gem 'pry'
-
+  
   gem 'sauce-cucumber'#, '~> 3.1.1'
   gem 'sauce-connect'
+
+  gem 'rake'
 end
