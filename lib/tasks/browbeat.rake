@@ -18,5 +18,10 @@ namespace :browbeat do
     task :login do
       sh 'cucumber --require features/ features/login/ping.feature features/login/'
     end
+
+    desc "Run all cucumber features for PDS (ping.feature first)"
+    task :pds do
+      sh 'cucumber --require features/ features/pds/ping.feature features/pds/'
+    end
   end
 end

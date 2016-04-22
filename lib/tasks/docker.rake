@@ -36,6 +36,11 @@ namespace :docker do
       task :login => ["docker:up"] do
         sh 'docker-compose run web rake browbeat:check:login'
       end
+
+      desc "Run all cucumber tests for PDS in docker containers"
+      task :pds => ["docker:up"] do
+        sh 'docker-compose run web rake browbeat:check:pds'
+      end
     end
   end
 end
