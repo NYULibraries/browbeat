@@ -11,4 +11,6 @@ group :test do
   gem 'poltergeist'
   gem 'figs', '2.0.0'
   gem 'pry'
+
+  gem 'rake'
 end
