@@ -15,7 +15,7 @@ if ENV["RUN_ON_SAUCE"]
 else
   puts "Running on default drivers..."
   Capybara.default_driver = :webkit
-  Capybara.javascript_driver = :selenium
+  Capybara.javascript_driver = :webkit
 end
 
 # Require and include helper modules
