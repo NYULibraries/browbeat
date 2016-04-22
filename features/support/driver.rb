@@ -32,12 +32,12 @@ else
       app,
       phantomjs_options: ['--load-images=no', '--ignore-ssl-errors=yes'],
       window_size: [1280, 1024],
-      timeout: 120,
+      timeout: 1,
       js_errors: false,
       phantomjs_logger: StringIO.new
     )
   end
   Capybara.default_driver    = :poltergeist
   Capybara.javascript_driver = :poltergeist
-  Capybara.default_max_wait_time = 20
+  Capybara.default_wait_time = 1
 end
