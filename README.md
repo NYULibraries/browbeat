@@ -44,11 +44,10 @@ Using a configuration based on one described in [a post by dankohn](https://gith
 DRIVER=sauce rake browbeat:check:all
 ```
 
-Note that `DRIVER` may also be set as `"firefox"` or `"chrome"` to run in those browsers via selenium
+Note that `DRIVER` may also be set as a browser name to run via selenium in that browser, e.g.:
 
 ```
 DRIVER=firefox rake browbeat:check:all
-DRIVER=chrome rake browbeat:check:all
 ```
 
 Without the `DRIVER` set, tests will be run via poltergeist:
