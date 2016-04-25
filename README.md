@@ -38,17 +38,32 @@ rake docker:browbeat:check:primo
 
 ### Run on SauceLabs
 
+Using a configuration based on one described in [a post by dankohn](https://github.com/saucelabs/sauce_ruby/issues/261), we can trigger running on sauce with the `DRIVER` environment variable set to `"sauce"`, e.g.:
+
+```
+DRIVER=sauce rake browbeat:check:all
+```
+
+Note that `DRIVER` may also be set as `"firefox"` or `"chrome"` to run in those browsers via selenium
+
+```
+DRIVER=firefox rake browbeat:check:all
+DRIVER=chrome rake browbeat:check:all
+```
+
+Without the `DRIVER` set, tests will be run via poltergeist:
+
+```
+rake browbeat:check:all
+```
+
 #### Dependencies
 
-Sauce on Cucumber requires `sauce-cucumber` and `sauce-connect` gems. While bundler unhelpfully won't raise an error, these require `cucumber` version `< 2.0`.
-
-The `sauce-connect` gem requires installing the Sauce Connect 4 executable, which as its written in C can't be installed via bundler/gems. Its available via `npm`.
+Sauce on Cucumber requires `sauce-cucumber` and `sauce-connect` gems. These require `cucumber` version `< 2.0`.
 
 #### "Swappable Sauce" on Cucumber
 
-Ideally, we'd like our cucumber tests to run either locally or on sauce (via different commands/flags). However, I can't find documentation on this.
-
-According to their [documentation](https://github.com/saucelabs/sauce_ruby/wiki/Cucumber-and-Capybara), Sauce looks for `@selenium` tags on Cucumber tests to determine which to run on Sauce; others are run locally. The documentation doesn't mention how to modify/configure this behavior. This complicates extending "Swappable Sauce" ([documented](https://github.com/saucelabs/sauce_ruby/wiki/Swappable-Sauce) for RSpec only) to Cucumber.
+Unfortunately, none of Sauce's documentation mentions how to configure tests to be run either in poltergeist or in sauce. We're limited mainly by the vexing decision to trigger sauce tests with the `@selenium` tag. This is all the more vexing of a design decision since `@selenium` replaces the current driver with `@selenium` in vanilla capybara. To get around this, we've added a callback to disable this override as suggested in a [post by dankohn](https://github.com/saucelabs/sauce_ruby/issues/261).
 
 ### Run on Jenkins
 

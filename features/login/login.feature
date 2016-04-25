@@ -1,4 +1,4 @@
-@functionality
+@functionality @selenium
 Feature: Login is running
   As a NYU Libraries user
   I want to be able to single-sign-on to Libraries' application
