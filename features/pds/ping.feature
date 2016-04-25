@@ -1,4 +1,4 @@
-@ping
+@ping @selenium
 Feature: PDS is running
   As a BobCat user,
   I want to be able to login

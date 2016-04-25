@@ -1,7 +1,0 @@
-{
-  "name": "browbeat",
-  "version": "1.0.0",
-  "devDependencies" : {
-    "sauce-connect": "^0.1.1"
-  }
-}
