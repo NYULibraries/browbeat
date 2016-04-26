@@ -26,8 +26,8 @@ def configure_sauce
     config[:name] = "#{`basename $(git rev-parse --show-toplevel)`}"
     config[:build] = "#{`git rev-parse --short HEAD`}"
     config[:tags] = [ ENV['CI'] ? "CI" : `whoami`, "#{`git rev-parse --abbrev-ref HEAD`}" ]
-    config[:username] = ENV['SAUCE_USERNAME']
-    config[:access_key] = ENV['SAUCE_ACCESS_KEY']
+    config[:username] = ENV['SAUCE_USERNAME'] || raise("Set SAUCE_USERNAME and SAUCE_ACCESS_KEY to run on sauce")
+    config[:access_key] = ENV['SAUCE_ACCESS_KEY'] || raise("Set SAUCE_USERNAME and SAUCE_ACCESS_KEY to run on sauce")
     config['screen-resolution'] = "1280x1024"
   end
 end
