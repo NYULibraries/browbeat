@@ -12,6 +12,8 @@ namespace :docker do
   desc "Build docker compose after preconfiguring"
   task :build do
     sh 'docker-compose build'
+    # ensure docker user owns gembox (volume for gems)
+    sh 'docker-compose run -u root web chown -R wsops /gembox'
   end
 
   # runs docker compose after building
@@ -24,22 +26,22 @@ namespace :docker do
     namespace :check do
       desc "Run all cucumber tests in docker containers"
       task :all => ["docker:up"] do
-        sh 'docker-compose run web rake browbeat:check:all'
+        sh 'docker-compose run web bundle exec rake browbeat:check:all'
       end
 
       desc "Run all cucumber tests for primo in docker containers"
       task :primo => ["docker:up"] do
-        sh 'docker-compose run web rake browbeat:check:primo'
+        sh 'docker-compose run web bundle exec rake browbeat:check:primo'
       end
 
       desc "Run all cucumber tests for login in docker containers"
       task :login => ["docker:up"] do
-        sh 'docker-compose run web rake browbeat:check:login'
+        sh 'docker-compose run web bundle exec rake browbeat:check:login'
       end
 
       desc "Run all cucumber tests for PDS in docker containers"
       task :pds => ["docker:up"] do
-        sh 'docker-compose run web rake browbeat:check:pds'
+        sh 'docker-compose run web bundle exec rake browbeat:check:pds'
       end
     end
   end
