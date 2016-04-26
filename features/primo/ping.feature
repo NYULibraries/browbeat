@@ -1,4 +1,4 @@
-@ping
+@ping @selenium
 Feature: Primo is running
   As a BobCat user
   In order to know whether or not I can do my research today
