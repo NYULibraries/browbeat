@@ -13,7 +13,7 @@ module Browbeat
     end
 
     def logo_url_regex
-      /url\(http:\/\/bobcat(dev)?\.library\.nyu\.edu\/primo_library\/libweb\/custom\/assets\/images\/nyulibraries\/nyu\/header\.png\?\d+\)/
+      /url\("?http:\/\/bobcat(dev)?\.library\.nyu\.edu\/primo_library\/libweb\/custom\/assets\/images\/nyulibraries\/nyu\/header\.png\?\d+"?\)/
     end
   end
 end
