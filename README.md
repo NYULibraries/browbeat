@@ -14,10 +14,12 @@ Run all tests:
 rake browbeat:check:all
 ```
 
-Run just primo tests:
+Run just tests for a specific application:
 
 ```
 rake browbeat:check:primo
+rake browbeat:check:login
+rake browbeat:check:pds
 ```
 
 ### Run on Docker
@@ -30,10 +32,12 @@ Run all tests:
 rake docker:browbeat:check:all
 ```
 
-Run just primo tests:
+Run just tests for a specific application:
 
 ```
 rake docker:browbeat:check:primo
+rake docker:browbeat:check:login
+rake docker:browbeat:check:pds
 ```
 
 ### Run on SauceLabs
