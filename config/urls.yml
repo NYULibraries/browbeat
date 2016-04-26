@@ -14,3 +14,8 @@ pds lb server 2: https://primo2.bobst.nyu.edu/pds?func=load-login&institute=NYU
 pds staging: https://pdsdev.library.nyu.edu/pds?func=load-login&institute=NYU
 pds staging lb server 1: https://primodev1.bobst.nyu.edu/pds?func=load-login&institute=NYU
 pds staging lb server 2: https://primodev2.bobst.nyu.edu/pds?func=load-login&institute=NYU
+e-shelf: https://eshelf.library.nyu.edu/
+e-shelf lb server 1: https://web-pr-eshelf1.bobst.nyu.edu
+e-shelf lb server 2: https://web-pr-eshelf2.bobst.nyu.edu
+e-shelf staging: https://dev.eshelf.library.nyu.edu/
+e-shelf qa: https://qa.eshelf.library.nyu.edu/
