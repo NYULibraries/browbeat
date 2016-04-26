@@ -14,6 +14,8 @@ end
 # disable capybara overriding @selenium-tagged tests (required to run in sauce)
 # with capybara; our default driver is selenium
 # modified from https://github.com/saucelabs/sauce_ruby/issues/261
-Before do |scenario|
-  Capybara.current_driver = :poltergeist unless ENV['DRIVER']
+if ENV['DRIVER'].nil?
+  Before do |scenario|
+    Capybara.current_driver = :poltergeist
+  end
 end
