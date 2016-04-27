@@ -44,7 +44,7 @@ namespace :docker do
         sh 'docker-compose run web bundle exec rake browbeat:check:pds'
       end
 
-      desc "Run all cucumber tests for E-shelf in docker containers"
+      desc "Run all cucumber tests for e-Shelf in docker containers"
       task :eshelf => ["docker:up"] do
         sh 'docker-compose run web bundle exec rake browbeat:check:eshelf'
       end
