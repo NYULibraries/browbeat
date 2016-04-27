@@ -5,6 +5,7 @@ module Browbeat
     end
 
     def shibboleth_password
+      raise "Cannot access production Shibboleth password while running tests in Sauce" if ENV['DRIVER'] == 'sauce'
       get_env_variable_or_raise 'SHIBBOLETH_PASSWORD'
     end
 
