@@ -1,4 +1,4 @@
-Then /^my browser should resolve to (E-shelf.*)$/ do |eshelf_url|
+Then /^my browser should resolve to (e-Shelf.*)$/ do |eshelf_url|
   expect(page.current_url).to eq url_to eshelf_url
 end
 

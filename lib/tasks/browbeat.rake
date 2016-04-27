@@ -24,7 +24,7 @@ namespace :browbeat do
       sh 'bundle exec cucumber --require features/ features/pds/ping.feature features/pds/'
     end
 
-    desc "Run all cucumber features for E-shelf (ping.feature first)"
+    desc "Run all cucumber features for e-Shelf (ping.feature first)"
     task :eshelf do
       sh 'bundle exec cucumber --require features/ features/eshelf/ping.feature features/eshelf/'
     end
