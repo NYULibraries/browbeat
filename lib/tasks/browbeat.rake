@@ -28,5 +28,10 @@ namespace :browbeat do
     task :eshelf do
       sh 'bundle exec cucumber --require features/ features/eshelf/ping.feature features/eshelf/'
     end
+
+    desc "Run all cucumber features for GetIt (ping.feature first)"
+    task :getit do
+      sh 'bundle exec cucumber --require features/ features/getit/ping.feature features/getit/'
+    end
   end
 end
