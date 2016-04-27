@@ -9,10 +9,6 @@ When(/^I search for "(.*?)"$/) do |search_term|
   end
 end
 
-Then(/^I should see results matching "(.+)"$/) do |content|
-  expect(page_results).to have_content /#{content}/i
-end
-
 Then(/^I should see the tabbed interface$/) do
   expect(page.find('.nav-tabs')).to have_css 'li'
 end
