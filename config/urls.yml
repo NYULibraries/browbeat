@@ -19,3 +19,8 @@ e-shelf lb server 1: https://web-pr-eshelf1.bobst.nyu.edu
 e-shelf lb server 2: https://web-pr-eshelf2.bobst.nyu.edu
 e-shelf staging: https://dev.eshelf.library.nyu.edu/
 e-shelf qa: https://qa.eshelf.library.nyu.edu/
+getit: https://getit.library.nyu.edu/
+getit lb server 1: https://umlaut1.bobst.nyu.edu/
+getit lb server 2: https://umlaut2.bobst.nyu.edu/
+getit staging: https://dev.getit.library.nyu.edu/
+getit qa: https://qa.getit.library.nyu.edu/
