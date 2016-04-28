@@ -9,7 +9,7 @@ Feature: e-Shelf is running
     Given I visit BobCat
     When I search for "monk"
       And I add the first record to e-Shelf
-      Then the first record should show as in guest e-Shelf
+      Then the first record should show as "In guest e-Shelf"
     When I click e-Shelf link
       Then I should see results matching "monk"
 
@@ -18,6 +18,6 @@ Feature: e-Shelf is running
     Given I visit BobCat staging
     When I search for "monk"
       And I add the first record to e-Shelf
-      Then the first record should show as in guest e-Shelf
+      Then the first record should show as "In guest e-Shelf"
     When I click e-Shelf link
       Then I should see results matching "monk"
