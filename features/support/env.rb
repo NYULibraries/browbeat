@@ -21,3 +21,5 @@ Dir["features/support/helpers/**/*.rb"].each do |helper_path|
   require helper_path
   World constantize_helper_path helper_path
 end
+
+Figs.load()

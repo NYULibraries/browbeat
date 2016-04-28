@@ -1,4 +1,5 @@
 --- !ruby/object:Figs::Figsfile
+repo: git@github.com:NYULibraries/configula.git
 locations:
-- application.yml
-method: path
+- test_users.yml
+method: git
