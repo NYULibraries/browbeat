@@ -17,6 +17,6 @@ Then /^my browser should redirect to passive Login$/ do
   expect(page.current_path).to eq passive_login_path
 end
 
-Then /^the first record should show as in guest e-Shelf$/ do
-  expect(first_result).to have_content "In guest e-Shelf"
+Then /^the first record should show as "(.+)"$/ do |text|
+  expect(first_result).to have_content text
 end
