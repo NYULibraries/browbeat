@@ -13,5 +13,5 @@ Feature: Login is running
   @production @major_outage
   Scenario: Logging in on staging
     Given I visit Login staging
-    When I login as an aleph staging user
+    When I login as an NYU staging user
     Then I should be logged in
