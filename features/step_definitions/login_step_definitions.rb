@@ -3,7 +3,7 @@ Then(/^my browser should resolve to Login$/) do
 end
 
 When /^I login as an NYU user$/ do
-  step "I login as NYU user \"#{shibboleth_username}\" with password \"#{shibboleth_password}\""
+  pending # step "I login as NYU user \"#{shibboleth_username}\" with password \"#{shibboleth_password}\""
 end
 
 When /^I login as an NYU staging user$/ do
