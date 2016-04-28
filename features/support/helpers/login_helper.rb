@@ -1,20 +1,20 @@
 module Browbeat
   module LoginHelper
     def shibboleth_username
-      get_env_variable_or_raise 'SHIBBOLETH_USERNAME'
+      Figs::ENV.nyu["staff"]["username"]
     end
 
     def shibboleth_password
       raise "Cannot access production Shibboleth password while running tests in Sauce" if ENV['DRIVER'] == 'sauce'
-      get_env_variable_or_raise 'SHIBBOLETH_PASSWORD'
+      Figs::ENV.nyu["staff"]["password"]
     end
 
-    def aleph_staging_username
-      get_env_variable_or_raise 'ALEPH_STAGING_USERNAME'
+    def shibboleth_staging_username
+      Figs::ENV.nyu["staff"]["username"]
     end
 
-    def aleph_staging_password
-      get_env_variable_or_raise 'ALEPH_STAGING_PASSWORD'
+    def shibboleth_staging_password
+      Figs::ENV.nyu["staff"]["password"]
     end
 
     def get_env_variable_or_raise(variable_name)
