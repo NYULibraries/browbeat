@@ -13,7 +13,7 @@ Feature: e-Shelf is running
     When I click e-Shelf link
       Then I should see results matching "monk"
 
-  @production @major_outage
+  @staging @major_outage
   Scenario: Adding a record to e-Shelf on staging
     Given I visit BobCat staging
     When I search for "monk"
