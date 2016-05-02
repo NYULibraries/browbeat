@@ -24,3 +24,5 @@ getit lb server 1: https://umlaut1.bobst.nyu.edu/
 getit lb server 2: https://umlaut2.bobst.nyu.edu/
 getit staging: https://dev.getit.library.nyu.edu/
 getit qa: https://qa.getit.library.nyu.edu/
+aleph: https://aleph.library.nyu.edu/
+aleph staging: https://alephstage.library.nyu.edu/
