@@ -26,6 +26,8 @@ rake browbeat:check:pds
 
 First, install docker and ensure your environment is configured per `DOCKER.md`.
 
+You will need to add a passwordless private key `id_rsa` to the project root. This key needs Github access to the [Configula repository](https://github.com/NYULibraries/configula) for this docker configuration to work with Figs and Configula.
+
 Run all tests:
 
 ```
