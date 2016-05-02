@@ -33,5 +33,10 @@ namespace :browbeat do
     task :getit do
       sh 'bundle exec cucumber --require features/ features/getit/ping.feature features/getit/'
     end
+
+    desc "Run all cucumber features for Aleph (ping.feature first)"
+    task :aleph do
+      sh 'bundle exec cucumber --require features/ features/aleph/ping.feature features/aleph/'
+    end
   end
 end
