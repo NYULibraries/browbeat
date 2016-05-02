@@ -53,6 +53,11 @@ namespace :docker do
       task :getit => ["docker:up"] do
         sh 'docker-compose run web bundle exec rake browbeat:check:getit'
       end
+
+      desc "Run all cucumber tests for Aleph in docker containers"
+      task :aleph => ["docker:up"] do
+        sh 'docker-compose run web bundle exec rake browbeat:check:aleph'
+      end
     end
   end
 end
