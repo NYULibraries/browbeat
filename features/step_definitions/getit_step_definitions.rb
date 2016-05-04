@@ -19,8 +19,8 @@ Then /^I should see results under "(.+)" section in a new window$/ do |section_t
   within_new_window do
     expect(page).to have_content section_title
     within first_umlaut_section_matching(section_title) do
-      expect(page).to have_css '.response_item'
-      expect(page.first('.response_item')).to have_content
+      expect(page).to have_css '.umlaut_section_content'
+      expect(page.first('.umlaut_section_content')).to have_content
     end
   end
 end
