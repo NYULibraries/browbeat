@@ -7,29 +7,31 @@ Feature: e-Shelf is running
   @production @major_outage
   Scenario: Visiting e-Shelf on production
     Given I visit e-Shelf
-    Then my browser should respond with a success
+    Then my browser should respond with a success for e-Shelf
     And my browser should resolve to e-Shelf
 
   @production @degraded_performance
   Scenario: Visiting e-Shelf LB server 1 on production
     Given I visit e-Shelf LB server 1
-    Then my browser should respond with a success
-    And my browser should redirect to passive Login
+    And I visit e-Shelf LB server 1
+    Then my browser should respond with a success for e-Shelf
+    And my browser should resolve to e-Shelf LB server 1
 
   @production @degraded_performance
   Scenario: Visiting e-Shelf LB server 2 on production
     Given I visit e-Shelf LB server 2
-    Then my browser should respond with a success
-    And my browser should redirect to passive Login
+    And I visit e-Shelf LB server 2
+    Then my browser should respond with a success for e-Shelf
+    And my browser should resolve to e-Shelf LB server 2
 
   @staging @major_outage
   Scenario: Visiting e-Shelf on staging
     Given I visit e-Shelf staging
-    Then my browser should respond with a success
+    Then my browser should respond with a success for e-Shelf
     And my browser should resolve to e-Shelf staging
 
   @staging @major_outage
   Scenario: Visiting e-Shelf on staging QA
     Given I visit e-Shelf QA
-    Then my browser should respond with a success
+    Then my browser should respond with a success for e-Shelf
     And my browser should resolve to e-Shelf QA
