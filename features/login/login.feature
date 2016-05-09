@@ -10,7 +10,7 @@ Feature: Login is running
     When I login as an NYU user
     Then I should be logged in
 
-  @production @major_outage
+  @staging @major_outage
   Scenario: Logging in on staging
     Given I visit Login staging
     When I login as an NYU staging user
