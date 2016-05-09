@@ -26,3 +26,5 @@ getit staging: https://dev.getit.library.nyu.edu/
 getit qa: https://qa.getit.library.nyu.edu/
 aleph: https://aleph.library.nyu.edu/
 aleph staging: https://alephstage.library.nyu.edu/
+x-services sample: https://aleph.library.nyu.edu/X?bor_id=N19064851&cash=N&filter_cash=N&hold=N&library=NYU50&loans=N&op=bor_info&sub_library=NYU50
+x-services sample staging: https://alephstage.library.nyu.edu/X?bor_id=N19064851&cash=N&filter_cash=N&hold=N&library=NYU50&loans=N&op=bor_info&sub_library=NYU50

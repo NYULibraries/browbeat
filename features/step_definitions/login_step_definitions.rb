@@ -22,3 +22,8 @@ end
 Then /^I should be logged in$/ do
   expect(page).to have_link "Log-out"
 end
+
+Then /^I should see valid XML without "(.+)" node$/ do |node_name|
+  expect(xml_body.xpath('.//bor-info')).to_not be_empty
+  expect(xml_body.xpath(".//#{node_name}")).to be_empty
+end

@@ -24,5 +24,9 @@ module Browbeat
     def login_default_path
       "/login"
     end
+
+    def xml_body
+      Nokogiri::XML page.body
+    end
   end
 end
