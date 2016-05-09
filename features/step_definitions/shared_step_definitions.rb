@@ -9,8 +9,8 @@ When(/^I search for "(.*?)"$/) do |search_term|
   end
 end
 
-Then(/^my browser should respond with a success$/) do
-  expect(page.find('body')).to have_content # expect(page.status_code).to eql 200
+Then(/^my browser should respond with a success for (.+)$/) do |app_name|
+  expect(page.find('body')).to have_content success_text_for(app_name)
 end
 
 Then(/^I should see results matching "(.+)"$/) do |content|

@@ -1,3 +1,4 @@
+require 'yaml'
 load 'features/support/helpers/url_helper.rb'
 
 describe Browbeat::UrlHelper do
