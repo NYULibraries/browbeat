@@ -4,6 +4,7 @@ require 'capybara/poltergeist'
 require 'capybara'
 require 'rspec'
 require 'pry'
+require 'yaml'
 
 # add project directory to load path
 project_dir = File.expand_path(File.join(File.dirname(__FILE__), '../..'))
