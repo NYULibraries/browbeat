@@ -15,5 +15,8 @@ group :test do
   gem 'sauce-cucumber'#, '~> 3.1.1'
   gem 'sauce-connect'
 
+  gem 'rest-client'
+  gem 'climate_control'
+
   gem 'rake'
 end
