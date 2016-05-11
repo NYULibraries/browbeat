@@ -18,6 +18,8 @@ GEM
       xpath (~> 2.0)
     childprocess (0.5.9)
       ffi (~> 1.0, >= 1.0.11)
+    climate_control (0.0.3)
+      activesupport (>= 3.0)
     cliver (0.3.2)
     cmdparse (3.0.1)
     coderay (1.1.1)
@@ -135,6 +137,7 @@ PLATFORMS
 
 DEPENDENCIES
   capybara
+  climate_control
   cucumber (< 2.0)
   factory_girl
   figs (= 2.0.0)
@@ -142,6 +145,7 @@ DEPENDENCIES
   poltergeist
   pry
   rake
+  rest-client
   rspec
   sauce-connect
   sauce-cucumber
