@@ -22,7 +22,7 @@ Feature: GetIt is running
     Given I visit GetIt LB server 2
     And I visit GetIt LB server 2
     Then my browser should respond with a success for GetIt
-    And my browser should redirect to GetIt LB server 2
+    And my browser should resolve to GetIt LB server 2
 
   @staging @major_outage
   Scenario: Visiting GetIt on staging
