@@ -1,5 +1,6 @@
-After('@ping') do |scenario|
+After do |scenario|
   if scenario.failed?
+    FailureTracker.register_failure scenario
     # Use syntax of scenario.title to determine which
     # statuspage.io application it maps to and call
     # status = Browbeat::StatusPage::Component.new(component_id)
@@ -18,4 +19,9 @@ if ENV['DRIVER'].nil?
   Before do |scenario|
     Capybara.current_driver = :poltergeist
   end
+end
+
+# after all, process failures
+at_exit do
+  FailureTracker.output_failed_applications
 end
