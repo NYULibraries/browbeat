@@ -5,6 +5,7 @@ require 'capybara'
 require 'rspec'
 require 'pry'
 require 'yaml'
+require 'failure_tracker'
 
 # add project directory to load path
 project_dir = File.expand_path(File.join(File.dirname(__FILE__), '../..'))
