@@ -10,6 +10,10 @@ module StatusPage
       end
     end
 
+    def self.find(id)
+      list_all.detect{|c| c.id == id}
+    end
+
     # returns a component instance whose name matches given name; raises error if more than one components match
     def self.find_matching_name(name)
       matching = list_all.select{|c| c.name.match(/(^|\s)#{name}($|\s)/i) }
@@ -20,16 +24,20 @@ module StatusPage
       @attributes = external_attributes
     end
 
+    def attributes
+      @attributes
+    end
+
     def id
-      @attributes["id"]
+      attributes["id"]
     end
 
     def name
-      @attributes["name"]
+      attributes["name"]
     end
 
     def status
-      @attributes["status"]
+      attributes["status"]
     end
 
     def update_status(status_type)

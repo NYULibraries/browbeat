@@ -38,6 +38,32 @@ describe StatusPage::Component do
       end
     end
 
+    describe "self.find" do
+      let(:component1){ klass.new({"status"=>"operational", "name"=>"Library.nyu.edu", "id"=>"abcd"}) }
+      let(:component2){ klass.new({"status"=>"operational", "name"=>"E-Shelf app", "id"=>"1234"}) }
+      let(:component3){ klass.new({"status"=>"operational", "name"=>"Login app", "id"=>"wxyz"}) }
+      # stub out request
+      before do
+        allow(klass).to receive(:list_all).and_return [component1, component2, component3]
+      end
+
+      it "should return a component with exact matching id" do
+        expect(klass.find("wxyz")).to eq component3
+      end
+
+      it "should return nil for case-insensitive match" do
+        expect(klass.find("wXyz")).to eq nil
+      end
+
+      it "should return nil for non-match" do
+        expect(klass.find("something")).to eq nil
+      end
+
+      it "should return nil for blank" do
+        expect(klass.find(nil)).to eq nil
+      end
+    end
+
     describe "self.find_matching_name" do
       let(:component1){ klass.new({"status"=>"operational", "name"=>"Library.nyu.edu", "id"=>"abcd"}) }
       let(:component2){ klass.new({"status"=>"operational", "name"=>"E-Shelf app", "id"=>"1234"}) }
@@ -122,6 +148,11 @@ describe StatusPage::Component do
 
       it "should return result of execute" do
         expect(component.update_attribute :status, "major_outage").to eq result_attributes
+      end
+
+      it "should assign result as attributes" do
+        component.update_attribute :status, "major_outage"
+        expect(component.attributes).to eq result_attributes
       end
 
       it "should raise error if given unrecognized attribute name" do
