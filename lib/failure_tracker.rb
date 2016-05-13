@@ -3,7 +3,6 @@ require 'status_page'
 require 'cucumber'
 require 'failure_tracker/failed_scenario'
 require 'failure_tracker/failed_scenario_collection'
-require 'failure_tracker/status_sync'
 
 module FailureTracker
 
