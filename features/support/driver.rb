@@ -41,7 +41,7 @@ def configure_poltergeist
       app,
       phantomjs_options: ['--load-images=no', '--ignore-ssl-errors=yes'],
       window_size: [1280, 1024],
-      timeout: 10,
+      timeout: (ENV['TIMEOUT'] || 30).to_i,
       js_errors: false,
       phantomjs_logger: StringIO.new
     )
