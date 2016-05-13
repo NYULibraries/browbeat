@@ -47,7 +47,7 @@ describe StatusPage::Component do
         allow(klass).to receive(:list_all).and_return [component1, component2, component3]
       end
 
-      it "should return a component with a case-insentive full matching name" do
+      it "should return a component with a case-insensitive full matching name" do
         expect(klass.find_matching_name("library.nyu.edu")).to eq component1
       end
 
