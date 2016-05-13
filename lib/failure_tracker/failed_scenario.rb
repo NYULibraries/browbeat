@@ -26,8 +26,8 @@ module FailureTracker
     end
 
     # returns app name as indicated by file path
-    def app_name
-      @app_name ||= file.match(/^features\/([\w-]+)\//)[1]
+    def app_symbol
+      @app_symbol ||= file.match(/^features\/([\w-]+)\//)[1]
     end
 
     # returns cucumber step at which failure occurred

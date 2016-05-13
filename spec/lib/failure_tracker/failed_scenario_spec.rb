@@ -57,8 +57,8 @@ describe FailureTracker::FailedScenario do
       end
     end
 
-    describe "app_name" do
-      subject{ scenario.app_name }
+    describe "app_symbol" do
+      subject{ scenario.app_symbol }
       before do
         allow(scenario).to receive(:file).and_return file
       end
