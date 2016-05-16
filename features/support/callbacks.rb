@@ -23,5 +23,5 @@ end
 
 # after all, process failures
 at_exit do
-  FailureTracker.output_failed_applications
+  FailureTracker.sync_status_page
 end
