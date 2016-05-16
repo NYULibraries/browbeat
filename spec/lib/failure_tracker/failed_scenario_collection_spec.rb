@@ -4,7 +4,7 @@ require 'failure_tracker'
 describe FailureTracker::FailedScenarioCollection do
   let(:klass){ FailureTracker::FailedScenarioCollection }
 
-  describe "collection methods" do
+  describe "instance methods" do
     let(:scenario1){ double FailureTracker::FailedScenario }
     let(:scenario2){ double FailureTracker::FailedScenario }
     let(:scenario3){ double FailureTracker::FailedScenario }
@@ -42,6 +42,26 @@ describe FailureTracker::FailedScenarioCollection do
         it{ is_expected.to_not eq collection }
 
         it{ is_expected.to be_empty }
+      end
+    end
+
+    describe "select" do
+      context "using app_name" do
+        subject{ collection.select{|s| s.app_name == 'app2' } }
+        before do
+          allow(scenario1).to receive(:app_name).and_return 'app1'
+          allow(scenario2).to receive(:app_name).and_return 'app2'
+          allow(scenario3).to receive(:app_name).and_return 'app2'
+        end
+
+        context "with scenarios" do
+          let(:scenarios){ [scenario1, scenario2, scenario3] }
+
+          it { is_expected.to be_a klass }
+          it "should have correct constituents" do
+            expect(subject.to_a).to match_array [scenario2, scenario3]
+          end
+        end
       end
     end
 
