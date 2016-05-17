@@ -9,7 +9,7 @@ require 'failure_tracker/status_sync'
 module FailureTracker
 
   def scenarios
-    @@scenarios ||= ScenarioCollection.new
+    @scenarios ||= ScenarioCollection.new
   end
   module_function :scenarios
 
