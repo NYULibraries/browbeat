@@ -7,7 +7,7 @@ describe FailureTracker::StatusSync do
   describe "class methods" do
     describe "self.sync_status_page" do
       subject{ klass.sync_status_page collection }
-      let(:collection){ double FailureTracker::FailedScenarioCollection }
+      let(:collection){ double FailureTracker::ScenarioCollection }
       let(:instance){ double klass, sync_status_page: true }
       before do
         allow(klass).to receive(:new).and_return instance
@@ -26,30 +26,41 @@ describe FailureTracker::StatusSync do
   end
 
   describe "instance methods" do
-    let(:collection){ double FailureTracker::FailedScenarioCollection }
-    let(:new_collection){ double FailureTracker::FailedScenarioCollection }
+    let(:collection){ double FailureTracker::ScenarioCollection }
+    let(:new_collection){ double FailureTracker::ScenarioCollection }
     let(:instance){ klass.new collection }
 
     describe "sync_status_page" do
       subject{ instance.sync_status_page }
       let(:application1){ double FailureTracker::Application, set_status_page_status: true }
       let(:application2){ double FailureTracker::Application, set_status_page_status: true }
+      let(:application3){ double FailureTracker::Application, set_status_page_status: true }
       let(:status1){ 'operational' }
-      let(:status2){ 'major_outage' }
+      let(:status3){ 'major_outage' }
       before do
-        allow(FailureTracker::Application).to receive(:list_all).and_return [application1, application2]
-        allow(instance).to receive(:status_for_application).and_return status1, status2
+        allow(FailureTracker::Application).to receive(:list_all).and_return [application1, application2, application3]
+        allow(instance).to receive(:scenarios_for_application?).and_return true, false, true
+        allow(instance).to receive(:status_for_application).and_return status1, status3
       end
 
-      it "should call status_for_application with each application" do
-        expect(instance).to receive(:status_for_application).with(application1)
-        expect(instance).to receive(:status_for_application).with(application2)
+      it "should call scenarios_for_application? with each application" do
+        expect(instance).to receive(:scenarios_for_application?).with(application1)
+        expect(instance).to receive(:scenarios_for_application?).with(application2)
+        expect(instance).to receive(:scenarios_for_application?).with(application3)
         subject
       end
 
-      it "should call set_status_page_status on each application" do
+      it "should call status_for_application with each application for which scenarios_for_application? returns true" do
+        expect(instance).to receive(:status_for_application).with(application1)
+        expect(instance).to_not receive(:status_for_application).with(application2)
+        expect(instance).to receive(:status_for_application).with(application3)
+        subject
+      end
+
+      it "should call set_status_page_status on each application for which scenarios_for_application? returns true" do
         expect(application1).to receive(:set_status_page_status).with(status1)
-        expect(application2).to receive(:set_status_page_status).with(status2)
+        expect(application2).to_not receive(:set_status_page_status)
+        expect(application3).to receive(:set_status_page_status).with(status3)
         subject
       end
     end
@@ -117,41 +128,46 @@ describe FailureTracker::StatusSync do
     describe "failed_scenarios_for_application" do
       subject{ instance.failed_scenarios_for_application application }
       let(:application){ double FailureTracker::Application, symbol: "wxyz" }
-      let(:new_collection){ FailureTracker::FailedScenarioCollection.new [scenario1, scenario2] }
-      let(:scenario1){ double FailureTracker::FailedScenario, app_symbol: "abcd" }
-      let(:scenario2){ double FailureTracker::FailedScenario, app_symbol: "wxyz" }
+      let(:scenario1){ double FailureTracker::Scenario, app_symbol: "wxyz", failed?: false }
+      let(:scenario2){ double FailureTracker::Scenario, app_symbol: "wxyz", failed?: true }
+      let(:scenario3){ double FailureTracker::Scenario, app_symbol: "abcd", failed?: false }
+      let(:scenario4){ double FailureTracker::Scenario, app_symbol: "wxyz", failed?: true }
+      let(:scenario5){ double FailureTracker::Scenario, app_symbol: "abcd", failed?: true }
+      let(:scenario6){ double FailureTracker::Scenario, app_symbol: "wxyz", failed?: true }
+      let(:collection){ FailureTracker::ScenarioCollection.new [scenario1, scenario2, scenario3, scenario4, scenario5, scenario6] }
+      # stub out has_tags? only for production
       before do
-        allow(instance).to receive(:failed_production_scenarios).and_return new_collection
-      end
-
-      it "should call failed_production_scenarios" do
-        expect(instance).to receive(:failed_production_scenarios)
-        subject
+        allow(scenario1).to receive(:has_tags?).with(:production).and_return true
+        allow(scenario2).to receive(:has_tags?).with(:production).and_return true
+        allow(scenario3).to receive(:has_tags?).with(:production).and_return true
+        allow(scenario4).to receive(:has_tags?).with(:production).and_return true
+        allow(scenario5).to receive(:has_tags?).with(:production).and_return true
+        allow(scenario6).to receive(:has_tags?).with(:production).and_return false
       end
 
       it "should return a new collection" do
-        expect(subject).to be_a FailureTracker::FailedScenarioCollection
+        expect(subject).to be_a FailureTracker::ScenarioCollection
       end
 
       it "should return a collection with only matching scenarios" do
-        expect(subject.to_a).to eq [scenario2]
+        expect(subject.to_a).to eq [scenario2, scenario4]
       end
     end
 
-    describe "failed_production_scenarios" do
-      subject{ instance.failed_production_scenarios }
-      before do
-        allow(collection).to receive(:with_tags).and_return new_collection
-      end
-
-      it "should use the with_tags method on collection" do
-        expect(collection).to receive(:with_tags).with(:production)
-        subject
-      end
-
-      it "should return the result" do
-        expect(subject).to eq new_collection
-      end
-    end
+    # describe "failed_production_scenarios" do
+    #   subject{ instance.failed_production_scenarios }
+    #   before do
+    #     allow(collection).to receive(:with_tags).and_return new_collection
+    #   end
+    #
+    #   it "should use the with_tags method on collection" do
+    #     expect(collection).to receive(:with_tags).with(:production)
+    #     subject
+    #   end
+    #
+    #   it "should return the result" do
+    #     expect(subject).to eq new_collection
+    #   end
+    # end
   end
 end

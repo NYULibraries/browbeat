@@ -1,5 +1,5 @@
 module FailureTracker
-  class FailedScenario
+  class Scenario
     extend Forwardable
     delegate [:name, :steps, :file, :source_tag_names] => :cucumber_scenario
     delegate [:backtrace_line] => :failed_step
@@ -13,9 +13,13 @@ module FailureTracker
       @cucumber_scenario = cucumber_scenario
     end
 
-    # returns failure type as indicated by tags
+    def failed?
+      !!failed_step
+    end
+
+    # if scenario failing, returns failure type as indicated by tags
     def failure_type
-      @failure_type ||= find_match_in_tags(ORDERED_FAILURE_TYPES)
+      @failure_type ||= find_match_in_tags(ORDERED_FAILURE_TYPES) if failed?
     end
 
     # returns integer for severity of failure; lower numbers are more severe
