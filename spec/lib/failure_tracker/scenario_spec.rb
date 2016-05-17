@@ -1,8 +1,8 @@
 require 'spec_helper'
 require 'failure_tracker'
 
-describe FailureTracker::FailedScenario do
-  let(:klass){ FailureTracker::FailedScenario }
+describe FailureTracker::Scenario do
+  let(:klass){ FailureTracker::Scenario }
 
   describe "scenario methods" do
     let(:cucumber_scenario){ double Cucumber::Ast::Scenario }
@@ -19,20 +19,48 @@ describe FailureTracker::FailedScenario do
         allow(scenario).to receive(:source_tag_names).and_return tags
       end
 
-      context "with major_outage tag" do
-        let(:tags){ ["@production", "@major_outage", "@ping", "@selenium"] }
-        it{ is_expected.to eq 'major_outage' }
+      context "with failure" do
+        before do
+          allow(scenario).to receive(:failed?).and_return true
+        end
+
+        context "with major_outage tag" do
+          let(:tags){ ["@production", "@major_outage", "@ping", "@selenium"] }
+          it{ is_expected.to eq 'major_outage' }
+        end
+
+        context "with partial_outage tag" do
+          let(:tags){ ["@staging", "@functionality", "@selenium", "@partial_outage"] }
+          it{ is_expected.to eq 'partial_outage' }
+        end
+
+        context "with degraded_performance tag" do
+          let(:tags){ ["@degraded_performance", "@staging", "@functionality", "@selenium"] }
+          it{ is_expected.to eq 'degraded_performance' }
+        end
       end
 
-      context "with partial_outage tag" do
-        let(:tags){ ["@staging", "@functionality", "@selenium", "@partial_outage"] }
-        it{ is_expected.to eq 'partial_outage' }
+      context "without failure" do
+        before do
+          allow(scenario).to receive(:failed?).and_return false
+        end
+
+        context "with major_outage tag" do
+          let(:tags){ ["@production", "@major_outage", "@ping", "@selenium"] }
+          it{ is_expected.to eq nil }
+        end
+
+        context "with partial_outage tag" do
+          let(:tags){ ["@staging", "@functionality", "@selenium", "@partial_outage"] }
+          it{ is_expected.to eq nil }
+        end
+
+        context "with degraded_performance tag" do
+          let(:tags){ ["@degraded_performance", "@staging", "@functionality", "@selenium"] }
+          it{ is_expected.to eq nil }
+        end
       end
 
-      context "with degraded_performance tag" do
-        let(:tags){ ["@degraded_performance", "@staging", "@functionality", "@selenium"] }
-        it{ is_expected.to eq 'degraded_performance' }
-      end
     end
 
     describe "failure_severity" do

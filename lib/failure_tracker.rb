@@ -1,43 +1,26 @@
 require 'forwardable'
 require 'status_page'
 require 'cucumber'
-require 'failure_tracker/failed_scenario'
-require 'failure_tracker/failed_scenario_collection'
+require 'failure_tracker/scenario'
+require 'failure_tracker/scenario_collection'
 require 'failure_tracker/application'
 require 'failure_tracker/status_sync'
 
 module FailureTracker
 
-  def failures
-    @@failures ||= FailedScenarioCollection.new
+  def scenarios
+    @@scenarios ||= ScenarioCollection.new
   end
-  module_function :failures
+  module_function :scenarios
 
-  def register_failure(scenario)
-    failures << FailedScenario.new(scenario)
+  def register_scenario(scenario)
+    scenarios << Scenario.new(scenario)
   end
-  module_function :register_failure
+  module_function :register_scenario
 
   def sync_status_page
-    StatusSync.sync_status_page failures
+    StatusSync.sync_status_page scenarios
   end
   module_function :sync_status_page
-
-  # def output_failed_applications
-  #   if failures.with_tags(:production).any?
-  #     failures.with_tags(:production).group_by(&:app_symbol).each do |app_symbol, app_failures|
-  #       puts "Application: #{app_symbol}"
-  #       if app_failures.any?
-  #         puts " Production: #{app_failures.worst_failure_type}"
-  #         app_failures.each do |failure|
-  #           puts "  * #{failure.name} (#{failure.backtrace_line})"
-  #         end
-  #       end
-  #     end
-  #   else
-  #     puts "No production failures detected"
-  #   end
-  # end
-  # module_function :output_failed_applications
 
 end

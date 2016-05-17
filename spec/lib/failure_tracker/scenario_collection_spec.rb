@@ -1,13 +1,13 @@
 require 'spec_helper'
 require 'failure_tracker'
 
-describe FailureTracker::FailedScenarioCollection do
-  let(:klass){ FailureTracker::FailedScenarioCollection }
+describe FailureTracker::ScenarioCollection do
+  let(:klass){ FailureTracker::ScenarioCollection }
 
   describe "instance methods" do
-    let(:scenario1){ double FailureTracker::FailedScenario }
-    let(:scenario2){ double FailureTracker::FailedScenario }
-    let(:scenario3){ double FailureTracker::FailedScenario }
+    let(:scenario1){ double FailureTracker::Scenario }
+    let(:scenario2){ double FailureTracker::Scenario }
+    let(:scenario3){ double FailureTracker::Scenario }
     let(:collection){ klass.new scenarios }
 
     describe "with_tags" do
