@@ -4,12 +4,12 @@ Feature: Login is running
   I want to be able to single-sign-on to Libraries' application
   So that I can maintain a persistent session.
 
-  @production @degraded_performance
+  @production @partial_outage
   Scenario: Logging in on production via X-services
     Given I visit X-services sample
     Then I should see valid XML without "error" node
 
-  @staging @degraded_performance
+  @staging @partial_outage
   Scenario: Logging in on staging via X-services
     Given I visit X-services sample staging
     Then I should see valid XML without "error" node
