@@ -4,15 +4,13 @@ module FailureTracker
     delegate [:name, :steps, :file, :source_tag_names] => :cucumber_scenario
     delegate [:backtrace_line] => :failed_step
 
+    attr_accessor :cucumber_scenario
+
     ORDERED_FAILURE_TYPES = %w[major_outage partial_outage degraded_performance]
     ENVIRONMENTS = %w[production staging]
 
     def initialize(cucumber_scenario)
       @cucumber_scenario = cucumber_scenario
-    end
-
-    def cucumber_scenario
-      @cucumber_scenario
     end
 
     # returns failure type as indicated by tags

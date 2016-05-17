@@ -1,6 +1,8 @@
 module StatusPage
   class Component
 
+    attr_accessor :status, :name, :created_at, :updated_at, :position, :description, :id, :page_id, :group_id
+
     MUTABLE_ATTRIBUTES = %w[name description status]
     STATUSES = %w[operational degraded_performance partial_outage major_outage]
 
@@ -20,24 +22,8 @@ module StatusPage
       matching.size < 2 ? matching[0] : raise("Ambiguous name '#{name}' matches multiple components: #{matching.map(&:name)}")
     end
 
-    def initialize(external_attributes={})
-      @attributes = external_attributes
-    end
-
-    def attributes
-      @attributes
-    end
-
-    def id
-      attributes["id"]
-    end
-
-    def name
-      attributes["name"]
-    end
-
-    def status
-      attributes["status"]
+    def initialize(attributes={})
+      assign_attributes attributes
     end
 
     def update_status(status_type)
@@ -47,7 +33,7 @@ module StatusPage
 
     def update_attribute(attr_name, value)
       validate_attribute_name attr_name
-      @attributes = StatusPage::Request.execute(
+      assign_attributes StatusPage::Request.execute(
         "components/#{id}.json",
         method: :patch,
         payload: "component[#{attr_name}]=#{value}"
@@ -55,6 +41,12 @@ module StatusPage
     end
 
     private
+
+    def assign_attributes(attributes)
+      attributes.each do |key, value|
+        send("#{key}=", value)
+      end
+    end
 
     def validate_attribute_name(attr_name)
       MUTABLE_ATTRIBUTES.include?(attr_name.to_s) || raise("Attribute '#{attr_name}' not recognized. Valid attributes: #{MUTABLE_ATTRIBUTES}")
