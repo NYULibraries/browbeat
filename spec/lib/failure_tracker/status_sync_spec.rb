@@ -35,18 +35,21 @@ describe FailureTracker::StatusSync do
       let(:application1){ double FailureTracker::Application, set_status_page_status: true }
       let(:application2){ double FailureTracker::Application, set_status_page_status: true }
       let(:application3){ double FailureTracker::Application, set_status_page_status: true }
+      let(:application4){ double FailureTracker::Application, set_status_page_status: true }
       let(:status1){ 'operational' }
       let(:status3){ 'major_outage' }
+      let(:status4){ 'degraded_performance' }
       before do
-        allow(FailureTracker::Application).to receive(:list_all).and_return [application1, application2, application3]
-        allow(instance).to receive(:scenarios_for_application?).and_return true, false, true
-        allow(instance).to receive(:status_for_application).and_return status1, status3
+        allow(FailureTracker::Application).to receive(:list_all).and_return [application1, application2, application3, application4]
+        allow(instance).to receive(:scenarios_for_application?).and_return true, false, true, true
+        allow(instance).to receive(:status_for_application).and_return status1, status3, status4
       end
 
       it "should call scenarios_for_application? with each application" do
         expect(instance).to receive(:scenarios_for_application?).with(application1)
         expect(instance).to receive(:scenarios_for_application?).with(application2)
         expect(instance).to receive(:scenarios_for_application?).with(application3)
+        expect(instance).to receive(:scenarios_for_application?).with(application4)
         subject
       end
 
@@ -54,6 +57,7 @@ describe FailureTracker::StatusSync do
         expect(instance).to receive(:status_for_application).with(application1)
         expect(instance).to_not receive(:status_for_application).with(application2)
         expect(instance).to receive(:status_for_application).with(application3)
+        expect(instance).to receive(:status_for_application).with(application4)
         subject
       end
 
@@ -61,6 +65,7 @@ describe FailureTracker::StatusSync do
         expect(application1).to receive(:set_status_page_status).with(status1)
         expect(application2).to_not receive(:set_status_page_status)
         expect(application3).to receive(:set_status_page_status).with(status3)
+        expect(application4).to receive(:set_status_page_status).with(status4)
         subject
       end
     end
