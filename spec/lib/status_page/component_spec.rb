@@ -136,7 +136,7 @@ describe StatusPage::Component do
     end
 
     describe "update_attribute" do
-      let(:result_attributes){ attributes.merge("status"=>"major_outage", "something"=>"different") }
+      let(:result_attributes){ attributes.merge("status"=>"major_outage", "description"=>"something") }
       before do
         allow(request).to receive(:execute).and_return result_attributes
       end
@@ -152,7 +152,8 @@ describe StatusPage::Component do
 
       it "should assign result as attributes" do
         component.update_attribute :status, "major_outage"
-        expect(component.attributes).to eq result_attributes
+        expect(component.status).to eq "major_outage"
+        expect(component.description).to eq "something"
       end
 
       it "should raise error if given unrecognized attribute name" do
