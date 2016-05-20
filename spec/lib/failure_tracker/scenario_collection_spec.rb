@@ -2,13 +2,11 @@ require 'spec_helper'
 require 'failure_tracker'
 
 describe FailureTracker::ScenarioCollection do
-  let(:klass){ FailureTracker::ScenarioCollection }
-
   describe "instance methods" do
     let(:scenario1){ double FailureTracker::Scenario }
     let(:scenario2){ double FailureTracker::Scenario }
     let(:scenario3){ double FailureTracker::Scenario }
-    let(:collection){ klass.new scenarios }
+    let(:collection){ described_class.new scenarios }
 
     describe "with_tags" do
       before do
@@ -21,7 +19,7 @@ describe FailureTracker::ScenarioCollection do
         let(:scenarios){ [scenario1, scenario2, scenario3] }
         subject{ collection.with_tags(:test, :ping) }
 
-        it{ is_expected.to be_a klass }
+        it{ is_expected.to be_a described_class }
 
         it{ is_expected.to_not eq collection }
 
@@ -37,7 +35,7 @@ describe FailureTracker::ScenarioCollection do
         let(:scenarios){ [] }
         subject{ collection.with_tags(:test, :ping) }
 
-        it{ is_expected.to be_a klass }
+        it{ is_expected.to be_a described_class }
 
         it{ is_expected.to_not eq collection }
 
@@ -57,7 +55,7 @@ describe FailureTracker::ScenarioCollection do
         context "with scenarios" do
           let(:scenarios){ [scenario1, scenario2, scenario3] }
 
-          it { is_expected.to be_a klass }
+          it { is_expected.to be_a described_class }
           it "should have correct constituents" do
             expect(subject.to_a).to match_array [scenario2, scenario3]
           end
@@ -79,12 +77,12 @@ describe FailureTracker::ScenarioCollection do
 
           it{ is_expected.to be_a Hash }
           it "should group by app1" do
-            expect(subject["app1"]).to be_a klass
+            expect(subject["app1"]).to be_a described_class
             expect(subject["app1"]).to include scenario1
             expect(subject["app1"]).to include scenario3
           end
           it "should group by app2" do
-            expect(subject["app2"]).to be_a klass
+            expect(subject["app2"]).to be_a described_class
             expect(subject["app2"]).to include scenario2
           end
         end

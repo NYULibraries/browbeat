@@ -2,11 +2,9 @@ require 'spec_helper'
 require 'failure_tracker'
 
 describe FailureTracker::Scenario do
-  let(:klass){ FailureTracker::Scenario }
-
   describe "scenario methods" do
     let(:cucumber_scenario){ double Cucumber::Ast::Scenario }
-    let(:scenario){ klass.new cucumber_scenario }
+    let(:scenario){ described_class.new cucumber_scenario }
 
     describe "cucumber_scenario" do
       subject{ scenario.cucumber_scenario }

@@ -2,19 +2,17 @@ require 'spec_helper'
 require 'failure_tracker'
 
 describe FailureTracker::StatusSync do
-  let(:klass){ FailureTracker::StatusSync }
-
   describe "class methods" do
     describe "self.sync_status_page" do
-      subject{ klass.sync_status_page collection }
+      subject{ described_class.sync_status_page collection }
       let(:collection){ double FailureTracker::ScenarioCollection }
-      let(:instance){ double klass, sync_status_page: true }
+      let(:instance){ double described_class, sync_status_page: true }
       before do
-        allow(klass).to receive(:new).and_return instance
+        allow(described_class).to receive(:new).and_return instance
       end
 
       it "should call new with given collection" do
-        expect(klass).to receive(:new).with(collection)
+        expect(described_class).to receive(:new).with(collection)
         subject
       end
 
@@ -28,7 +26,7 @@ describe FailureTracker::StatusSync do
   describe "instance methods" do
     let(:collection){ double FailureTracker::ScenarioCollection }
     let(:new_collection){ double FailureTracker::ScenarioCollection }
-    let(:instance){ klass.new collection }
+    let(:instance){ described_class.new collection }
 
     describe "sync_status_page" do
       subject{ instance.sync_status_page }
