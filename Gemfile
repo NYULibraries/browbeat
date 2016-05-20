@@ -19,4 +19,6 @@ group :test do
   gem 'climate_control'
 
   gem 'rake'
+  gem 'mailx_ruby', github: "NYULibraries/mailx_ruby"
+  gem 'haml'
 end
