@@ -5,12 +5,20 @@ group :test do
   gem 'factory_girl'
   gem 'capybara'
 
-  gem 'sauce-connect'
-  gem 'sauce-cucumber', :require => false
-  gem 'sauce'
+  gem 'cucumber', '< 2.0'
   gem 'selenium-webdriver'
   gem 'phantomjs'
   gem 'poltergeist'
   gem 'figs', '2.0.0'
   gem 'pry'
+
+  gem 'sauce-cucumber'#, '~> 3.1.1'
+  gem 'sauce-connect'
+
+  gem 'rest-client'
+  gem 'climate_control'
+
+  gem 'rake'
+  gem 'mailx_ruby', github: "NYULibraries/mailx_ruby"
+  gem 'haml'
 end

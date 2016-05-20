@@ -1,0 +1,30 @@
+bobcat: http://bobcat.library.nyu.edu/
+bobcat lb server 1: http://primo1.bobst.nyu.edu/
+bobcat lb server 2: http://primo2.bobst.nyu.edu/
+bobcat staging: http://bobcatdev.library.nyu.edu/
+bobcat staging lb server 1: http://primodev1.bobst.nyu.edu/
+bobcat staging lb server 2: http://primodev2.bobst.nyu.edu/
+login: https://login.library.nyu.edu
+login staging: https://dev.login.library.nyu.edu
+login lb server 1: https://login1.bobst.nyu.edu/
+login lb server 2: https://login2.bobst.nyu.edu/
+pds: https://pds.library.nyu.edu/pds?func=load-login&institute=NYU
+pds lb server 1: https://primo1.bobst.nyu.edu/pds?func=load-login&institute=NYU
+pds lb server 2: https://primo2.bobst.nyu.edu/pds?func=load-login&institute=NYU
+pds staging: https://pdsdev.library.nyu.edu/pds?func=load-login&institute=NYU
+pds staging lb server 1: https://primodev1.bobst.nyu.edu/pds?func=load-login&institute=NYU
+pds staging lb server 2: https://primodev2.bobst.nyu.edu/pds?func=load-login&institute=NYU
+e-shelf: https://eshelf.library.nyu.edu/
+e-shelf lb server 1: https://web-pr-eshelf1.bobst.nyu.edu/
+e-shelf lb server 2: https://web-pr-eshelf2.bobst.nyu.edu/
+e-shelf staging: https://dev.eshelf.library.nyu.edu/
+e-shelf qa: https://qa.eshelf.library.nyu.edu/
+getit: https://getit.library.nyu.edu/
+getit lb server 1: https://umlaut1.bobst.nyu.edu/
+getit lb server 2: https://umlaut2.bobst.nyu.edu/
+getit staging: https://dev.getit.library.nyu.edu/
+getit qa: https://qa.getit.library.nyu.edu/
+aleph: https://aleph.library.nyu.edu/
+aleph staging: https://alephstage.library.nyu.edu/
+x-services sample: https://aleph.library.nyu.edu/X?bor_id=N19064851&cash=N&filter_cash=N&hold=N&library=NYU50&loans=N&op=bor_info&sub_library=NYU50
+x-services sample staging: https://alephstage.library.nyu.edu/X?bor_id=N19064851&cash=N&filter_cash=N&hold=N&library=NYU50&loans=N&op=bor_info&sub_library=NYU50

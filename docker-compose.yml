@@ -1,0 +1,15 @@
+version: '2'
+services:
+  web:
+    build: .
+    command: "script/start"
+    tty: true
+    volumes:
+      - .:/login
+    volumes_from:
+      - gembox
+
+  gembox:
+    image: busybox
+    volumes:
+      - /gembox
