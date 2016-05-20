@@ -7,9 +7,7 @@ describe FailureTracker::StatusSync do
       subject{ described_class.sync_status_page collection }
       let(:collection){ double FailureTracker::ScenarioCollection }
       let(:instance){ double described_class, sync_status_page: true }
-      before do
-        allow(described_class).to receive(:new).and_return instance
-      end
+      before { allow(described_class).to receive(:new).and_return instance }
 
       it "should call new with given collection" do
         expect(described_class).to receive(:new).with(collection)
@@ -82,6 +80,8 @@ describe FailureTracker::StatusSync do
           allow(new_collection).to receive(:worst_failure_type).and_return failure
         end
 
+        it { is_expected.to eq failure }
+
         it "should call failed_scenarios_for_application" do
           expect(instance).to receive(:failed_scenarios_for_application).with(application)
           subject
@@ -96,16 +96,12 @@ describe FailureTracker::StatusSync do
           expect(new_collection).to receive(:worst_failure_type)
           subject
         end
-
-        it "should return result of worst_failure_type" do
-          expect(subject).to eq failure
-        end
       end
 
       context "without application failures" do
-        before do
-          allow(new_collection).to receive(:any?).and_return false
-        end
+        before { allow(new_collection).to receive(:any?).and_return false }
+
+        it { is_expected.to eq "operational" }
 
         it "should call failed_scenarios_for_application" do
           expect(instance).to receive(:failed_scenarios_for_application).with(application)
@@ -120,10 +116,6 @@ describe FailureTracker::StatusSync do
         it "should not call worst_failure_type" do
           expect(new_collection).to_not receive(:worst_failure_type)
           subject
-        end
-
-        it "should return 'operational'" do
-          expect(subject).to eq 'operational'
         end
       end
     end
@@ -148,29 +140,8 @@ describe FailureTracker::StatusSync do
         allow(scenario6).to receive(:has_tags?).with(:production).and_return false
       end
 
-      it "should return a new collection" do
-        expect(subject).to be_a FailureTracker::ScenarioCollection
-      end
-
-      it "should return a collection with only matching scenarios" do
-        expect(subject.to_a).to eq [scenario2, scenario4]
-      end
+      it { is_expected.to be_a FailureTracker::ScenarioCollection }
+      it { is_expected.to match_array [scenario2, scenario4] }
     end
-
-    # describe "failed_production_scenarios" do
-    #   subject{ instance.failed_production_scenarios }
-    #   before do
-    #     allow(collection).to receive(:with_tags).and_return new_collection
-    #   end
-    #
-    #   it "should use the with_tags method on collection" do
-    #     expect(collection).to receive(:with_tags).with(:production)
-    #     subject
-    #   end
-    #
-    #   it "should return the result" do
-    #     expect(subject).to eq new_collection
-    #   end
-    # end
   end
 end

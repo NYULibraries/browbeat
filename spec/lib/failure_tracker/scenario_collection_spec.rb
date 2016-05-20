@@ -10,24 +10,24 @@ describe FailureTracker::ScenarioCollection do
 
     describe "with_tags" do
       before do
-        allow(scenario1).to receive(:has_tags?)
-        allow(scenario2).to receive(:has_tags?)
-        allow(scenario3).to receive(:has_tags?)
+        allow(scenario1).to receive(:has_tags?).and_return false
+        allow(scenario2).to receive(:has_tags?).and_return true
+        allow(scenario3).to receive(:has_tags?).and_return true
       end
 
       context "with scenarios" do
         let(:scenarios){ [scenario1, scenario2, scenario3] }
         subject{ collection.with_tags(:test, :ping) }
 
-        it{ is_expected.to be_a described_class }
-
-        it{ is_expected.to_not eq collection }
+        it { is_expected.to match_array [scenario2, scenario3] }
+        it { is_expected.to be_a described_class }
+        it { is_expected.to_not eq collection }
 
         it "should return an collection whose scenarios return true for has_tags?" do
-          expect(scenario1).to receive(:has_tags?).with(:test, :ping).and_return false
-          expect(scenario2).to receive(:has_tags?).with(:test, :ping).and_return true
-          expect(scenario3).to receive(:has_tags?).with(:test, :ping).and_return true
-          expect(subject.to_a).to match_array [scenario2, scenario3]
+          expect(scenario1).to receive(:has_tags?).with(:test, :ping)
+          expect(scenario2).to receive(:has_tags?).with(:test, :ping)
+          expect(scenario3).to receive(:has_tags?).with(:test, :ping)
+          subject
         end
       end
 
@@ -35,11 +35,9 @@ describe FailureTracker::ScenarioCollection do
         let(:scenarios){ [] }
         subject{ collection.with_tags(:test, :ping) }
 
-        it{ is_expected.to be_a described_class }
-
-        it{ is_expected.to_not eq collection }
-
-        it{ is_expected.to be_empty }
+        it { is_expected.to be_a described_class }
+        it { is_expected.to_not eq collection }
+        it { is_expected.to be_empty }
       end
     end
 
@@ -56,9 +54,7 @@ describe FailureTracker::ScenarioCollection do
           let(:scenarios){ [scenario1, scenario2, scenario3] }
 
           it { is_expected.to be_a described_class }
-          it "should have correct constituents" do
-            expect(subject.to_a).to match_array [scenario2, scenario3]
-          end
+          it { is_expected.to match_array [scenario2, scenario3] }
         end
       end
     end
@@ -78,12 +74,11 @@ describe FailureTracker::ScenarioCollection do
           it{ is_expected.to be_a Hash }
           it "should group by app1" do
             expect(subject["app1"]).to be_a described_class
-            expect(subject["app1"]).to include scenario1
-            expect(subject["app1"]).to include scenario3
+            expect(subject["app1"]).to match_array [scenario1, scenario3]
           end
           it "should group by app2" do
             expect(subject["app2"]).to be_a described_class
-            expect(subject["app2"]).to include scenario2
+            expect(subject["app2"]).to match_array [scenario2]
           end
         end
 
