@@ -1,43 +1,73 @@
-if ENV['SELENIUM']
-  # On demand: non-headless tests via Selenium/WebDriver
-  # To run the scenarios in browser (default: Firefox), use the following command line:
-  # SELENIUM=true bundle exec cucumber
-  # or (to have a pause of 1 second between each step):
-  # SELENIUM=true PAUSE=1 bundle exec cucumber
-  Capybara.register_driver :selenium do |app|
-    http_client = Selenium::WebDriver::Remote::Http::Default.new
-    http_client.timeout = 120
-    Capybara::Selenium::Driver.new(app, :browser => :chrome, :http_client => http_client)
-  end
-  Capybara.default_driver = :selenium
-  AfterStep do
-    sleep (ENV['PAUSE'] || 0).to_i
-  end
-elsif ENV['SAUCE']
-  require 'sauce/cucumber'
-  require 'sauce/capybara'
-  Capybara.default_driver = :sauce
-  # For more options see: https://github.com/saucelabs/sauce_ruby/wiki/Configuration----The-(in)Complete-Guide
+# Run specs in specific driver via DRIVER variable, e.g.:
+#  DRIVER=sauce rake browbeat:check:all
+#  DRIVER=chrome rake browbeat:check:all
+# Runs by default in poltergist:
+#  rake browbeat:check:all
+
+# configures to run in sauce, with needed requires
+# modified from https://github.com/saucelabs/sauce_ruby/issues/261
+def configure_sauce
+  require "sauce/cucumber"
+
   Sauce.config do |config|
+    config[:start_tunnel] = false
     config[:browsers] = [
+      ["Windows 8.1", "googlechrome", "36"],
+      ["Windows 8.1", "firefox", "31"],
+      # ["Windows 8.1", "Internet Explorer", "11"],
+      # ["Windows 8", "Internet Explorer", "10"],
+      # ["Windows 7", "Internet Explorer", "9"],
       ["Windows 7", "Internet Explorer", "9"],
-      ["Linux", "Firefox", "19"],
-      ["OSX 10.6", "Chrome", nil]
+      # ["Windows XP", "Internet Explorer", "7"],
+      # ["OS X 10.9", "safari", "7"],
+      # ["OS X 10.9", "iPhone", "7.1"],
+      # ["Linux", "Android", "4.4"]
     ]
+    config[:name] = "#{`basename $(git rev-parse --show-toplevel)`}"
+    config[:build] = "#{`git rev-parse --short HEAD`}"
+    config[:tags] = [ ENV['CI'] ? "CI" : `whoami`, "#{`git rev-parse --abbrev-ref HEAD`}" ]
+    config[:username] = ENV['SAUCE_USERNAME'] || raise("Set SAUCE_USERNAME and SAUCE_ACCESS_KEY to run on sauce")
+    config[:access_key] = ENV['SAUCE_ACCESS_KEY'] || raise("Set SAUCE_USERNAME and SAUCE_ACCESS_KEY to run on sauce")
+    config['screen-resolution'] = "1280x1024"
   end
-else
+end
+
+# configure poltergeist with js error throwing/logging off and with timeouts
+# set for our tests
+def configure_poltergeist
   # DEFAULT: headless tests with poltergeist/PhantomJS
   Capybara.register_driver :poltergeist do |app|
     Capybara::Poltergeist::Driver.new(
       app,
       phantomjs_options: ['--load-images=no', '--ignore-ssl-errors=yes'],
       window_size: [1280, 1024],
-      timeout: 120,
+      timeout: (ENV['TIMEOUT'] || 30).to_i,
       js_errors: false,
       phantomjs_logger: StringIO.new
     )
   end
-  Capybara.default_driver    = :poltergeist
+end
+
+# if driver set to sauce, set and configure
+case ENV['DRIVER']
+when 'sauce'
+  configure_sauce
+  Capybara.default_driver = :sauce
+  Capybara.javascript_driver = :selenium
+  Capybara.default_max_wait_time = ENV['MAX_WAIT'] || 5
+# if driver not set, default to poltergeist
+when nil
+  configure_poltergeist
+  Capybara.default_driver = :poltergeist
   Capybara.javascript_driver = :poltergeist
-  Capybara.default_max_wait_time = 20
+  Capybara.current_driver = :poltergeist
+  Capybara.default_max_wait_time = ENV['MAX_WAIT'] || 5
+# otherwise, run driver as a browser via selenium
+else
+  Capybara.register_driver :selenium do |app|
+    Capybara::Selenium::Driver.new(app, browser: ENV['DRIVER'].to_sym)
+  end
+  Capybara.default_driver = :selenium
+  Capybara.javascript_driver = :selenium
+  Capybara.default_max_wait_time = ENV['MAX_WAIT'] || 15
 end

@@ -1,5 +1,6 @@
 --- !ruby/object:Figs::Figsfile
 repo: git@github.com:NYULibraries/configula.git
 locations:
+- test_users.yml
 - browbeat.yml
 method: git
