@@ -19,14 +19,15 @@ describe StatusPage::Component do
         allow(request).to receive(:execute).and_return array_response
       end
 
+      it { is_expected.to be_a Array }
+
+      it "should return an array of instances" do
+        expect(subject.map(&:class).uniq).to eq [StatusPage::Component]
+      end
+
       it "should execute request with correct parameters" do
         expect(request).to receive(:execute).with("components.json", method: :get)
         subject
-      end
-
-      it "should return an array of instances" do
-        expect(subject).to be_an Array
-        expect(subject.map(&:class).uniq).to eq [StatusPage::Component]
       end
 
       it "should initialize instances with attributes from response" do
@@ -102,27 +103,22 @@ describe StatusPage::Component do
     let(:component){ described_class.new attributes }
 
     describe "id" do
-      it "should return the id" do
-        expect(component.id).to eq "abcd"
-      end
+      subject { component.id }
+      it { is_expected.to eq "abcd" }
     end
 
     describe "name" do
-      it "should return the name" do
-        expect(component.name).to eq "favorite app"
-      end
+      subject { component.name }
+      it { is_expected.to eq "favorite app" }
     end
 
     describe "status" do
-      it "should return the status" do
-        expect(component.status).to eq "operational"
-      end
+      subject { component.status }
+      it { is_expected.to eq "operational" }
     end
 
     describe "update_status" do
-      before do
-        allow(component).to receive(:update_attribute)
-      end
+      before { allow(component).to receive(:update_attribute) }
 
       it "should execute update_attribute if given a valid status" do
         expect(component).to receive(:update_attribute).with(:status, "major_outage")
@@ -136,9 +132,7 @@ describe StatusPage::Component do
 
     describe "update_attribute" do
       let(:result_attributes){ attributes.merge("status"=>"major_outage", "description"=>"something") }
-      before do
-        allow(request).to receive(:execute).and_return result_attributes
-      end
+      before { allow(request).to receive(:execute).and_return result_attributes }
 
       it "should execute request with correct parameters" do
         expect(request).to receive(:execute).with("components/abcd.json", method: :patch, payload: "component[status]=major_outage")
