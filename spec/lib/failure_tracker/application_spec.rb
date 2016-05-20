@@ -2,14 +2,12 @@ require 'spec_helper'
 require 'failure_tracker'
 
 describe FailureTracker::Application do
-  let(:klass){ FailureTracker::Application }
-
   describe "class methods" do
     describe "self.list_all" do
-      subject{ klass.list_all }
+      subject{ described_class.list_all }
       let(:yml){ "---\nlogin:\n  name: Login\n  status_page_id: abcd1234\neshelf:\n  name: E-Shelf\n  status_page_id: wxyz1234\n" }
       before do
-        allow(File).to receive(:open).with(klass::LIST_FILEPATH).and_return yml
+        allow(File).to receive(:open).with(described_class::LIST_FILEPATH).and_return yml
       end
 
       it { is_expected.to be_an Array }
@@ -17,12 +15,12 @@ describe FailureTracker::Application do
         expect(subject.length).to eq 2
       end
       it "should have instances of the class" do
-        expect(subject[0]).to be_a klass
-        expect(subject[1]).to be_a klass
+        expect(subject[0]).to be_a described_class
+        expect(subject[1]).to be_a described_class
       end
       it "should initialize with correct yml" do
-        expect(klass).to receive(:new).with(name: "Login", status_page_id: "abcd1234", symbol: "login")
-        expect(klass).to receive(:new).with(name: "E-Shelf", status_page_id: "wxyz1234", symbol: "eshelf")
+        expect(described_class).to receive(:new).with(name: "Login", status_page_id: "abcd1234", symbol: "login")
+        expect(described_class).to receive(:new).with(name: "E-Shelf", status_page_id: "wxyz1234", symbol: "eshelf")
         subject
       end
     end
@@ -32,7 +30,7 @@ describe FailureTracker::Application do
     let(:name){ "Login" }
     let(:status_page_id){ "abcd1234" }
     let(:symbol){ "login" }
-    let(:application){ klass.new(name: name, status_page_id: status_page_id, symbol: symbol) }
+    let(:application){ described_class.new(name: name, status_page_id: status_page_id, symbol: symbol) }
 
     describe "set_status_page_status" do
       it "should call StatusPage with correct parameters" do

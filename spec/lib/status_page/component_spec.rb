@@ -2,12 +2,11 @@ require 'spec_helper'
 require 'status_page'
 
 describe StatusPage::Component do
-  let(:klass){ StatusPage::Component }
   let(:request){ StatusPage::Request }
 
   describe "class methods" do
     describe "self.list_all" do
-      let(:subject){ klass.list_all }
+      let(:subject){ described_class.list_all }
       # stub out request
       let(:array_response) do
         [
@@ -31,68 +30,68 @@ describe StatusPage::Component do
       end
 
       it "should initialize instances with attributes from response" do
-        expect(klass).to receive(:new).with(array_response[0]).once.and_call_original
-        expect(klass).to receive(:new).with(array_response[1]).once.and_call_original
-        expect(klass).to receive(:new).with(array_response[2]).once.and_call_original
+        expect(described_class).to receive(:new).with(array_response[0]).once.and_call_original
+        expect(described_class).to receive(:new).with(array_response[1]).once.and_call_original
+        expect(described_class).to receive(:new).with(array_response[2]).once.and_call_original
         subject
       end
     end
 
     describe "self.find" do
-      let(:component1){ klass.new({"status"=>"operational", "name"=>"Library.nyu.edu", "id"=>"abcd"}) }
-      let(:component2){ klass.new({"status"=>"operational", "name"=>"E-Shelf app", "id"=>"1234"}) }
-      let(:component3){ klass.new({"status"=>"operational", "name"=>"Login app", "id"=>"wxyz"}) }
+      let(:component1){ described_class.new({"status"=>"operational", "name"=>"Library.nyu.edu", "id"=>"abcd"}) }
+      let(:component2){ described_class.new({"status"=>"operational", "name"=>"E-Shelf app", "id"=>"1234"}) }
+      let(:component3){ described_class.new({"status"=>"operational", "name"=>"Login app", "id"=>"wxyz"}) }
       # stub out request
       before do
-        allow(klass).to receive(:list_all).and_return [component1, component2, component3]
+        allow(described_class).to receive(:list_all).and_return [component1, component2, component3]
       end
 
       it "should return a component with exact matching id" do
-        expect(klass.find("wxyz")).to eq component3
+        expect(described_class.find("wxyz")).to eq component3
       end
 
       it "should return nil for case-insensitive match" do
-        expect(klass.find("wXyz")).to eq nil
+        expect(described_class.find("wXyz")).to eq nil
       end
 
       it "should return nil for non-match" do
-        expect(klass.find("something")).to eq nil
+        expect(described_class.find("something")).to eq nil
       end
 
       it "should return nil for blank" do
-        expect(klass.find(nil)).to eq nil
+        expect(described_class.find(nil)).to eq nil
       end
     end
 
     describe "self.find_matching_name" do
-      let(:component1){ klass.new({"status"=>"operational", "name"=>"Library.nyu.edu", "id"=>"abcd"}) }
-      let(:component2){ klass.new({"status"=>"operational", "name"=>"E-Shelf app", "id"=>"1234"}) }
-      let(:component3){ klass.new({"status"=>"operational", "name"=>"Login app", "id"=>"wxyz"}) }
+      let(:component1){ described_class.new({"status"=>"operational", "name"=>"Library.nyu.edu", "id"=>"abcd"}) }
+      let(:component2){ described_class.new({"status"=>"operational", "name"=>"E-Shelf app", "id"=>"1234"}) }
+      let(:component3){ described_class.new({"status"=>"operational", "name"=>"Login app", "id"=>"wxyz"}) }
       # stub out request
       before do
-        allow(klass).to receive(:list_all).and_return [component1, component2, component3]
+        allow(described_class).to receive(:list_all).and_return [component1, component2, component3]
       end
 
       it "should return a component with a case-insensitive full matching name" do
-        expect(klass.find_matching_name("library.nyu.edu")).to eq component1
+        expect(described_class.find_matching_name("library.nyu.edu")).to eq component1
       end
 
       it "should return a component with a case-insensitive partial, full-word matching name" do
-        expect(klass.find_matching_name("e-shelF")).to eq component2
-        expect(klass.find_matching_name("logIn")).to eq component3
+        expect(described_class.find_matching_name("e-shelF")).to eq component2
+        expect(described_class.find_matching_name("logIn")).to eq component3
       end
 
       it "should return nil even with a case-insensitive partial, partial-word matching name" do
-        expect(klass.find_matching_name("library")).to eq nil
+        expect(described_class.find_matching_name("library")).to eq nil
       end
 
       it "should return nil for a blank parameter" do
-        expect(klass.find_matching_name("")).to eq nil
-        expect(klass.find_matching_name(nil)).to eq nil
+        expect(described_class.find_matching_name("")).to eq nil
+        expect(described_class.find_matching_name(nil)).to eq nil
       end
 
       it "should raise an error for ambiguous match" do
-        expect{ klass.find_matching_name("app") }.to raise_error "Ambiguous name 'app' matches multiple components: [\"E-Shelf app\", \"Login app\"]"
+        expect{ described_class.find_matching_name("app") }.to raise_error "Ambiguous name 'app' matches multiple components: [\"E-Shelf app\", \"Login app\"]"
       end
 
     end
@@ -100,7 +99,7 @@ describe StatusPage::Component do
 
   describe "instance methods" do
     let(:attributes){ ({"id"=>"abcd", "name"=>"favorite app", "status"=>"operational"}) }
-    let(:component){ klass.new attributes }
+    let(:component){ described_class.new attributes }
 
     describe "id" do
       it "should return the id" do
