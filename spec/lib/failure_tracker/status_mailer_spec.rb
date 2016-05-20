@@ -64,10 +64,33 @@ describe FailureTracker::StatusMailer do
         allow(mailer).to receive(:body).and_return body
       end
 
-      it "should call MailxRuby" do
-        expect(MailxRuby).to receive(:send_mail).with(body: body, subject: mail_subject, to: described_class::RECIPIENT, html: true)
-        subject #mailer.send_mail
+      context "with FAILURE_EMAIL_RECIPIENT set" do
+        around do |example|
+          with_modified_env FAILURE_EMAIL_RECIPIENT: 'joe@example.com' do
+            example.run
+          end
+        end
+
+        it "should call MailxRuby" do
+          expect(MailxRuby).to receive(:send_mail).with(body: body, subject: mail_subject, to: 'joe@example.com', html: true)
+          subject
+        end
       end
+
+      context "with FAILURE_EMAIL_RECIPIENT not set" do
+        around do |example|
+          with_modified_env FAILURE_EMAIL_RECIPIENT: nil do
+            example.run
+          end
+        end
+
+        it "should print a warning" do
+          expect(mailer).to receive(:puts).with("WARNING: No email sent since FAILURE_EMAIL_RECIPIENT is not specified")
+          expect(MailxRuby).to_not receive(:send_mail)
+          subject
+        end
+      end
+
     end
 
     describe "body" do
