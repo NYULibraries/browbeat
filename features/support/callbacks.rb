@@ -15,4 +15,7 @@ end
 at_exit do
   puts "Syncing with StatusPage..."
   FailureTracker.sync_status_page
+  puts "Sending mail..."
+  FailureTracker.send_status_mail
+  puts "Done"
 end
