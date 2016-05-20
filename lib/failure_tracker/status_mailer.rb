@@ -2,8 +2,6 @@ module FailureTracker
   class StatusMailer
     attr_reader :scenario_collection
 
-    RECIPIENT = 'eric.griffis@nyu.edu'
-
     def self.send_status(scenario_collection)
       new(scenario_collection).send_status_if_failed
     end
@@ -17,7 +15,11 @@ module FailureTracker
     end
 
     def send_mail
-      MailxRuby.send_mail(body: body, subject: subject, to: RECIPIENT, html: true)
+      if ENV['FAILURE_EMAIL_RECIPIENT']
+        MailxRuby.send_mail(body: body, subject: subject, to: ENV['FAILURE_EMAIL_RECIPIENT'], html: true)
+      else
+        puts "WARNING: No email sent since FAILURE_EMAIL_RECIPIENT is not specified"
+      end
     end
 
     def body
@@ -31,6 +33,9 @@ module FailureTracker
     def failed_scenarios
       @failed_scenarios ||= @scenario_collection.select(&:failed?)
     end
+
+    private
+
 
   end
 end
