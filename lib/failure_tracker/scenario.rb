@@ -1,7 +1,7 @@
 module FailureTracker
   class Scenario
     extend Forwardable
-    delegate [:name, :steps, :file, :source_tag_names] => :cucumber_scenario
+    delegate [:name, :steps, :file, :source_tag_names, :exception] => :cucumber_scenario
     delegate [:backtrace_line] => :failed_step
 
     attr_accessor :cucumber_scenario
@@ -30,6 +30,10 @@ module FailureTracker
     # returns app name as indicated by file path
     def app_symbol
       @app_symbol ||= file.match(/^features\/([\w-]+)\//)[1]
+    end
+
+    def exception_message
+      "#{exception.message} (#{exception})"
     end
 
     # returns cucumber step at which failure occurred

@@ -52,4 +52,23 @@ describe FailureTracker do
       subject
     end
   end
+
+  describe "send_status_mail" do
+    subject{ FailureTracker.send_status_mail }
+    let(:collection){ FailureTracker::ScenarioCollection }
+    before do
+      allow(FailureTracker).to receive(:scenarios).and_return collection
+      allow(FailureTracker::StatusMailer).to receive(:send_status)
+    end
+
+    it "should call scenarios" do
+      expect(FailureTracker).to receive(:scenarios)
+      subject
+    end
+
+    it "should call sync_status_page with scenarios" do
+      expect(FailureTracker::StatusMailer).to receive(:send_status).with(collection)
+      subject
+    end
+  end
 end

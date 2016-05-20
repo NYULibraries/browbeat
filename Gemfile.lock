@@ -1,3 +1,9 @@
+GIT
+  remote: git://github.com/NYULibraries/mailx_ruby.git
+  revision: b1944834fbcc5816106b93dd05ac4211e5797e79
+  specs:
+    mailx_ruby (0.0.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -40,6 +46,8 @@ GEM
     gherkin (2.12.2)
       multi_json (~> 1.3)
     git (1.2.9.1)
+    haml (4.0.7)
+      tilt
     highline (1.7.8)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
@@ -120,6 +128,7 @@ GEM
       websocket (~> 1.0)
     slop (3.6.0)
     thread_safe (0.3.5)
+    tilt (2.0.4)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     unf (0.1.4)
@@ -141,6 +150,8 @@ DEPENDENCIES
   cucumber (< 2.0)
   factory_girl
   figs (= 2.0.0)
+  haml
+  mailx_ruby!
   phantomjs
   poltergeist
   pry

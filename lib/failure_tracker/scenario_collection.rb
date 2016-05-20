@@ -1,7 +1,7 @@
 module FailureTracker
   class ScenarioCollection
     extend Forwardable
-    delegate [:<<, :[], :first, :last, :map, :each, :to_a, :any?, :empty?, :include?] => :@scenarios
+    delegate [:<<, :[], :first, :last, :map, :each, :to_a, :to_ary, :any?, :none?, :empty?, :include?] => :@scenarios
 
     def initialize(scenarios = [])
       @scenarios = scenarios
