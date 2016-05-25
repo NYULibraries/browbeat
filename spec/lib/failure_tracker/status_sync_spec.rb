@@ -19,6 +19,27 @@ describe FailureTracker::StatusSync do
         subject
       end
     end
+
+    describe "self.previously_failing?" do
+      subject { described_class.previously_failing? }
+      context "after calling sync_status_page" do
+        context "when StatusPage.failing_components? returns true" do
+          before do
+            allow(StatusPage).to receive(:failing_components?).and_return true
+            described_class.sync_status_page FailureTracker::ScenarioCollection.new []
+          end
+          it { is_expected.to be_truthy }
+        end
+
+        context "when StatusPage.failing_components? returns false" do
+          before do
+            allow(StatusPage).to receive(:failing_components?).and_return false
+            described_class.sync_status_page FailureTracker::ScenarioCollection.new []
+          end
+          it { is_expected.to be_falsy }
+        end
+      end
+    end
   end
 
   describe "instance methods" do

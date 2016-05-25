@@ -33,9 +33,7 @@ describe FailureTracker::StatusMailer do
       before { allow(mailer).to receive(:send_mail).and_return true }
 
       context "with failures" do
-        let(:scenario_collection){ FailureTracker::ScenarioCollection.new [scenario1, scenario2] }
-        let(:scenario1){ double FailureTracker::Scenario, failed?: false }
-        let(:scenario2){ double FailureTracker::Scenario, failed?: true }
+        before { allow(mailer).to receive(:any_failures?).and_return true }
 
         it "should call send_mail" do
           expect(mailer).to receive(:send_mail)
@@ -44,9 +42,7 @@ describe FailureTracker::StatusMailer do
       end
 
       context "without failures" do
-        let(:scenario_collection){ FailureTracker::ScenarioCollection.new [scenario1, scenario2] }
-        let(:scenario1){ double FailureTracker::Scenario, failed?: false }
-        let(:scenario2){ double FailureTracker::Scenario, failed?: false }
+        before { allow(mailer).to receive(:any_failures?).and_return false }
 
         it "should not call send_mail" do
           expect(mailer).to_not receive(:send_mail)
@@ -102,11 +98,26 @@ describe FailureTracker::StatusMailer do
         allow(mailer).to receive(:failed_scenarios).and_return failed_scenarios
       end
 
-      it { is_expected.to eq body }
+      context "with failures" do
+        before { allow(mailer).to receive(:any_failures?).and_return true }
 
-      it "should call formatter correctly" do
-        expect(FailureTracker::Formatters::MailFailureFormatter).to receive(:render).with failed_scenarios
-        subject
+        it { is_expected.to eq body }
+
+        it "should call formatter correctly" do
+          expect(FailureTracker::Formatters::MailFailureFormatter).to receive(:render).with failed_scenarios
+          subject
+        end
+      end
+
+      context "without failures" do
+        before { allow(mailer).to receive(:any_failures?).and_return false }
+
+        it { is_expected.to eq "Some services were previously set to failing, but Browbeat found them all operational." }
+
+        it "should not call formatter" do
+          expect(FailureTracker::Formatters::MailFailureFormatter).to_not receive(:render)
+          subject
+        end
       end
     end
 
@@ -119,7 +130,17 @@ describe FailureTracker::StatusMailer do
         allow(failed_scenarios).to receive(:worst_failure_type).and_return worst_failure_type
       end
 
-      it { is_expected.to eq "Browbeat: catastrophic outage detected" }
+      context "with failures" do
+        before { allow(mailer).to receive(:any_failures?).and_return true }
+
+        it { is_expected.to eq "Browbeat: catastrophic outage detected" }
+      end
+
+      context "without failures" do
+        before { allow(mailer).to receive(:any_failures?).and_return false }
+
+        it { is_expected.to eq "Browbeat: all services now operational" }
+      end
     end
 
     describe "failed_scenarios" do
@@ -141,6 +162,31 @@ describe FailureTracker::StatusMailer do
 
         it { is_expected.to match_array [] }
         it { is_expected.to be_a FailureTracker::ScenarioCollection }
+      end
+    end
+
+    describe "any_failures?" do
+      subject { mailer.any_failures? }
+      context "with failing scenarios" do
+        let(:scenario_collection){ FailureTracker::ScenarioCollection.new [scenario1, scenario2] }
+        let(:scenario1){ double FailureTracker::Scenario, failed?: false }
+        let(:scenario2){ double FailureTracker::Scenario, failed?: true }
+
+        it { is_expected.to be_truthy }
+      end
+
+      context "without failing scenarios" do
+        let(:scenario_collection){ FailureTracker::ScenarioCollection.new [scenario1, scenario2] }
+        let(:scenario1){ double FailureTracker::Scenario, failed?: false }
+        let(:scenario2){ double FailureTracker::Scenario, failed?: false }
+
+        it { is_expected.to be_falsy }
+      end
+
+      context "without scenarios" do
+        let(:scenario_collection){ FailureTracker::ScenarioCollection.new [] }
+
+        it { is_expected.to be_falsy }
       end
     end
   end
