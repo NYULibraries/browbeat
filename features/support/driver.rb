@@ -39,6 +39,7 @@ def configure_poltergeist
   Capybara.register_driver :poltergeist do |app|
     Capybara::Poltergeist::Driver.new(
       app,
+      phantomjs: ENV['PHANTOMJS'],
       phantomjs_options: ['--load-images=no', '--ignore-ssl-errors=yes'],
       window_size: [1280, 1024],
       timeout: (ENV['TIMEOUT'] || 30).to_i,
