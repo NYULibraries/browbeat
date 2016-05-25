@@ -35,4 +35,34 @@ describe StatusPage do
       end
     end
   end
+
+  describe "failing_components?" do
+    subject { StatusPage.failing_components? }
+    before do
+      allow(StatusPage::Component).to receive(:list_all).and_return components
+    end
+
+    context "with at least one component failing" do
+      let(:component1){ double StatusPage::Component, failing?: false }
+      let(:component2){ double StatusPage::Component, failing?: false }
+      let(:component3){ double StatusPage::Component, failing?: true }
+      let(:components){ [component1, component2, component3] }
+
+      it { is_expected.to be_truthy }
+    end
+
+    context "with no components failing" do
+      let(:component1){ double StatusPage::Component, failing?: false }
+      let(:component2){ double StatusPage::Component, failing?: false }
+      let(:components){ [component1, component2] }
+
+      it { is_expected.to be_falsy }
+    end
+
+    context "with no components" do
+      let(:components){ [] }
+
+      it { is_expected.to be_falsy }
+    end
+  end
 end

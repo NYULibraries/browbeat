@@ -5,6 +5,7 @@ module StatusPage
 
     MUTABLE_ATTRIBUTES = %w[name description status]
     STATUSES = %w[operational degraded_performance partial_outage major_outage]
+    SUCCESS_STATUS = 'operational'
 
     def self.list_all
       StatusPage::Request.execute("components.json", method: :get).map do |external_attributes|
@@ -24,6 +25,10 @@ module StatusPage
 
     def initialize(attributes={})
       assign_attributes attributes
+    end
+
+    def failing?
+      status != SUCCESS_STATUS
     end
 
     def update_status(status_type)

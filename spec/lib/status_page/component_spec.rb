@@ -117,6 +117,17 @@ describe StatusPage::Component do
       it { is_expected.to eq "operational" }
     end
 
+    describe "failing?" do
+      subject { component.failing? }
+      context "when status operational" do
+        it { is_expected.to be_falsy }
+      end
+      context "when status not operational" do
+        before { attributes["status"] = "major_outage" }
+        it { is_expected.to be_truthy }
+      end
+    end
+
     describe "update_status" do
       before { allow(component).to receive(:update_attribute) }
 
