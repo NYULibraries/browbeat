@@ -1,7 +1,5 @@
 module StatusPage
   class Request
-    PAGE_ID = 'kyyfz4489y7m'
-
     # sends request to status page API for given path and method, passing any other options through to RestClient
     # parses the response and returns as a ruby hash or array
     def self.execute(path, method:, **options)
@@ -15,7 +13,7 @@ module StatusPage
     private
 
     def self.get_full_url(subpath)
-      "https://api.statuspage.io/v1/pages/#{PAGE_ID}/#{subpath}"
+      "https://api.statuspage.io/v1/pages/#{page_id}/#{subpath}"
     end
 
     def self.authentication_headers
@@ -24,6 +22,10 @@ module StatusPage
 
     def self.api_key
       ENV['STATUS_PAGE_API_KEY'] || raise("Must specify STATUS_PAGE_API_KEY to use StatusPage")
+    end
+
+    def self.page_id
+      ENV['STATUS_PAGE_PAGE_ID'] || raise("Must specify STATUS_PAGE_PAGE_ID to use StatusPage")
     end
 
   end

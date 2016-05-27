@@ -11,7 +11,9 @@ module FailureTracker
     end
 
     def send_status_if_failed
-      send_mail if @scenario_collection.any?(&:failed?)
+      if any_failures? || StatusSync.previously_failing?
+        send_mail
+      end
     end
 
     def send_mail
@@ -23,19 +25,28 @@ module FailureTracker
     end
 
     def body
-      Formatters::MailFailureFormatter.render(failed_scenarios)
+      if any_failures?
+        Formatters::MailFailureFormatter.render(failed_scenarios)
+      else
+        "Some services were previously set to failing, but Browbeat found them all operational."
+      end
     end
 
     def subject
-      "Browbeat: #{failed_scenarios.worst_failure_type.gsub('_',' ')} detected"
+      if any_failures?
+        "Browbeat: #{failed_scenarios.worst_failure_type.gsub('_',' ')} detected"
+      else
+        "Browbeat: all services now operational"
+      end
     end
 
     def failed_scenarios
       @failed_scenarios ||= @scenario_collection.select(&:failed?)
     end
 
-    private
-
+    def any_failures?
+      @any_failures ||= @scenario_collection.any?(&:failed?)
+    end
 
   end
 end

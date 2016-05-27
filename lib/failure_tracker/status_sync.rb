@@ -5,7 +5,12 @@ module FailureTracker
     SUCCESS_STATUS_TYPE = 'operational'
 
     def self.sync_status_page(scenario_collection)
+      @previously_failing = StatusPage.failing_components?
       new(scenario_collection).sync_status_page
+    end
+
+    def self.previously_failing?
+      @previously_failing
     end
 
     def initialize(scenario_collection)

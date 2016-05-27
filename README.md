@@ -72,7 +72,23 @@ Unfortunately, none of Sauce's documentation mentions how to configure tests to 
 
 ### Run on Jenkins
 
-## Status reports
+TODO
+
+## Notifications
+
+### Emails
+
+Browbeat will send email notifications in the event of a failure. Emails will sort failures first by service, then by environment (production or staging), then by failure type. Failures will include the scenario failed, the exception thrown, and the step (and line number) at which it failed.
+
+Browbeat will notify that all services are operational only if any service was previously set to failing in StatusPage.
+
+This functionality requires that `FAILURE_EMAIL_RECIPIENT` be set.
+
+### StatusPage
+
+Browbeat will sync with StatusPage using components listed in `config/application.yml`, where keys represent subdirectories of the `features` directory and `status_page_id` specifies the component ID used by the StatusPage API. Given no failures for an application, it will set it to operational. Given any failures, it will set the component to the most severe failure, as determined by tags on the scenarios: `@major_outage`, `@partial_outage`, and `@degraded_performance`
+
+This functionality requires that both `STATUS_PAGE_API_KEY` and `STATUS_PAGE_PAGE_ID` be set.
 
 ### Posting callbacks to Statuspage.io
 
