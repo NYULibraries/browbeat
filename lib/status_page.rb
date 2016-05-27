@@ -11,4 +11,9 @@ module StatusPage
   end
   module_function :set_component_status
 
+  def failing_components?
+    Component.list_all.any?(&:failing?)
+  end
+  module_function :failing_components?
+
 end
