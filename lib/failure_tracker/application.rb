@@ -28,9 +28,13 @@ module FailureTracker
     private
 
     def get_status_page_component
-      comp = StatusPage::API::Component.new(status_page_id, ENV['STATUS_PAGE_PAGE_ID'])
+      comp = StatusPage::API::Component.new(status_page_id, status_page_page_id)
       comp.get
       comp
+    end
+
+    def status_page_page_id
+      ENV['STATUS_PAGE_PAGE_ID'] || raise("Must define STATUS_PAGE_PAGE_ID")
     end
 
     def self.all_applications_yaml
