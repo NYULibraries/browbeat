@@ -4,6 +4,14 @@ GIT
   specs:
     mailx_ruby (0.0.1)
 
+GIT
+  remote: git://github.com/NYULibraries/status_page-api.git
+  revision: ec5b031b5e60a04cf5bad9508bc9ef077ba9393c
+  branch: development
+  specs:
+    status_page-api (0.0.0)
+      rest-client (>= 1.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -161,6 +169,7 @@ DEPENDENCIES
   sauce-connect
   sauce-cucumber
   selenium-webdriver
+  status_page-api!
 
 BUNDLED WITH
    1.11.2

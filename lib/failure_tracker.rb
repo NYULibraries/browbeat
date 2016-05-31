@@ -1,5 +1,5 @@
 require 'forwardable'
-require 'status_page'
+require 'status_page/api'
 require 'mailx_ruby'
 require 'cucumber'
 require 'haml'
