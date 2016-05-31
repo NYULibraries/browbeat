@@ -7,7 +7,10 @@ describe FailureTracker::StatusSync do
       subject{ described_class.sync_status_page collection }
       let(:collection){ double FailureTracker::ScenarioCollection }
       let(:instance){ double described_class, sync_status_page: true }
-      before { allow(described_class).to receive(:new).and_return instance }
+      before do
+        allow(described_class).to receive(:new).and_return instance
+        allow(described_class).to receive(:get_failing_components).and_return []
+      end
 
       it "should call new with given collection" do
         expect(described_class).to receive(:new).with(collection)
@@ -18,27 +21,68 @@ describe FailureTracker::StatusSync do
         expect(instance).to receive(:sync_status_page)
         subject
       end
+
+      it "should call get_failing_components before initializing" do
+        expect(described_class).to receive(:get_failing_components).ordered
+        expect(described_class).to receive(:new).ordered
+        subject
+      end
     end
 
     describe "self.previously_failing?" do
-      subject { described_class.previously_failing? }
+      subject { described_class.previously_failing? application_symbols }
       context "after calling sync_status_page" do
-        context "when StatusPage.failing_components? returns true" do
+        context "when components were failing" do
+          let(:component1){ double StatusPage::API::Component, id: "aaaa" }
+          let(:component2){ double StatusPage::API::Component, id: "bbbb" }
+          let(:component3){ double StatusPage::API::Component, id: "cccc" }
           before do
-            allow(StatusPage).to receive(:failing_components?).and_return true
+            allow(described_class).to receive(:get_failing_components).and_return [component1, component2, component3]
             described_class.sync_status_page FailureTracker::ScenarioCollection.new []
           end
-          it { is_expected.to be_truthy }
+          context "given matching application symbols" do
+            let(:application_symbols){ %w[bbbb cccc] }
+            it { is_expected.to be_truthy }
+          end
+          context "given non-matching application symbols" do
+            let(:application_symbols){ %w[dddd] }
+            it { is_expected.to be_falsy }
+          end
+          context "given no application symbols" do
+            let(:application_symbols){ [] }
+            it { is_expected.to be_falsy }
+          end
         end
 
-        context "when StatusPage.failing_components? returns false" do
+        context "when no components were failing" do
           before do
-            allow(StatusPage).to receive(:failing_components?).and_return false
+            allow(described_class).to receive(:get_failing_components).and_return []
             described_class.sync_status_page FailureTracker::ScenarioCollection.new []
           end
-          it { is_expected.to be_falsy }
+          context "given application symbols" do
+            let(:application_symbols){ %w[bbbb cccc] }
+            it { is_expected.to be_falsy }
+          end
+          context "given no application symbols" do
+            let(:application_symbols){ [] }
+            it { is_expected.to be_falsy }
+          end
         end
       end
+    end
+
+    describe "self.get_failing_components" do
+      subject { described_class.get_failing_components }
+      let(:component_list){ double StatusPage::API::ComponentList, get: [component1, component2, component3] }
+      let(:component1){ double StatusPage::API::Component, failing?: true }
+      let(:component2){ double StatusPage::API::Component, failing?: false }
+      let(:component3){ double StatusPage::API::Component, failing?: true }
+      before { allow(StatusPage::API::ComponentList).to receive(:new).and_return component_list }
+
+      it { is_expected.to match_array [component1, component3] }
+
+      it { is_expected.to be_a Array }
+
     end
   end
 
