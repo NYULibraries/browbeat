@@ -5,13 +5,13 @@ module Browbeat
     SUCCESS_STATUS_TYPE = 'operational'
 
     def self.sync_status_page(scenario_collection)
-      @previously_failing_component_ids = get_failing_components.map(&:id)
+      @previously_failing_component_ids = get_failing_components
       new(scenario_collection).sync_status_page
     end
 
-    def self.previously_failing?(component_ids)
-      component_ids.any? do |component_id|
-        @previously_failing_component_ids.include?(component_id)
+    def self.previously_failing?(*component_ids)
+      component_ids.flatten.any? do |component_id|
+        @previously_failing_component_ids.map(&:id).include?(component_id)
       end
     end
 
