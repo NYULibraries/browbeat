@@ -1,10 +1,10 @@
-module FailureTracker
+module Browbeat
   module Formatters
     class MailFailureFormatter
       attr_accessor :scenario_collection
 
       ENVIRONMENTS = %w[production staging]
-      TEMPLATE = "lib/failure_tracker/templates/mail_failure.html.haml"
+      TEMPLATE = "lib/browbeat/templates/mail_failure.html.haml"
 
       def self.render(failed_scenarios)
         new(failed_scenarios).render

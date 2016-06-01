@@ -1,12 +1,12 @@
 require 'spec_helper'
-require 'failure_tracker'
+require 'browbeat'
 
-describe FailureTracker::Formatters::MailFailureFormatter do
+describe Browbeat::Formatters::MailFailureFormatter do
   describe "class methods" do
     describe "self.render" do
       subject { described_class.render scenario_collection }
       let(:formatter){ double described_class }
-      let(:scenario_collection){ double FailureTracker::ScenarioCollection }
+      let(:scenario_collection){ double Browbeat::ScenarioCollection }
       let(:result){ "<div>Hello!</div>" }
       before do
         allow(described_class).to receive(:new).and_return formatter
@@ -28,7 +28,7 @@ describe FailureTracker::Formatters::MailFailureFormatter do
   end
 
   describe "instance methods" do
-    let(:scenario_collection){ double FailureTracker::ScenarioCollection }
+    let(:scenario_collection){ double Browbeat::ScenarioCollection }
     let(:formatter){ described_class.new scenario_collection }
 
     describe "render" do
@@ -64,7 +64,7 @@ describe FailureTracker::Formatters::MailFailureFormatter do
       subject { formatter.application_list }
       let(:list){ double Array }
       it "should call Application.list and return result" do
-        expect(FailureTracker::Application).to receive(:list_all).and_return list
+        expect(Browbeat::Application).to receive(:list_all).and_return list
         expect(subject).to eq list
       end
     end
@@ -83,17 +83,17 @@ describe FailureTracker::Formatters::MailFailureFormatter do
       subject { formatter.scenarios_for_application? application }
 
       context "with scenarios" do
-        let(:scenario_collection){ FailureTracker::ScenarioCollection.new [scenario1, scenario2] }
-        let(:scenario1){ double FailureTracker::Scenario, app_symbol: 'abcd' }
-        let(:scenario2){ double FailureTracker::Scenario, app_symbol: 'wxyz' }
+        let(:scenario_collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2] }
+        let(:scenario1){ double Browbeat::Scenario, app_symbol: 'abcd' }
+        let(:scenario2){ double Browbeat::Scenario, app_symbol: 'wxyz' }
 
         context "with corresponding application" do
-          let(:application){ double FailureTracker::Application, symbol: 'wxyz' }
+          let(:application){ double Browbeat::Application, symbol: 'wxyz' }
           it { is_expected.to be_truthy }
         end
 
         context "with non-corresponding application" do
-          let(:application){ double FailureTracker::Application, symbol: '1234' }
+          let(:application){ double Browbeat::Application, symbol: '1234' }
           it { is_expected.to be_falsy }
         end
       end
@@ -103,28 +103,28 @@ describe FailureTracker::Formatters::MailFailureFormatter do
       subject { formatter.scenarios_for_application application }
 
       context "with scenarios" do
-        let(:scenario_collection){ FailureTracker::ScenarioCollection.new [scenario1, scenario2, scenario3, scenario4] }
-        let(:scenario1){ double FailureTracker::Scenario, app_symbol: 'abcd' }
-        let(:scenario2){ double FailureTracker::Scenario, app_symbol: 'wxyz' }
-        let(:scenario3){ double FailureTracker::Scenario, app_symbol: 'wxyz' }
-        let(:scenario4){ double FailureTracker::Scenario, app_symbol: '4567' }
+        let(:scenario_collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2, scenario3, scenario4] }
+        let(:scenario1){ double Browbeat::Scenario, app_symbol: 'abcd' }
+        let(:scenario2){ double Browbeat::Scenario, app_symbol: 'wxyz' }
+        let(:scenario3){ double Browbeat::Scenario, app_symbol: 'wxyz' }
+        let(:scenario4){ double Browbeat::Scenario, app_symbol: '4567' }
 
         context "with corresponding application" do
-          let(:application){ double FailureTracker::Application, symbol: '4567' }
+          let(:application){ double Browbeat::Application, symbol: '4567' }
           it { is_expected.to match_array [scenario4] }
-          it { is_expected.to be_a FailureTracker::ScenarioCollection }
+          it { is_expected.to be_a Browbeat::ScenarioCollection }
         end
 
         context "with corresponding application matching multiple" do
-          let(:application){ double FailureTracker::Application, symbol: 'wxyz' }
+          let(:application){ double Browbeat::Application, symbol: 'wxyz' }
           it { is_expected.to match_array [scenario2, scenario3] }
-          it { is_expected.to be_a FailureTracker::ScenarioCollection }
+          it { is_expected.to be_a Browbeat::ScenarioCollection }
         end
 
         context "with non-corresponding application" do
-          let(:application){ double FailureTracker::Application, symbol: '1234' }
+          let(:application){ double Browbeat::Application, symbol: '1234' }
           it { is_expected.to match_array [] }
-          it { is_expected.to be_a FailureTracker::ScenarioCollection }
+          it { is_expected.to be_a Browbeat::ScenarioCollection }
         end
       end
 
@@ -132,17 +132,17 @@ describe FailureTracker::Formatters::MailFailureFormatter do
 
     describe "scenarios_for_application_environment?" do
       subject { formatter.scenarios_for_application_environment? application, environment }
-      let(:application){ double FailureTracker::Application }
+      let(:application){ double Browbeat::Application }
       let(:environment){ "something" }
 
       context "with application scenarios" do
-        let(:subcollection){ FailureTracker::ScenarioCollection.new [scenario1, scenario2, scenario3] }
+        let(:subcollection){ Browbeat::ScenarioCollection.new [scenario1, scenario2, scenario3] }
         before { allow(formatter).to receive(:scenarios_for_application).and_return subcollection }
 
         context "with environment tag" do
-          let(:scenario1){ double FailureTracker::Scenario, has_tag?: false }
-          let(:scenario2){ double FailureTracker::Scenario, has_tag?: true }
-          let(:scenario3){ double FailureTracker::Scenario, has_tag?: false }
+          let(:scenario1){ double Browbeat::Scenario, has_tag?: false }
+          let(:scenario2){ double Browbeat::Scenario, has_tag?: true }
+          let(:scenario3){ double Browbeat::Scenario, has_tag?: false }
 
           it { is_expected.to be_truthy }
 
@@ -156,9 +156,9 @@ describe FailureTracker::Formatters::MailFailureFormatter do
         end
 
         context "without environment tag" do
-          let(:scenario1){ double FailureTracker::Scenario, has_tag?: false }
-          let(:scenario2){ double FailureTracker::Scenario, has_tag?: false }
-          let(:scenario3){ double FailureTracker::Scenario, has_tag?: false }
+          let(:scenario1){ double Browbeat::Scenario, has_tag?: false }
+          let(:scenario2){ double Browbeat::Scenario, has_tag?: false }
+          let(:scenario3){ double Browbeat::Scenario, has_tag?: false }
 
           it { is_expected.to be_falsy }
 
@@ -173,7 +173,7 @@ describe FailureTracker::Formatters::MailFailureFormatter do
       end
 
       context "without application scenarios" do
-        let(:subcollection){ FailureTracker::ScenarioCollection.new [] }
+        let(:subcollection){ Browbeat::ScenarioCollection.new [] }
         before { allow(formatter).to receive(:scenarios_for_application).and_return subcollection }
 
         it { is_expected.to be_falsy }
@@ -182,11 +182,11 @@ describe FailureTracker::Formatters::MailFailureFormatter do
 
     describe "scenarios_for_application_environment_failure_type" do
       subject { formatter.scenarios_for_application_environment_failure_type application, environment, failure_type }
-      let(:application){ double FailureTracker::Application }
+      let(:application){ double Browbeat::Application }
       let(:environment){ "something" }
       let(:failure_type){ "catastrophic" }
-      let(:subcollection){ double FailureTracker::ScenarioCollection }
-      let(:subsubcollection){ double FailureTracker::ScenarioCollection }
+      let(:subcollection){ double Browbeat::ScenarioCollection }
+      let(:subsubcollection){ double Browbeat::ScenarioCollection }
       before do
         allow(formatter).to receive(:scenarios_for_application).and_return subcollection
         allow(subcollection).to receive(:with_tags).and_return subsubcollection

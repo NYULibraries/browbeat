@@ -1,11 +1,11 @@
 require 'spec_helper'
-require 'failure_tracker'
+require 'browbeat'
 
-describe FailureTracker::StatusSync do
+describe Browbeat::StatusSync do
   describe "class methods" do
     describe "self.sync_status_page" do
       subject{ described_class.sync_status_page collection }
-      let(:collection){ double FailureTracker::ScenarioCollection }
+      let(:collection){ double Browbeat::ScenarioCollection }
       let(:instance){ double described_class, sync_status_page: true }
       before do
         allow(described_class).to receive(:new).and_return instance
@@ -38,7 +38,7 @@ describe FailureTracker::StatusSync do
           let(:component3){ double StatusPage::API::Component, id: "cccc" }
           before do
             allow(described_class).to receive(:get_failing_components).and_return [component1, component2, component3]
-            described_class.sync_status_page FailureTracker::ScenarioCollection.new []
+            described_class.sync_status_page Browbeat::ScenarioCollection.new []
           end
           context "given matching application symbols" do
             let(:application_symbols){ %w[bbbb cccc] }
@@ -57,7 +57,7 @@ describe FailureTracker::StatusSync do
         context "when no components were failing" do
           before do
             allow(described_class).to receive(:get_failing_components).and_return []
-            described_class.sync_status_page FailureTracker::ScenarioCollection.new []
+            described_class.sync_status_page Browbeat::ScenarioCollection.new []
           end
           context "given application symbols" do
             let(:application_symbols){ %w[bbbb cccc] }
@@ -87,21 +87,21 @@ describe FailureTracker::StatusSync do
   end
 
   describe "instance methods" do
-    let(:collection){ double FailureTracker::ScenarioCollection }
-    let(:new_collection){ double FailureTracker::ScenarioCollection }
+    let(:collection){ double Browbeat::ScenarioCollection }
+    let(:new_collection){ double Browbeat::ScenarioCollection }
     let(:instance){ described_class.new collection }
 
     describe "sync_status_page" do
       subject{ instance.sync_status_page }
-      let(:application1){ double FailureTracker::Application, set_status_page_status: true }
-      let(:application2){ double FailureTracker::Application, set_status_page_status: true }
-      let(:application3){ double FailureTracker::Application, set_status_page_status: true }
-      let(:application4){ double FailureTracker::Application, set_status_page_status: true }
+      let(:application1){ double Browbeat::Application, set_status_page_status: true }
+      let(:application2){ double Browbeat::Application, set_status_page_status: true }
+      let(:application3){ double Browbeat::Application, set_status_page_status: true }
+      let(:application4){ double Browbeat::Application, set_status_page_status: true }
       let(:status1){ 'operational' }
       let(:status3){ 'major_outage' }
       let(:status4){ 'degraded_performance' }
       before do
-        allow(FailureTracker::Application).to receive(:list_all).and_return [application1, application2, application3, application4]
+        allow(Browbeat::Application).to receive(:list_all).and_return [application1, application2, application3, application4]
         allow(instance).to receive(:scenarios_for_application?).and_return true, false, true, true
         allow(instance).to receive(:status_for_application).and_return status1, status3, status4
       end
@@ -133,7 +133,7 @@ describe FailureTracker::StatusSync do
 
     describe "status_for_application" do
       subject{ instance.status_for_application application }
-      let(:application){ double FailureTracker::Application }
+      let(:application){ double Browbeat::Application }
       before do
         allow(instance).to receive(:failed_scenarios_for_application).and_return new_collection
       end
@@ -187,14 +187,14 @@ describe FailureTracker::StatusSync do
 
     describe "failed_scenarios_for_application" do
       subject{ instance.failed_scenarios_for_application application }
-      let(:application){ double FailureTracker::Application, symbol: "wxyz" }
-      let(:scenario1){ double FailureTracker::Scenario, app_symbol: "wxyz", failed?: false }
-      let(:scenario2){ double FailureTracker::Scenario, app_symbol: "wxyz", failed?: true }
-      let(:scenario3){ double FailureTracker::Scenario, app_symbol: "abcd", failed?: false }
-      let(:scenario4){ double FailureTracker::Scenario, app_symbol: "wxyz", failed?: true }
-      let(:scenario5){ double FailureTracker::Scenario, app_symbol: "abcd", failed?: true }
-      let(:scenario6){ double FailureTracker::Scenario, app_symbol: "wxyz", failed?: true }
-      let(:collection){ FailureTracker::ScenarioCollection.new [scenario1, scenario2, scenario3, scenario4, scenario5, scenario6] }
+      let(:application){ double Browbeat::Application, symbol: "wxyz" }
+      let(:scenario1){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: false }
+      let(:scenario2){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true }
+      let(:scenario3){ double Browbeat::Scenario, app_symbol: "abcd", failed?: false }
+      let(:scenario4){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true }
+      let(:scenario5){ double Browbeat::Scenario, app_symbol: "abcd", failed?: true }
+      let(:scenario6){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true }
+      let(:collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2, scenario3, scenario4, scenario5, scenario6] }
       # stub out has_tags? only for production
       before do
         allow(scenario1).to receive(:has_tags?).with(:production).and_return true
@@ -205,7 +205,7 @@ describe FailureTracker::StatusSync do
         allow(scenario6).to receive(:has_tags?).with(:production).and_return false
       end
 
-      it { is_expected.to be_a FailureTracker::ScenarioCollection }
+      it { is_expected.to be_a Browbeat::ScenarioCollection }
       it { is_expected.to match_array [scenario2, scenario4] }
     end
   end

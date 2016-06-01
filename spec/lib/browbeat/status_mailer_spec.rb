@@ -1,12 +1,12 @@
 require 'spec_helper'
-require 'failure_tracker'
+require 'browbeat'
 
-describe FailureTracker::StatusMailer do
+describe Browbeat::StatusMailer do
   describe "class methods" do
     describe "self.send_status" do
       subject { described_class.send_status scenario_collection }
       let(:mailer){ double described_class }
-      let(:scenario_collection){ double FailureTracker::ScenarioCollection }
+      let(:scenario_collection){ double Browbeat::ScenarioCollection }
       before do
         allow(described_class).to receive(:new).and_return mailer
         allow(mailer).to receive(:send_status_if_failed).and_return true
@@ -26,7 +26,7 @@ describe FailureTracker::StatusMailer do
 
   describe "instance methods" do
     let(:mailer){ described_class.new scenario_collection }
-    let(:scenario_collection){ double FailureTracker::ScenarioCollection }
+    let(:scenario_collection){ double Browbeat::ScenarioCollection }
 
     describe "send_status_if_failed" do
       subject { mailer.send_status_if_failed }
@@ -41,7 +41,7 @@ describe FailureTracker::StatusMailer do
         end
 
         it "should not call previously_failing?" do
-          expect(FailureTracker::StatusSync).to_not receive(:previously_failing?)
+          expect(Browbeat::StatusSync).to_not receive(:previously_failing?)
           subject
         end
       end
@@ -50,7 +50,7 @@ describe FailureTracker::StatusMailer do
         before { allow(mailer).to receive(:any_failures?).and_return false }
 
         context "without scenarios" do
-          let(:scenario_collection){ FailureTracker::ScenarioCollection.new [] }
+          let(:scenario_collection){ Browbeat::ScenarioCollection.new [] }
 
           it "should not call send_mail" do
             expect(mailer).to_not receive(:send_mail)
@@ -58,19 +58,19 @@ describe FailureTracker::StatusMailer do
           end
 
           it "should call previously_failing? correctly" do
-            expect(FailureTracker::StatusSync).to receive(:previously_failing?).with([])
+            expect(Browbeat::StatusSync).to receive(:previously_failing?).with([])
             subject
           end
         end
 
         context "with scenario applications" do
-          let(:application1){ double FailureTracker::Scenario, status_page_id: "aaaa" }
-          let(:application2){ double FailureTracker::Scenario, status_page_id: "bbbb" }
-          let(:application3){ double FailureTracker::Scenario, status_page_id: "cccc" }
+          let(:application1){ double Browbeat::Scenario, status_page_id: "aaaa" }
+          let(:application2){ double Browbeat::Scenario, status_page_id: "bbbb" }
+          let(:application3){ double Browbeat::Scenario, status_page_id: "cccc" }
           before { allow(mailer).to receive(:scenario_applications).and_return [application1, application2, application3] }
 
           context "with previous failures" do
-            before { allow(FailureTracker::StatusSync).to receive(:previously_failing?).and_return true }
+            before { allow(Browbeat::StatusSync).to receive(:previously_failing?).and_return true }
 
             it "should call send_mail" do
               expect(mailer).to receive(:send_mail)
@@ -78,13 +78,13 @@ describe FailureTracker::StatusMailer do
             end
 
             it "should call previously_failing? correctly" do
-              expect(FailureTracker::StatusSync).to receive(:previously_failing?).with(["aaaa", "bbbb", "cccc"])
+              expect(Browbeat::StatusSync).to receive(:previously_failing?).with(["aaaa", "bbbb", "cccc"])
               subject
             end
           end
 
           context "without previous failures" do
-            before { allow(FailureTracker::StatusSync).to receive(:previously_failing?).and_return false }
+            before { allow(Browbeat::StatusSync).to receive(:previously_failing?).and_return false }
 
             it "should not call send_mail" do
               expect(mailer).to_not receive(:send_mail)
@@ -92,7 +92,7 @@ describe FailureTracker::StatusMailer do
             end
 
             it "should call previously_failing? correctly" do
-              expect(FailureTracker::StatusSync).to receive(:previously_failing?).with(["aaaa", "bbbb", "cccc"])
+              expect(Browbeat::StatusSync).to receive(:previously_failing?).with(["aaaa", "bbbb", "cccc"])
               subject
             end
           end
@@ -141,9 +141,9 @@ describe FailureTracker::StatusMailer do
     describe "body" do
       subject { mailer.body }
       let(:body){ "<div>Hello world</div>" }
-      let(:failed_scenarios){ double FailureTracker::ScenarioCollection }
+      let(:failed_scenarios){ double Browbeat::ScenarioCollection }
       before do
-        allow(FailureTracker::Formatters::MailFailureFormatter).to receive(:render).and_return body
+        allow(Browbeat::Formatters::MailFailureFormatter).to receive(:render).and_return body
         allow(mailer).to receive(:failed_scenarios).and_return failed_scenarios
       end
 
@@ -153,7 +153,7 @@ describe FailureTracker::StatusMailer do
         it { is_expected.to eq body }
 
         it "should call formatter correctly" do
-          expect(FailureTracker::Formatters::MailFailureFormatter).to receive(:render).with failed_scenarios
+          expect(Browbeat::Formatters::MailFailureFormatter).to receive(:render).with failed_scenarios
           subject
         end
       end
@@ -164,7 +164,7 @@ describe FailureTracker::StatusMailer do
         it { is_expected.to eq "Some services were previously set to failing, but Browbeat found them operational." }
 
         it "should not call formatter" do
-          expect(FailureTracker::Formatters::MailFailureFormatter).to_not receive(:render)
+          expect(Browbeat::Formatters::MailFailureFormatter).to_not receive(:render)
           subject
         end
       end
@@ -173,7 +173,7 @@ describe FailureTracker::StatusMailer do
     describe "subject" do
       subject { mailer.subject }
       let(:worst_failure_type){ "catastrophic_outage" }
-      let(:failed_scenarios){ double FailureTracker::ScenarioCollection }
+      let(:failed_scenarios){ double Browbeat::ScenarioCollection }
       before do
         allow(mailer).to receive(:failed_scenarios).and_return failed_scenarios
         allow(failed_scenarios).to receive(:worst_failure_type).and_return worst_failure_type
@@ -195,45 +195,45 @@ describe FailureTracker::StatusMailer do
     describe "failed_scenarios" do
       describe "with scenarios" do
         subject { mailer.failed_scenarios }
-        let(:scenario_collection){ FailureTracker::ScenarioCollection.new [scenario1, scenario2, scenario3, scenario4] }
-        let(:scenario1){ double FailureTracker::Scenario, failed?: false }
-        let(:scenario2){ double FailureTracker::Scenario, failed?: true }
-        let(:scenario3){ double FailureTracker::Scenario, failed?: true }
-        let(:scenario4){ double FailureTracker::Scenario, failed?: false }
+        let(:scenario_collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2, scenario3, scenario4] }
+        let(:scenario1){ double Browbeat::Scenario, failed?: false }
+        let(:scenario2){ double Browbeat::Scenario, failed?: true }
+        let(:scenario3){ double Browbeat::Scenario, failed?: true }
+        let(:scenario4){ double Browbeat::Scenario, failed?: false }
 
         it { is_expected.to match_array [scenario2, scenario3] }
-        it { is_expected.to be_a FailureTracker::ScenarioCollection }
+        it { is_expected.to be_a Browbeat::ScenarioCollection }
       end
 
       describe "without scenarios" do
         subject { mailer.failed_scenarios }
-        let(:scenario_collection){ FailureTracker::ScenarioCollection.new [] }
+        let(:scenario_collection){ Browbeat::ScenarioCollection.new [] }
 
         it { is_expected.to match_array [] }
-        it { is_expected.to be_a FailureTracker::ScenarioCollection }
+        it { is_expected.to be_a Browbeat::ScenarioCollection }
       end
     end
 
     describe "any_failures?" do
       subject { mailer.any_failures? }
       context "with failing scenarios" do
-        let(:scenario_collection){ FailureTracker::ScenarioCollection.new [scenario1, scenario2] }
-        let(:scenario1){ double FailureTracker::Scenario, failed?: false }
-        let(:scenario2){ double FailureTracker::Scenario, failed?: true }
+        let(:scenario_collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2] }
+        let(:scenario1){ double Browbeat::Scenario, failed?: false }
+        let(:scenario2){ double Browbeat::Scenario, failed?: true }
 
         it { is_expected.to be_truthy }
       end
 
       context "without failing scenarios" do
-        let(:scenario_collection){ FailureTracker::ScenarioCollection.new [scenario1, scenario2] }
-        let(:scenario1){ double FailureTracker::Scenario, failed?: false }
-        let(:scenario2){ double FailureTracker::Scenario, failed?: false }
+        let(:scenario_collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2] }
+        let(:scenario1){ double Browbeat::Scenario, failed?: false }
+        let(:scenario2){ double Browbeat::Scenario, failed?: false }
 
         it { is_expected.to be_falsy }
       end
 
       context "without scenarios" do
-        let(:scenario_collection){ FailureTracker::ScenarioCollection.new [] }
+        let(:scenario_collection){ Browbeat::ScenarioCollection.new [] }
 
         it { is_expected.to be_falsy }
       end
@@ -241,40 +241,40 @@ describe FailureTracker::StatusMailer do
 
     describe "scenario_applications" do
       subject { mailer.scenario_applications }
-      let(:scenario1){ double FailureTracker::Scenario, app_symbol: "aaaa" }
-      let(:scenario2){ double FailureTracker::Scenario, app_symbol: "zzzz" }
-      let(:scenario3){ double FailureTracker::Scenario, app_symbol: "xxxx" }
-      let(:application1){ double FailureTracker::Application, symbol: "xxxx" }
-      let(:application2){ double FailureTracker::Application, symbol: "yyyy" }
-      let(:application3){ double FailureTracker::Application, symbol: "zzzz" }
+      let(:scenario1){ double Browbeat::Scenario, app_symbol: "aaaa" }
+      let(:scenario2){ double Browbeat::Scenario, app_symbol: "zzzz" }
+      let(:scenario3){ double Browbeat::Scenario, app_symbol: "xxxx" }
+      let(:application1){ double Browbeat::Application, symbol: "xxxx" }
+      let(:application2){ double Browbeat::Application, symbol: "yyyy" }
+      let(:application3){ double Browbeat::Application, symbol: "zzzz" }
 
       context "with scenarios" do
-        let(:scenario_collection){ FailureTracker::ScenarioCollection.new [scenario1, scenario2, scenario3] }
+        let(:scenario_collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2, scenario3] }
 
         context "with applications" do
-          before { allow(FailureTracker::Application).to receive(:list_all).and_return [application1, application2, application3] }
+          before { allow(Browbeat::Application).to receive(:list_all).and_return [application1, application2, application3] }
 
           it { is_expected.to match_array [application1, application3] }
         end
 
         context "without applications" do
-          before { allow(FailureTracker::Application).to receive(:list_all).and_return [] }
+          before { allow(Browbeat::Application).to receive(:list_all).and_return [] }
 
           it { is_expected.to eq [] }
         end
       end
 
       context "without scenarios" do
-        let(:scenario_collection){ FailureTracker::ScenarioCollection.new [] }
+        let(:scenario_collection){ Browbeat::ScenarioCollection.new [] }
 
         context "with applications" do
-          before { allow(FailureTracker::Application).to receive(:list_all).and_return [application1, application2, application3] }
+          before { allow(Browbeat::Application).to receive(:list_all).and_return [application1, application2, application3] }
 
           it { is_expected.to eq [] }
         end
 
         context "without applications" do
-          before { allow(FailureTracker::Application).to receive(:list_all).and_return [] }
+          before { allow(Browbeat::Application).to receive(:list_all).and_return [] }
 
           it { is_expected.to eq [] }
         end

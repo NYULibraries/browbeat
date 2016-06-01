@@ -1,4 +1,4 @@
-module FailureTracker
+module Browbeat
   class Application
     LIST_FILEPATH = 'config/application_list.yml'
 

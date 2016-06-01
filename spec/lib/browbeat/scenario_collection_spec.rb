@@ -1,11 +1,11 @@
 require 'spec_helper'
-require 'failure_tracker'
+require 'browbeat'
 
-describe FailureTracker::ScenarioCollection do
+describe Browbeat::ScenarioCollection do
   describe "instance methods" do
-    let(:scenario1){ double FailureTracker::Scenario }
-    let(:scenario2){ double FailureTracker::Scenario }
-    let(:scenario3){ double FailureTracker::Scenario }
+    let(:scenario1){ double Browbeat::Scenario }
+    let(:scenario2){ double Browbeat::Scenario }
+    let(:scenario3){ double Browbeat::Scenario }
     let(:collection){ described_class.new scenarios }
 
     describe "with_tags" do

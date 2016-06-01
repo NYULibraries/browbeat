@@ -1,4 +1,4 @@
-module FailureTracker
+module Browbeat
   class StatusMailer
     attr_reader :scenario_collection
 

@@ -1,7 +1,7 @@
 require 'spec_helper'
-require 'failure_tracker'
+require 'browbeat'
 
-describe FailureTracker::Application do
+describe Browbeat::Application do
   describe "class methods" do
     describe "self.list_all" do
       subject{ described_class.list_all }
