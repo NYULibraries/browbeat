@@ -1,4 +1,4 @@
-module FailureTracker
+module Browbeat
   class StatusSync
     attr_accessor :scenario_collection
 
