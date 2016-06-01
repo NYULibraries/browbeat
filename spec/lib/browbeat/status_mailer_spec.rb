@@ -140,20 +140,24 @@ describe Browbeat::StatusMailer do
 
     describe "body" do
       subject { mailer.body }
-      let(:body){ "<div>Hello world</div>" }
+      let(:failure_body){ "<div>Hello world</div>" }
+      let(:success_body){ "<em>Hello world</em>" }
       let(:failed_scenarios){ double Browbeat::ScenarioCollection }
+      let(:applications){ double Array }
       before do
-        allow(Browbeat::Formatters::MailFailureFormatter).to receive(:render).and_return body
+        allow(Browbeat::Formatters::MailFailureFormatter).to receive(:render).and_return failure_body
+        allow(Browbeat::Formatters::MailSuccessFormatter).to receive(:render).and_return success_body
         allow(mailer).to receive(:failed_scenarios).and_return failed_scenarios
+        allow(mailer).to receive(:scenario_applications).and_return applications
       end
 
       context "with failures" do
         before { allow(mailer).to receive(:any_failures?).and_return true }
 
-        it { is_expected.to eq body }
+        it { is_expected.to eq failure_body }
 
-        it "should call formatter correctly" do
-          expect(Browbeat::Formatters::MailFailureFormatter).to receive(:render).with failed_scenarios
+        it "should call failure formatter correctly" do
+          expect(Browbeat::Formatters::MailFailureFormatter).to receive(:render).with failed_scenarios, applications
           subject
         end
       end
@@ -161,10 +165,10 @@ describe Browbeat::StatusMailer do
       context "without failures" do
         before { allow(mailer).to receive(:any_failures?).and_return false }
 
-        it { is_expected.to eq "Some services were previously set to failing, but Browbeat found them operational." }
+        it { is_expected.to eq success_body }
 
-        it "should not call formatter" do
-          expect(Browbeat::Formatters::MailFailureFormatter).to_not receive(:render)
+        it "should call success formatter correctly" do
+          expect(Browbeat::Formatters::MailSuccessFormatter).to receive(:render).with applications
           subject
         end
       end

@@ -10,6 +10,7 @@ require 'browbeat/application'
 require 'browbeat/status_sync'
 require 'browbeat/status_mailer'
 require 'browbeat/formatters/mail_failure_formatter'
+require 'browbeat/formatters/mail_success_formatter'
 
 module Browbeat
 end

@@ -43,10 +43,18 @@ describe Browbeat::StatusSync do
           context "given matching application symbols" do
             let(:application_symbols){ %w[bbbb cccc] }
             it { is_expected.to be_truthy }
+            context "as splat" do
+              subject { described_class.previously_failing?(*application_symbols) }
+              it { is_expected.to be_truthy }
+            end
           end
           context "given non-matching application symbols" do
             let(:application_symbols){ %w[dddd] }
             it { is_expected.to be_falsy }
+            context "as splat" do
+              subject { described_class.previously_failing?(*application_symbols) }
+              it { is_expected.to be_falsy }
+            end
           end
           context "given no application symbols" do
             let(:application_symbols){ [] }
@@ -62,6 +70,10 @@ describe Browbeat::StatusSync do
           context "given application symbols" do
             let(:application_symbols){ %w[bbbb cccc] }
             it { is_expected.to be_falsy }
+            context "as splat" do
+              subject { described_class.previously_failing?(*application_symbols) }
+              it { is_expected.to be_falsy }
+            end
           end
           context "given no application symbols" do
             let(:application_symbols){ [] }

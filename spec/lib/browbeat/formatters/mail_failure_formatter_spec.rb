@@ -4,9 +4,10 @@ require 'browbeat'
 describe Browbeat::Formatters::MailFailureFormatter do
   describe "class methods" do
     describe "self.render" do
-      subject { described_class.render scenario_collection }
+      subject { described_class.render scenario_collection, applications }
       let(:formatter){ double described_class }
       let(:scenario_collection){ double Browbeat::ScenarioCollection }
+      let(:applications){ [double(Browbeat::Application), double(Browbeat::Application)] }
       let(:result){ "<div>Hello!</div>" }
       before do
         allow(described_class).to receive(:new).and_return formatter
@@ -16,7 +17,7 @@ describe Browbeat::Formatters::MailFailureFormatter do
       it { is_expected.to eq result }
 
       it "should instantiate instance correctly" do
-        expect(described_class).to receive(:new).with scenario_collection
+        expect(described_class).to receive(:new).with scenario_collection, applications
         subject
       end
 
@@ -29,7 +30,8 @@ describe Browbeat::Formatters::MailFailureFormatter do
 
   describe "instance methods" do
     let(:scenario_collection){ double Browbeat::ScenarioCollection }
-    let(:formatter){ described_class.new scenario_collection }
+    let(:applications){ [double(Browbeat::Application), double(Browbeat::Application)] }
+    let(:formatter){ described_class.new scenario_collection, applications }
 
     describe "render" do
       subject { formatter.render }
@@ -45,7 +47,7 @@ describe Browbeat::Formatters::MailFailureFormatter do
       it { is_expected.to eq result }
 
       it "should call File.read correctly" do
-        expect(File).to receive(:read).with("lib/failure_tracker/templates/mail_failure.html.haml")
+        expect(File).to receive(:read).with("lib/browbeat/templates/mail_failure.html.haml")
         subject
       end
 
@@ -62,11 +64,7 @@ describe Browbeat::Formatters::MailFailureFormatter do
 
     describe "application_list" do
       subject { formatter.application_list }
-      let(:list){ double Array }
-      it "should call Application.list and return result" do
-        expect(Browbeat::Application).to receive(:list_all).and_return list
-        expect(subject).to eq list
-      end
+      it { is_expected.to eq applications }
     end
 
     describe "environments" do

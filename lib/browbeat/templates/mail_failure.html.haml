@@ -1,10 +1,16 @@
+%p The following services had no failures:
+%ul
+  - application_list.each do |application|
+    - next if scenarios_for_application?(application)
+    %li= application.name
+%p The following services had failures:
 - application_list.each do |application|
-  - next unless scenarios_for_application? application
+  - next unless scenarios_for_application?(application)
   %div
     %b= "#{application.name} (#{scenarios_for_application(application).worst_failure_type.gsub('_', ' ')})"
     %ul
       - environments.each do |environment|
-        - next unless scenarios_for_application_environment? application, environment
+        - next unless scenarios_for_application_environment?(application, environment)
         %li
           = environment
           %ul

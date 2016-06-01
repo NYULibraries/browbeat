@@ -11,7 +11,7 @@ module Browbeat
     end
 
     def send_status_if_failed
-      if any_failures? || StatusSync.previously_failing?(scenario_applications.map(&:status_page_id))
+      if any_failures? || previous_failures?
         send_mail
       end
     end
@@ -26,9 +26,9 @@ module Browbeat
 
     def body
       if any_failures?
-        Formatters::MailFailureFormatter.render(failed_scenarios)
+        Formatters::MailFailureFormatter.render(failed_scenarios, scenario_applications)
       else
-        "Some services were previously set to failing, but Browbeat found them operational."
+        Formatters::MailSuccessFormatter.render(scenario_applications)
       end
     end
 
@@ -62,6 +62,10 @@ module Browbeat
 
     def scenario_application_symbols
       @symbols ||= @scenario_collection.map(&:app_symbol)
+    end
+
+    def previous_failures?
+      StatusSync.previously_failing?(scenario_applications.map(&:status_page_id))
     end
 
   end
