@@ -1,6 +1,6 @@
 module Browbeat
-  module Formatters
-    class MailSuccessFormatter
+  module Presenters
+    class MailSuccessPresenter
       attr_reader :application_list
 
       TEMPLATE = "lib/browbeat/templates/mail_success.html.haml"

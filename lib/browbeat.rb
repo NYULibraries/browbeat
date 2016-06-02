@@ -9,8 +9,8 @@ require 'browbeat/scenario_collection'
 require 'browbeat/application'
 require 'browbeat/status_sync'
 require 'browbeat/status_mailer'
-require 'browbeat/formatters/mail_failure_formatter'
-require 'browbeat/formatters/mail_success_formatter'
+require 'browbeat/presenters/mail_failure_presenter'
+require 'browbeat/presenters/mail_success_presenter'
 
 module Browbeat
 end

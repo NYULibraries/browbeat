@@ -145,8 +145,8 @@ describe Browbeat::StatusMailer do
       let(:failed_scenarios){ double Browbeat::ScenarioCollection }
       let(:applications){ double Array }
       before do
-        allow(Browbeat::Formatters::MailFailureFormatter).to receive(:render).and_return failure_body
-        allow(Browbeat::Formatters::MailSuccessFormatter).to receive(:render).and_return success_body
+        allow(Browbeat::Presenters::MailFailurePresenter).to receive(:render).and_return failure_body
+        allow(Browbeat::Presenters::MailSuccessPresenter).to receive(:render).and_return success_body
         allow(mailer).to receive(:failed_scenarios).and_return failed_scenarios
         allow(mailer).to receive(:scenario_applications).and_return applications
       end
@@ -156,8 +156,8 @@ describe Browbeat::StatusMailer do
 
         it { is_expected.to eq failure_body }
 
-        it "should call failure formatter correctly" do
-          expect(Browbeat::Formatters::MailFailureFormatter).to receive(:render).with failed_scenarios, applications
+        it "should call failure presenter correctly" do
+          expect(Browbeat::Presenters::MailFailurePresenter).to receive(:render).with failed_scenarios, applications
           subject
         end
       end
@@ -167,8 +167,8 @@ describe Browbeat::StatusMailer do
 
         it { is_expected.to eq success_body }
 
-        it "should call success formatter correctly" do
-          expect(Browbeat::Formatters::MailSuccessFormatter).to receive(:render).with applications
+        it "should call success presenter correctly" do
+          expect(Browbeat::Presenters::MailSuccessPresenter).to receive(:render).with applications
           subject
         end
       end

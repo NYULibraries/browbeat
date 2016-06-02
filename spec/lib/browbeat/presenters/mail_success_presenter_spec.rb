@@ -1,16 +1,16 @@
 require 'spec_helper'
 require 'browbeat'
 
-describe Browbeat::Formatters::MailSuccessFormatter do
+describe Browbeat::Presenters::MailSuccessPresenter do
   describe "class methods" do
     describe "self.render" do
       subject { described_class.render applications }
-      let(:formatter){ double described_class }
+      let(:presenter){ double described_class }
       let(:applications){ [double(Browbeat::Application), double(Browbeat::Application)] }
       let(:result){ "<div>Hello!</div>" }
       before do
-        allow(described_class).to receive(:new).and_return formatter
-        allow(formatter).to receive(:render).and_return result
+        allow(described_class).to receive(:new).and_return presenter
+        allow(presenter).to receive(:render).and_return result
       end
 
       it { is_expected.to eq result }
@@ -21,18 +21,18 @@ describe Browbeat::Formatters::MailSuccessFormatter do
       end
 
       it "should call render on that instance" do
-        expect(formatter).to receive(:render)
+        expect(presenter).to receive(:render)
         subject
       end
     end
   end
 
   describe "instance methods" do
-    let(:formatter){ described_class.new applications }
+    let(:presenter){ described_class.new applications }
     let(:applications){ [double(Browbeat::Application), double(Browbeat::Application)] }
 
     describe "render" do
-      subject { formatter.render }
+      subject { presenter.render }
       let(:file_text){ "%div =environments" }
       let(:engine){ double Haml::Engine }
       let(:result){ "Hello world!" }
@@ -55,13 +55,13 @@ describe Browbeat::Formatters::MailSuccessFormatter do
       end
 
       it "should call render correctly" do
-        expect(engine).to receive(:render).with(formatter)
+        expect(engine).to receive(:render).with(presenter)
         subject
       end
     end
 
     describe "application_list" do
-      subject { formatter.application_list }
+      subject { presenter.application_list }
       it { is_expected.to eq applications }
     end
 
