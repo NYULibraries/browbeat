@@ -1,6 +1,6 @@
 module Browbeat
-  module Formatters
-    class MailFailureFormatter
+  module Presenters
+    class MailFailurePresenter
       attr_accessor :scenario_collection, :application_list
 
       ENVIRONMENTS = %w[production staging]
