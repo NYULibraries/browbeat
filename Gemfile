@@ -19,7 +19,7 @@ group :test do
   gem 'climate_control'
 
   gem 'rake'
-  gem 'status_page-api', github: "NYULibraries/status_page-api", branch: 'development'
+  gem 'status_page-api', github: "NYULibraries/status_page-api"
   gem 'mailx_ruby', github: "NYULibraries/mailx_ruby"
   gem 'haml'
 end
