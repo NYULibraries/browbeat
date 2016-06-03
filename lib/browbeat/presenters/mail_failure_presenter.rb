@@ -1,25 +1,22 @@
-module FailureTracker
-  module Formatters
-    class MailFailureFormatter
-      attr_accessor :scenario_collection
+module Browbeat
+  module Presenters
+    class MailFailurePresenter
+      attr_accessor :scenario_collection, :application_list
 
       ENVIRONMENTS = %w[production staging]
-      TEMPLATE = "lib/failure_tracker/templates/mail_failure.html.haml"
+      TEMPLATE = "lib/browbeat/templates/mail_failure.html.haml"
 
-      def self.render(failed_scenarios)
-        new(failed_scenarios).render
+      def self.render(failed_scenarios, scenario_applications)
+        new(failed_scenarios, scenario_applications).render
       end
 
-      def initialize(failed_scenarios)
+      def initialize(failed_scenarios, scenario_applications)
         @scenario_collection = failed_scenarios
+        @application_list = scenario_applications
       end
 
       def render
         Haml::Engine.new(File.read(TEMPLATE)).render(self)
-      end
-
-      def application_list
-        Application.list_all
       end
 
       def environments

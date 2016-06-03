@@ -1,4 +1,4 @@
-module FailureTracker
+module Browbeat
   class ScenarioCollection
     extend Forwardable
     delegate [:<<, :[], :first, :last, :map, :each, :to_a, :to_ary, :any?, :none?, :empty?, :include?] => :@scenarios

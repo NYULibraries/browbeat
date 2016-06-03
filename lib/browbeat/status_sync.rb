@@ -1,16 +1,23 @@
-module FailureTracker
+module Browbeat
   class StatusSync
     attr_accessor :scenario_collection
 
     SUCCESS_STATUS_TYPE = 'operational'
 
     def self.sync_status_page(scenario_collection)
-      @previously_failing = StatusPage.failing_components?
+      @previously_failing_component_ids = get_failing_components
       new(scenario_collection).sync_status_page
     end
 
-    def self.previously_failing?
-      @previously_failing
+    def self.previously_failing?(*component_ids)
+      component_ids.flatten.any? do |component_id|
+        @previously_failing_component_ids.map(&:id).include?(component_id)
+      end
+    end
+
+    def self.get_failing_components
+      component_list = StatusPage::API::ComponentList.new(ENV['STATUS_PAGE_PAGE_ID'])
+      component_list.get.to_a.select(&:failing?)
     end
 
     def initialize(scenario_collection)
@@ -49,5 +56,6 @@ module FailureTracker
     def production_scenarios
       @production_scenarios ||= scenario_collection.with_tags(:production)
     end
+
   end
 end

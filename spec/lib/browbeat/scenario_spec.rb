@@ -1,7 +1,7 @@
 require 'spec_helper'
-require 'failure_tracker'
+require 'browbeat'
 
-describe FailureTracker::Scenario do
+describe Browbeat::Scenario do
   describe "scenario methods" do
     let(:cucumber_scenario){ double Cucumber::Ast::Scenario }
     let(:scenario){ described_class.new cucumber_scenario }
