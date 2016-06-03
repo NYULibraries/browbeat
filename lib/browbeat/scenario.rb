@@ -1,4 +1,4 @@
-module FailureTracker
+module Browbeat
   class Scenario
     extend Forwardable
     delegate [:name, :steps, :file, :source_tag_names, :exception] => :cucumber_scenario

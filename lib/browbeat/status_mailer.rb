@@ -1,4 +1,4 @@
-module FailureTracker
+module Browbeat
   class StatusMailer
     attr_reader :scenario_collection
 
@@ -11,7 +11,7 @@ module FailureTracker
     end
 
     def send_status_if_failed
-      if any_failures? || StatusSync.previously_failing?
+      if any_failures? || previous_failures?
         send_mail
       end
     end
@@ -26,9 +26,9 @@ module FailureTracker
 
     def body
       if any_failures?
-        Formatters::MailFailureFormatter.render(failed_scenarios)
+        Presenters::MailFailurePresenter.render(failed_scenarios, scenario_applications)
       else
-        "Some services were previously set to failing, but Browbeat found them all operational."
+        Presenters::MailSuccessPresenter.render(scenario_applications)
       end
     end
 
@@ -36,7 +36,7 @@ module FailureTracker
       if any_failures?
         "Browbeat: #{failed_scenarios.worst_failure_type.gsub('_',' ')} detected"
       else
-        "Browbeat: all services now operational"
+        "Browbeat: services now operational"
       end
     end
 
@@ -46,6 +46,26 @@ module FailureTracker
 
     def any_failures?
       @any_failures ||= @scenario_collection.any?(&:failed?)
+    end
+
+    def scenario_applications
+      @scenario_applications ||= get_scenario_applications
+    end
+
+    private
+
+    def get_scenario_applications
+      Application.list_all.select do |application|
+        scenario_application_symbols.include?(application.symbol)
+      end
+    end
+
+    def scenario_application_symbols
+      @symbols ||= @scenario_collection.map(&:app_symbol)
+    end
+
+    def previous_failures?
+      StatusSync.previously_failing?(scenario_applications.map(&:status_page_id))
     end
 
   end

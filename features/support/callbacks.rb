@@ -1,5 +1,7 @@
+tracker ||= Browbeat::FailureTracker.new
+
 After do |scenario|
-  FailureTracker.register_scenario scenario
+  tracker.register_scenario scenario
 end
 
 # disable capybara overriding @selenium-tagged tests (required to run in sauce)
@@ -14,8 +16,8 @@ end
 # after all, process failures
 at_exit do
   puts "Syncing with StatusPage..."
-  FailureTracker.sync_status_page
+  tracker.sync_status_page
   puts "Sending mail..."
-  FailureTracker.send_status_mail
+  tracker.send_status_mail
   puts "Done"
 end
