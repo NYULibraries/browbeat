@@ -8,6 +8,7 @@ FEATURE_GROUPS = {
   eshelf: "e-Shelf",
   getit: "GetIt",
   aleph: "Aleph",
+  arch: "Arch",
 }
 
 namespace :browbeat do
