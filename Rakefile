@@ -1,2 +1,2 @@
-# import all *.rake files from lib/tasks directory
-import *Dir.glob('lib/tasks/*.rake')
+import 'lib/tasks/browbeat.rake'
+import 'lib/tasks/docker.rake'
