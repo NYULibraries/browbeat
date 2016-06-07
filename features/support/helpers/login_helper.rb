@@ -17,16 +17,12 @@ module Browbeat
       Figs::ENV.nyu["staff"]["password"]
     end
 
-    def get_env_variable_or_raise(variable_name)
-      ENV[variable_name] || raise("Must specify #{variable_name} to run login features")
-    end
-
     def login_default_path
       "/login"
     end
 
     def xml_body
-      Nokogiri::XML page.body
+      Nokogiri::XML(page.body)
     end
   end
 end

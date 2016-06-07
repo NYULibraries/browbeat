@@ -24,12 +24,11 @@ Then /^I should be logged in$/ do
 end
 
 Then /^I should see valid XML without "(.+)" node$/ do |node_name|
-  expect(xml_body.xpath('.//bor-info')).to_not be_empty
+  expect(xml_body.children).to_not be_empty
   expect(xml_body.xpath(".//#{node_name}")).to be_empty
 end
 
 Then(/^my browser should redirect to (Login.*)$/) do |login_url_name|
   expect(page.current_path).to eql login_default_path
-  # test full URL
   expect(page.current_url).to eql url_to(login_url_name) + login_default_path
 end
