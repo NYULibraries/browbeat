@@ -6,7 +6,7 @@ module Browbeat
 
     attr_accessor :cucumber_scenario
 
-    ORDERED_FAILURE_TYPES = %w[major_outage partial_outage degraded_performance]
+    ORDERED_FAILURE_TYPES = %w[major_outage partial_outage degraded_performance warning]
     ENVIRONMENTS = %w[production staging]
 
     def initialize(cucumber_scenario)

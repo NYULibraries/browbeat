@@ -74,7 +74,7 @@ describe Browbeat::Presenters::MailFailurePresenter do
 
     describe "failure_types" do
       subject { presenter.failure_types }
-      it { is_expected.to eq %w[major_outage partial_outage degraded_performance] }
+      it { is_expected.to eq %w[major_outage partial_outage degraded_performance warning] }
     end
 
     describe "scenarios_for_application?" do
