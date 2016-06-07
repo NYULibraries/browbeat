@@ -31,3 +31,5 @@ x-services sample staging: https://alephstage.library.nyu.edu/X?bor_id=N19064851
 arch: https://arch.library.nyu.edu/
 arch staging: https://dev.arch.library.nyu.edu/
 arch qa: https://qa.arch.library.nyu.edu/
+metalib: http://metalib1.bobst.nyu.edu:8331
+metalib x-server: http://metalib1.bobst.nyu.edu:8331/X
