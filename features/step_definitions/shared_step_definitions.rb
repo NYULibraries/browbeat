@@ -2,6 +2,10 @@ Given(/^I visit (.+)$/) do |url_name|
   visit url_to url_name
 end
 
+When /^I click on "(.+)"$/ do |link_name|
+  click_on link_name
+end
+
 When(/^I search for "(.*?)"$/) do |search_term|
   within('form[name=searchForm]') do
     fill_in("search_field", with: search_term)
