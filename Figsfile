@@ -3,4 +3,5 @@ repo: git@github.com:NYULibraries/configula.git
 locations:
 - test_users.yml
 - browbeat.yml
+- findingaids.yml
 method: git

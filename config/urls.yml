@@ -33,3 +33,7 @@ arch staging: https://dev.arch.library.nyu.edu/
 arch qa: https://qa.arch.library.nyu.edu/
 metalib: http://metalib1.bobst.nyu.edu:8331
 metalib x-server: http://metalib1.bobst.nyu.edu:8331/X
+special collections: https://specialcollections.library.nyu.edu
+special collections lb server 1: https://spcollect1.bobst.nyu.edu
+special collections lb server 2: https://spcollect2.bobst.nyu.edu
+special collections staging: https://dev.specialcollections.library.nyu.edu
