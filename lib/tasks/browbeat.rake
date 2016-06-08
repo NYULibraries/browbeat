@@ -9,6 +9,7 @@ FEATURE_GROUPS = {
   getit: "GetIt",
   aleph: "Aleph",
   arch: "Arch",
+  special_collections: "Special Collections",
 }
 
 namespace :browbeat do
