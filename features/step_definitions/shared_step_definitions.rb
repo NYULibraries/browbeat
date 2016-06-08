@@ -2,6 +2,24 @@ Given(/^I visit (.+)$/) do |url_name|
   visit url_to url_name
 end
 
+Given /^I login as an NYU user$/ do
+  steps %Q{
+    Given I visit Login
+    When I click on "NYU"
+    And I enter NYU credentials
+    Then I should be logged in
+  }
+end
+
+Given /^I login as an NYU staging user$/ do
+  steps %Q{
+    Given I visit Login staging
+    When I click on "NYU"
+    And I enter NYU staging credentials
+    Then I should be logged in
+  }
+end
+
 When /^I click on "(.+)"$/ do |link_name|
   click_on link_name
 end

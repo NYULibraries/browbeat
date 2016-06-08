@@ -6,18 +6,21 @@ Feature: Arch is running
 
   @production @major_outage
   Scenario: Visiting JSTOR from Arch on production
-    Given I visit Arch
+    Given I login as an NYU user
+    And I visit Arch
     When I click on "JSTOR"
-    Then my browser should resolve to JSTOR
+    Then my browser should respond with a success for JSTOR
 
-  @staging @major_outage @wip
+  @staging @major_outage
   Scenario: Visiting JSTOR from Arch on staging
-    Given I visit Arch staging
+    Given I login as an NYU staging user
+    And I visit Arch staging
     When I click on "JSTOR"
-    Then my browser should resolve to JSTOR
+    Then my browser should respond with a success for JSTOR
 
-  @staging @major_outage @wip
+  @staging @major_outage
   Scenario: Visiting JSTOR from Arch on staging QA
-    Given I visit Arch QA
+    Given I login as an NYU staging user
+    And I visit Arch QA
     When I click on "JSTOR"
-    Then my browser should resolve to JSTOR
+    Then my browser should respond with a success for JSTOR
