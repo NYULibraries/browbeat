@@ -2,18 +2,17 @@ Then(/^my browser should resolve to Login$/) do
   expect(page.current_path).to eql login_default_path
 end
 
-When /^I login as an NYU user$/ do
-  step "I login as NYU user \"#{shibboleth_username}\" with password \"#{shibboleth_password}\""
-end
-
-When /^I login as an NYU staging user$/ do
-  step "I login as NYU user \"#{shibboleth_staging_username}\" with password \"#{shibboleth_staging_password}\""
-end
-
-When /^I login as NYU user "(.+)" with password "(.+)"/ do |username, password|
-  click_link_or_button "NYU"
-  # ensure we're on shibboleth login page
+When /^I enter NYU credentials$/ do
   expect(page).to have_content "NYU Login"
+  step "I enter username \"#{shibboleth_username}\" with password \"#{shibboleth_password}\""
+end
+
+When /^I enter NYU staging credentials$/ do
+  expect(page).to have_content "NYU Login"
+  step "I enter username \"#{shibboleth_staging_username}\" with password \"#{shibboleth_staging_password}\""
+end
+
+When /^I enter username "(.+)" with password "(.+)"/ do |username, password|
   fill_in "netid", with: username
   fill_in "Password", with: password
   click_button "Login"
