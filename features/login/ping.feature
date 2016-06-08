@@ -14,16 +14,16 @@ Feature: Login is running
   Scenario: Visiting Login LB server 1 on production
     Given I visit Login LB server 1
     Then my browser should respond with a success for Login
-    And my browser should resolve to Login
+    And my browser should resolve to Login LB server 1
 
   @production @degraded_performance
   Scenario: Visiting Login LB server 2 on production
     Given I visit Login LB server 2
     Then my browser should respond with a success for Login
-    And my browser should resolve to Login
+    And my browser should resolve to Login LB server 2
 
   @staging @major_outage
   Scenario: Visiting Login on staging
     Given I visit Login staging
     Then my browser should respond with a success for Login
-    And my browser should resolve to Login
+    And my browser should resolve to Login staging
