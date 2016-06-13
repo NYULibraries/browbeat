@@ -30,13 +30,13 @@ namespace :docker do
       end
 
       FEATURE_GROUPS.each do |directory, application_name|
-        desc "Run all cucumber features for #{application_name} in docker containers"
+        desc "Run cucumber features for #{application_name} in docker containers"
         task directory => ["docker:up"] do
           sh "docker-compose run web bundle exec rake browbeat:check:#{directory}"
         end
       end
 
-      desc "Run all cucumber tests for PDS in docker containers"
+      desc "Run cucumber tests for PDS in docker containers"
       task :pds => ["docker:up"] do
         sh 'docker-compose run web bundle exec rake browbeat:check:pds'
       end

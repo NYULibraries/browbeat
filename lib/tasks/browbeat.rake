@@ -23,13 +23,13 @@ namespace :browbeat do
     end
 
     FEATURE_GROUPS.each do |directory, application_name|
-      desc "Run all cucumber features for #{application_name} (ping.feature first)"
+      desc "Run cucumber features for #{application_name} (ping.feature first)"
       task directory do
         sh "bundle exec cucumber --require features/ features/#{directory}/ping.feature features/#{directory}/"
       end
     end
 
-    desc "Run all cucumber features for PDS (ping.feature first)"
+    desc "Run cucumber features for PDS (ping.feature first)"
     task :pds do
       sh 'bundle exec cucumber --require features/ features/login/pds/ping.feature features/login/pds/'
     end
