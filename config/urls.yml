@@ -37,3 +37,6 @@ special collections: https://specialcollections.library.nyu.edu
 special collections lb server 1: https://spcollect1.bobst.nyu.edu
 special collections lb server 2: https://spcollect2.bobst.nyu.edu
 special collections staging: https://dev.specialcollections.library.nyu.edu
+privileges: https://privileges.library.nyu.edu/
+privileges staging: https://dev.privileges.library.nyu.edu/
+privileges qa: https://qa.privileges.library.nyu.edu/

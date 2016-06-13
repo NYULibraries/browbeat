@@ -11,8 +11,8 @@ When /^I click on external link "(.+)"$/ do |link_name|
   end
 end
 
-When /^I secretly visit WebSolr$/ do
-  visit web_solr_url
+When /^I secretly visit Special Collections WebSolr$/ do
+  visit special_collections_web_solr_url
 end
 
 Then /^my browser should resolve to (Special Collections.*)$/ do |special_collections_url_name|
