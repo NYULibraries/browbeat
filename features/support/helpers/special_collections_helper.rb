@@ -12,7 +12,7 @@ module Browbeat
       "http://dlib.nyu.edu/findingaids/html"
     end
 
-    def web_solr_url
+    def special_collections_web_solr_url
       raise "Cannot access WebSolr URL while running tests in Sauce" if ENV['DRIVER'] == 'sauce'
       Figs::ENV.production['SOLR_URL']
     end

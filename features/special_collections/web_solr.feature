@@ -6,5 +6,5 @@ Feature: Special Collections is running
 
   @production @major_outage
   Scenario: WebSolr on production
-    Given I secretly visit WebSolr
+    Given I secretly visit Special Collections WebSolr
     Then my browser should respond with a success for WebSolr

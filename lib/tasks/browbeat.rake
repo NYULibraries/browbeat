@@ -10,6 +10,7 @@ FEATURE_GROUPS = {
   aleph: "Aleph",
   arch: "Arch",
   special_collections: "Special Collections",
+  privileges: "Privileges"
 }
 
 namespace :browbeat do
