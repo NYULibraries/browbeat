@@ -45,3 +45,7 @@ website beta: https://beta.library.nyu.edu/
 website staging: https://dev.library.nyu.edu/
 marli: https://web1.library.nyu.edu/marli
 marli staging: https://webdev3.library.nyu.edu/marli
+illiad: http://ill.library.nyu.edu/illiad/illiad.dll
+illiad staging: http://illdev.library.nyu.edu/illiad/illiad.dll
+illiad request sample: http://ill.library.nyu.edu/illiad/illiad.dll?Action=10&Form=30&rft.au=Smith%2C+John&rft.aufirst=John&rft.aulast=Smith&rft.btitle=Test+title&rft.date=2009&rft.genre=book&rft.place=New+York
+illiad staging request sample: http://illdev.library.nyu.edu/illiad/illiad.dll?Action=10&Form=30&rft.au=Smith%2C+John&rft.aufirst=John&rft.aulast=Smith&rft.btitle=Test+title&rft.date=2009&rft.genre=book&rft.place=New+York
