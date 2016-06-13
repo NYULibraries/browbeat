@@ -40,3 +40,6 @@ special collections staging: https://dev.specialcollections.library.nyu.edu
 privileges: https://privileges.library.nyu.edu/
 privileges staging: https://dev.privileges.library.nyu.edu/
 privileges qa: https://qa.privileges.library.nyu.edu/
+website: http://library.nyu.edu/
+website beta: https://beta.library.nyu.edu/
+website staging: https://dev.library.nyu.edu/

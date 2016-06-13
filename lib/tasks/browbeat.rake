@@ -10,7 +10,8 @@ FEATURE_GROUPS = {
   aleph: "Aleph",
   arch: "Arch",
   special_collections: "Special Collections",
-  privileges: "Privileges"
+  privileges: "Privileges",
+  website: "Library.nyu.edu website",
 }
 
 namespace :browbeat do
