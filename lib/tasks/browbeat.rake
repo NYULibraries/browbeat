@@ -13,6 +13,7 @@ FEATURE_GROUPS = {
   privileges: "Privileges",
   website: "Library.nyu.edu website",
   marli: "MaRLi",
+  illiad: "ILLiad",
 }
 
 namespace :browbeat do

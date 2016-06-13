@@ -19,7 +19,7 @@ getit:
 arch:
   name: The Arch (Articles & Databases, Databases A-Z)
   status_page_id: dnxb1np2b5zy
-interlibrary:
+illiad:
   name: Interlibrary Loan (ILL)
   status_page_id: r7sjhcjpwc3h
 room:
