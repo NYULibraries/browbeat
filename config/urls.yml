@@ -43,3 +43,5 @@ privileges qa: https://qa.privileges.library.nyu.edu/
 website: http://library.nyu.edu/
 website beta: https://beta.library.nyu.edu/
 website staging: https://dev.library.nyu.edu/
+marli: https://web1.library.nyu.edu/marli
+marli staging: https://webdev3.library.nyu.edu/marli
