@@ -12,6 +12,7 @@ FEATURE_GROUPS = {
   special_collections: "Special Collections",
   privileges: "Privileges",
   website: "Library.nyu.edu website",
+  marli: "MaRLi",
 }
 
 namespace :browbeat do
