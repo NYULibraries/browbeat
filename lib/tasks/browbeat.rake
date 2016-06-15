@@ -14,6 +14,7 @@ FEATURE_GROUPS = {
   website: "Library.nyu.edu website",
   marli: "MaRLi",
   illiad: "ILLiad",
+  ezborrow: "EZBorrow",
 }
 
 namespace :browbeat do
