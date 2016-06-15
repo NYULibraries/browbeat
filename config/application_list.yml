@@ -34,3 +34,9 @@ privileges:
 marli:
   name: MaRLI (Manhattan Research Library Initiative)
   status_page_id: tfhq22gtmld9
+ezborrow:
+  name: EZBorrow
+  status_page_id: 9hgcdbqnd832
+ezproxy:
+  name: EZProxy
+  status_page_id: q23q1ggvgj60

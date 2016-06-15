@@ -7,7 +7,6 @@ Given /^I login as an NYU user$/ do
     Given I visit Login
     When I click on "NYU"
     And I enter NYU credentials
-    Then I should be logged in
   }
 end
 
@@ -16,7 +15,6 @@ Given /^I login as an NYU staging user$/ do
     Given I visit Login staging
     When I click on "NYU"
     And I enter NYU staging credentials
-    Then I should be logged in
   }
 end
 
@@ -31,7 +29,7 @@ When(/^I search for "(.*?)"$/) do |search_term|
   end
 end
 
-Then(/^my browser should respond with a success for (.+)$/) do |app_name|
+Then(/^my browser should respond with a? ?success for (.+)$/) do |app_name|
   expect(page.find('body')).to have_content success_text_for(app_name)
 end
 
