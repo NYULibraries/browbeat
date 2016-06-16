@@ -28,3 +28,25 @@ aleph: https://aleph.library.nyu.edu/
 aleph staging: https://alephstage.library.nyu.edu/
 x-services sample: https://aleph.library.nyu.edu/X?bor_id=N19064851&cash=N&filter_cash=N&hold=N&library=NYU50&loans=N&op=bor_info&sub_library=NYU50
 x-services sample staging: https://alephstage.library.nyu.edu/X?bor_id=N19064851&cash=N&filter_cash=N&hold=N&library=NYU50&loans=N&op=bor_info&sub_library=NYU50
+arch: https://arch.library.nyu.edu/
+arch staging: https://dev.arch.library.nyu.edu/
+arch qa: https://qa.arch.library.nyu.edu/
+metalib: http://metalib1.bobst.nyu.edu:8331
+metalib x-server: http://metalib1.bobst.nyu.edu:8331/X
+special collections: https://specialcollections.library.nyu.edu
+special collections lb server 1: https://spcollect1.bobst.nyu.edu
+special collections lb server 2: https://spcollect2.bobst.nyu.edu
+special collections staging: https://dev.specialcollections.library.nyu.edu
+privileges: https://privileges.library.nyu.edu/
+privileges staging: https://dev.privileges.library.nyu.edu/
+privileges qa: https://qa.privileges.library.nyu.edu/
+website: http://library.nyu.edu/
+website beta: https://beta.library.nyu.edu/
+website staging: https://dev.library.nyu.edu/
+marli: https://web1.library.nyu.edu/marli
+marli staging: https://webdev3.library.nyu.edu/marli
+illiad: http://ill.library.nyu.edu/illiad/illiad.dll
+illiad staging: http://illdev.library.nyu.edu/illiad/illiad.dll
+illiad request sample: http://ill.library.nyu.edu/illiad/illiad.dll?Action=10&Form=30&rft.au=Smith%2C+John&rft.aufirst=John&rft.aulast=Smith&rft.btitle=Test+title&rft.date=2009&rft.genre=book&rft.place=New+York
+illiad staging request sample: http://illdev.library.nyu.edu/illiad/illiad.dll?Action=10&Form=30&rft.au=Smith%2C+John&rft.aufirst=John&rft.aulast=Smith&rft.btitle=Test+title&rft.date=2009&rft.genre=book&rft.place=New+York
+ezborrow: https://login.library.nyu.edu/ezborrow

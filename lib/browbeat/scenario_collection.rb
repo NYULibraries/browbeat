@@ -14,7 +14,7 @@ module Browbeat
 
     # returns worst failure type from all constituent scenarios
     def worst_failure_type
-      @scenarios.select(&:failure_severity).sort_by(&:failure_severity).first.failure_type if any?
+      @scenarios.select(&:failure_severity).sort_by(&:failure_severity).first.failure_type if any?(&:failure_severity)
     end
 
     # wrapper for Array#select that returns instance of this class

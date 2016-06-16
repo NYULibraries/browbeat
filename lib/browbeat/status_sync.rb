@@ -3,6 +3,7 @@ module Browbeat
     attr_accessor :scenario_collection
 
     SUCCESS_STATUS_TYPE = 'operational'
+    FAILURE_STATUS_TYPES = %w[major_outage partial_outage degraded_performance]
 
     def self.sync_status_page(scenario_collection)
       @previously_failing_component_ids = get_failing_components
@@ -32,8 +33,12 @@ module Browbeat
     end
 
     def status_for_application(application)
-      app_failures = failed_scenarios_for_application application
-      app_failures.any? ? app_failures.worst_failure_type : SUCCESS_STATUS_TYPE
+      app_failures = failed_scenarios_for_application(application)
+      if FAILURE_STATUS_TYPES.include?(app_failures.worst_failure_type)
+        app_failures.worst_failure_type
+      else
+        SUCCESS_STATUS_TYPE
+      end
     end
 
     def failed_scenarios_for_application(application)
@@ -44,11 +49,11 @@ module Browbeat
       production_scenario_symbols.any?{|symbol| symbol == application.symbol }
     end
 
+    private
     def failed_production_scenarios
-      @failed_production_scenarios ||= production_scenarios.select(&:failed?)
+      @failed_production_scenarios ||= production_scenarios.select(&:failed?).select(&:failure_severity)
     end
 
-    private
     def production_scenario_symbols
       @scenario_symbols ||= production_scenarios.map(&:app_symbol).uniq
     end

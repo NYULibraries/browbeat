@@ -29,34 +29,16 @@ namespace :docker do
         sh 'docker-compose run web bundle exec rake browbeat:check:all'
       end
 
-      desc "Run all cucumber tests for primo in docker containers"
-      task :primo => ["docker:up"] do
-        sh 'docker-compose run web bundle exec rake browbeat:check:primo'
+      FEATURE_GROUPS.each do |directory, application_name|
+        desc "Run cucumber features for #{application_name} in docker containers"
+        task directory => ["docker:up"] do
+          sh "docker-compose run web bundle exec rake browbeat:check:#{directory}"
+        end
       end
 
-      desc "Run all cucumber tests for login in docker containers"
-      task :login => ["docker:up"] do
-        sh 'docker-compose run web bundle exec rake browbeat:check:login'
-      end
-
-      desc "Run all cucumber tests for PDS in docker containers"
+      desc "Run cucumber tests for PDS in docker containers"
       task :pds => ["docker:up"] do
         sh 'docker-compose run web bundle exec rake browbeat:check:pds'
-      end
-
-      desc "Run all cucumber tests for e-Shelf in docker containers"
-      task :eshelf => ["docker:up"] do
-        sh 'docker-compose run web bundle exec rake browbeat:check:eshelf'
-      end
-
-      desc "Run all cucumber tests for GetIt in docker containers"
-      task :getit => ["docker:up"] do
-        sh 'docker-compose run web bundle exec rake browbeat:check:getit'
-      end
-
-      desc "Run all cucumber tests for Aleph in docker containers"
-      task :aleph => ["docker:up"] do
-        sh 'docker-compose run web bundle exec rake browbeat:check:aleph'
       end
     end
   end

@@ -1,4 +1,4 @@
-library:
+website:
   name: Library.nyu.edu
   status_page_id: thynp2429mrl
 login:
@@ -19,18 +19,24 @@ getit:
 arch:
   name: The Arch (Articles & Databases, Databases A-Z)
   status_page_id: dnxb1np2b5zy
-interlibrary:
+illiad:
   name: Interlibrary Loan (ILL)
   status_page_id: r7sjhcjpwc3h
 room:
   name: Room Reservation System
   status_page_id: 04tq5pv1m4tw
-archival:
+special_collections:
   name: Archival Collections
   status_page_id: 24mxy5m1c505
 privileges:
-  name: Privileges Gustatus_page_ide
+  name: Privileges Guide
   status_page_id: zh4m03cjhtxl
 marli:
   name: MaRLI (Manhattan Research Library Initiative)
   status_page_id: tfhq22gtmld9
+ezborrow:
+  name: EZBorrow
+  status_page_id: 9hgcdbqnd832
+ezproxy:
+  name: EZProxy
+  status_page_id: q23q1ggvgj60

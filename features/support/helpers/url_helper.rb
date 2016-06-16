@@ -8,6 +8,10 @@ module Browbeat
       url_hash[url_name] || raise("URL \"#{url_name}\" is not defined. Define it in #{URL_CONFIG_FILEPATH}")
     end
 
+    def combine_url(*parts)
+      File.join(*parts)
+    end
+
     private
     def url_hash
       @@url_hash ||= read_url_hash
