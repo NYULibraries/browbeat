@@ -7,7 +7,7 @@
 - application_list.each do |application|
   - next unless scenarios_for_application?(application)
   %div
-    %b= "#{application.name} (#{scenarios_for_application(application).worst_failure_type.gsub('_', ' ')})"
+    %b= "#{application.name} (#{scenarios_for_application(application).worst_failure_type.tr('_', ' ')})"
     %ul
       - environments.each do |environment|
         - next unless scenarios_for_application_environment?(application, environment)
