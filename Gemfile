@@ -16,8 +16,8 @@ group :test do
   gem 'sauce-cucumber'#, '~> 3.1.1'
   gem 'sauce-connect'
 
-  gem 'status_page-api', github: "NYULibraries/status_page-api"
-  gem 'mailx_ruby', github: "NYULibraries/mailx_ruby"
+  gem 'status_page-api', git: "https://github.com/NYULibraries/status_page-api"
+  gem 'mailx_ruby', git: "https://github.com/NYULibraries/mailx_ruby"
   gem 'haml'
   gem 'climate_control'
 
