@@ -9,7 +9,7 @@ module Browbeat
 
     # returns new instance whose constituent scenarios are those from the original with all of the given tags
     def with_tags(*tags)
-      self.class.new @scenarios.select{|scenario| scenario.has_tags? *tags }
+      self.class.new @scenarios.select{|scenario| scenario.has_tags?(*tags) }
     end
 
     # returns worst failure type from all constituent scenarios

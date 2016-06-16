@@ -52,11 +52,6 @@ module Browbeat
       def scenario_symbols
         @scenario_symbols ||= scenario_collection.map(&:app_symbol).uniq
       end
-
-      def get_or_set_instance_variable(instance_variable_name, &block)
-        return instance_variable_get(instance_variable_name) if instance_variable_defined?(instance_variable_name)
-        instance_variable_set instance_variable_name, yield
-      end
     end
   end
 end
