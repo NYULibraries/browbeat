@@ -74,10 +74,6 @@ Sauce on Cucumber requires `sauce-cucumber` and `sauce-connect` gems. These requ
 
 Unfortunately, none of Sauce's documentation mentions how to configure tests to be run either in poltergeist or in sauce. We're limited mainly by the vexing decision to trigger sauce tests with the `@selenium` tag. This is all the more vexing of a design decision since `@selenium` replaces the current driver with `@selenium` in vanilla capybara. To get around this, we've added a callback to disable this override as suggested in a [post by dankohn](https://github.com/saucelabs/sauce_ruby/issues/261).
 
-### Run on Jenkins
-
-TODO
-
 ## Notifications
 
 ### Emails
@@ -93,10 +89,6 @@ This functionality requires that `FAILURE_EMAIL_RECIPIENT` be set.
 Browbeat will sync with StatusPage using components listed in `config/application.yml`, where keys represent subdirectories of the `features` directory and `status_page_id` specifies the component ID used by the StatusPage API. Given no failures for an application, it will set it to operational. Given any failures, it will set the component to the most severe failure, as determined by tags on the scenarios: `@major_outage`, `@partial_outage`, and `@degraded_performance`
 
 This functionality requires that both `STATUS_PAGE_API_KEY` and `STATUS_PAGE_PAGE_ID` be set.
-
-### Posting callbacks to Statuspage.io
-
-### E-mailing failures to development team
 
 ### Outage definitions
 
