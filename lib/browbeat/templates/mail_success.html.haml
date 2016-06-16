@@ -1,9 +1,9 @@
-%p The following services previously had failures but are now operational:
+%p The following applications previously had failures but are now operational:
 %ul
   - application_list.each do |application|
     - next unless previously_failing?(application)
     %li= application.name
-%p The following services remained operational:
+%p The following applications remained operational:
 %ul
   - application_list.each do |application|
     - next if previously_failing?(application)
