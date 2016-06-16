@@ -21,5 +21,5 @@ group :test do
   gem 'haml'
   gem 'climate_control'
 
-  gem 'coveralls'
+  gem 'coveralls', require: false
 end
