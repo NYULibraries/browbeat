@@ -2,6 +2,7 @@
 
 [![NYU](https://github.com/NYULibraries/nyulibraries-assets/blob/master/lib/assets/images/nyu.png)](https://dev.library.nyu.edu)
 [![Build Status](https://travis-ci.org/NYULibraries/browbeat.svg)](https://travis-ci.org/NYULibraries/browbeat)
+[![Code Climate](https://codeclimate.com/github/NYULibraries/browbeat/badges/gpa.svg)](https://codeclimate.com/github/NYULibraries/browbeat)
 [![Coverage Status](https://coveralls.io/repos/github/NYULibraries/browbeat/badge.svg?branch=master)](https://coveralls.io/github/NYULibraries/browbeat?branch=master)
 
 Beat you over the head with browser integration testing for the NYU Libraries suite of Web applications.
