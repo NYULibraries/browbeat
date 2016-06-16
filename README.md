@@ -1,5 +1,9 @@
 # Browbeat
 
+[![NYU](https://github.com/NYULibraries/nyulibraries-assets/blob/master/lib/assets/images/nyu.png)](https://dev.library.nyu.edu)
+[![Build Status](https://travis-ci.org/NYULibraries/browbeat.svg)](https://travis-ci.org/NYULibraries/browbeat)
+[![Coverage Status](https://coveralls.io/repos/github/NYULibraries/browbeat/badge.svg?branch=master)](https://coveralls.io/github/NYULibraries/browbeat?branch=master)
+
 Beat you over the head with browser integration testing for the NYU Libraries suite of Web applications.
 
 The purpose of this test suite is to provide comprehensive health checks that run in the cloud (i.e. SauceLabs) and provide automated feedback via e-mail reports and statuspage.io updates.

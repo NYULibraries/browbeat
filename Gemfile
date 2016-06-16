@@ -11,15 +11,15 @@ group :test do
   gem 'poltergeist'
   gem 'figs', '2.0.0'
   gem 'pry'
+  gem 'rake'
 
   gem 'sauce-cucumber'#, '~> 3.1.1'
   gem 'sauce-connect'
 
-  gem 'rest-client'
-  gem 'climate_control'
-
-  gem 'rake'
   gem 'status_page-api', github: "NYULibraries/status_page-api"
   gem 'mailx_ruby', github: "NYULibraries/mailx_ruby"
   gem 'haml'
+  gem 'climate_control'
+
+  gem 'coveralls', require: false
 end
