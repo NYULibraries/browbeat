@@ -6,7 +6,7 @@ module Browbeat
 
     def self.list_all
       all_applications_yaml.map do |app_symbol, attributes|
-        new **symbolize_keys(attributes).merge(symbol: app_symbol)
+        new(**symbolize_keys(attributes).merge(symbol: app_symbol))
       end
     end
 
