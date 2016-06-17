@@ -11,7 +11,7 @@ Feature: PDS is running
     And I enter NYU credentials
     Then I should be logged in
 
-  @production @partial_outage
+  @staging @partial_outage
   Scenario: Logging in on staging PDS
     Given I visit PDS staging
     When I click on "NYU"
