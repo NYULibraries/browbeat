@@ -30,7 +30,7 @@ When(/^I search for "(.*?)"$/) do |search_term|
 end
 
 Then(/^my browser should respond with a? ?success for (.+)$/) do |app_name|
-  expect(page.find('body')).to have_content success_text_for(app_name)
+  expect(page).to have_text success_text_for(app_name)
 end
 
 Then(/^I should see results matching "(.+)"$/) do |content|
