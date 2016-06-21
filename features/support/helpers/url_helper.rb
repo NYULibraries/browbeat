@@ -1,6 +1,6 @@
 module Browbeat
   module UrlHelper
-    URL_CONFIG_FILEPATH = 'config/urls.yml'
+    URL_CONFIG_FILEPATH = 'config/urls.yml' unless defined?(URL_CONFIG_FILEPATH)
 
     # returns URL for given case-insensitive name as defined in YAML config file
     def url_to(url_name)
