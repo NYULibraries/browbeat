@@ -19,6 +19,7 @@ Given(/^I login as an NYU staging user$/) do
 end
 
 When(/^I click on "(.+)"$/) do |link_name|
+  expect(page).to have_text link_name
   click_on link_name
 end
 
