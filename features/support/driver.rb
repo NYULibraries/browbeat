@@ -55,14 +55,14 @@ when 'sauce'
   configure_sauce
   Capybara.default_driver = :sauce
   Capybara.javascript_driver = :selenium
-  Capybara.default_max_wait_time = ENV['MAX_WAIT'] || 5
+  Capybara.default_max_wait_time = (ENV['MAX_WAIT'] || 15).to_i
 # if driver not set, default to poltergeist
 when nil
   configure_poltergeist
   Capybara.default_driver = :poltergeist
   Capybara.javascript_driver = :poltergeist
   Capybara.current_driver = :poltergeist
-  Capybara.default_max_wait_time = ENV['MAX_WAIT'] || 5
+  Capybara.default_max_wait_time = (ENV['MAX_WAIT'] || 6).to_i
 # otherwise, run driver as a browser via selenium
 else
   Capybara.register_driver :selenium do |app|
@@ -70,5 +70,5 @@ else
   end
   Capybara.default_driver = :selenium
   Capybara.javascript_driver = :selenium
-  Capybara.default_max_wait_time = ENV['MAX_WAIT'] || 15
+  Capybara.default_max_wait_time = (ENV['MAX_WAIT'] || 15).to_i
 end
