@@ -10,11 +10,11 @@ module Browbeat
     end
 
     def shibboleth_staging_username
-      Figs::ENV.nyu["student"]["username"]
+      Figs::ENV.nyu["staff"]["username"]
     end
 
     def shibboleth_staging_password
-      Figs::ENV.nyu["student"]["password"]
+      Figs::ENV.nyu["staff"]["password"]
     end
 
     def login_default_path

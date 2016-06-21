@@ -10,12 +10,30 @@ Given(/^I login as an NYU user$/) do
   }
 end
 
+Given(/^I login as an NYU user if prompted$/) do
+  if page.has_text? "Select your affiliation to login"
+    steps %Q{
+      When I click on "NYU"
+      And I enter NYU credentials
+    }
+  end
+end
+
 Given(/^I login as an NYU staging user$/) do
   steps %Q{
     Given I visit Login staging
     When I click on "NYU"
     And I enter NYU staging credentials
   }
+end
+
+Given(/^I login as an NYU staging user if prompted$/) do
+  if page.has_text? "Select your affiliation to login"
+    steps %Q{
+      When I click on "NYU"
+      And I enter NYU staging credentials
+    }
+  end
 end
 
 When(/^I click on "(.+)"$/) do |link_name|
