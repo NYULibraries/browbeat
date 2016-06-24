@@ -20,7 +20,7 @@ Feature: Special Collections is running
     Given I visit Special Collections LB server 2
     Then my browser should redirect to Login authorization page
 
-  @staging @major_outage
+  @staging @major_outage @wip
   Scenario: Visiting Special Collections on staging
     Given I visit Special Collections staging
     Then my browser should respond with a success for Special Collections

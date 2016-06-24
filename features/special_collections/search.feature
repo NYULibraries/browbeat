@@ -11,7 +11,7 @@ Feature: Special Collections is running
     And I click on external link "Cuban Letters Collection"
     Then my browser should open a new window with finding aid base URL
 
-  @staging @major_outage
+  @staging @major_outage @wip
   Scenario: Searching on staging
     Given I visit Special Collections staging
     When I search for "cuba" in Special Collections
