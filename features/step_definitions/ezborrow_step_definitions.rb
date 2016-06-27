@@ -1,4 +1,5 @@
 When /^I search EZBorrow for "(.+)"$/ do |search_text|
+  expect(page).to have_content "Copyright"
   fill_in "query", with: search_text
   click_on "Search"
 end
