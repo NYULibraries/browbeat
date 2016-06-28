@@ -49,6 +49,23 @@ def configure_poltergeist
   end
 end
 
+SELENIUM_DOWNLOAD_FILETYPES = 'application/x-url' unless defined?(SELENIUM_DOWNLOAD_FILETYPES)
+
+# configure selenium to download to local directory
+def configure_selenium(browser)
+  Capybara.register_driver :selenium do |app|
+    profile = Kernel.const_get("Selenium::WebDriver::#{browser.to_s.capitalize}::Profile").new
+    profile["browser.download.dir"] = File.join(FileUtils.pwd, ENV['SELENIUM_DOWNLOAD_DIRECTORY'])
+    profile["browser.download.folderList"] = 2
+    profile["browser.helperApps.neverAsk.saveToDisk"] = SELENIUM_DOWNLOAD_FILETYPES
+    Capybara::Selenium::Driver.new(
+      app,
+      browser: browser.to_sym,
+      profile: profile,
+    )
+  end
+end
+
 # if driver set to sauce, set and configure
 case ENV['DRIVER']
 when 'sauce'
@@ -65,9 +82,7 @@ when nil
   Capybara.default_max_wait_time = (ENV['MAX_WAIT'] || 6).to_i
 # otherwise, run driver as a browser via selenium
 else
-  Capybara.register_driver :selenium do |app|
-    Capybara::Selenium::Driver.new(app, browser: ENV['DRIVER'].to_sym)
-  end
+  configure_selenium(ENV['DRIVER'])
   Capybara.default_driver = :selenium
   Capybara.javascript_driver = :selenium
   Capybara.default_max_wait_time = (ENV['MAX_WAIT'] || 15).to_i

@@ -2,6 +2,7 @@ require 'figs'; Figs.load()
 require 'capybara/cucumber'
 require 'capybara/poltergeist'
 require 'capybara'
+require 'selenium/webdriver'
 require 'rspec'
 require 'pry'
 require 'yaml'

@@ -1,9 +1,20 @@
+def poltergeist_driver?
+  ENV['DRIVER'].nil?
+end
+
 # disable capybara overriding @selenium-tagged tests (required to run in sauce)
 # with capybara; our default driver is selenium
 # modified from https://github.com/saucelabs/sauce_ruby/issues/261
-if ENV['DRIVER'].nil?
+if poltergeist_driver?
   Before do |scenario|
     Capybara.current_driver = :poltergeist
+  end
+end
+
+# clear downloads after each test
+if !poltergeist_driver?
+  After do |scenario|
+    FileUtils.rm_f(ENV['SELENIUM_DOWNLOAD_DIRECTORY'])
   end
 end
 

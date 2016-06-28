@@ -19,10 +19,5 @@ module Browbeat
     def first_result
       first('.results .result')
     end
-
-    def content_disposition_attachment_regex(file_extension)
-      file_extension = ".#{file_extension}" unless file_extension[0] == '.'
-      /^attachment; filename=".+#{Regexp.quote(file_extension)}"$/
-    end
   end
 end

@@ -24,7 +24,8 @@ Then(/^I should see the Libraries' logo$/) do
 end
 
 Then(/^I should download an "(.+)" file$/) do |file_extension|
-  expect(page.response_headers['Content-Disposition']).to match content_disposition_attachment_regex(file_extension)
+  file_extension = ".#{file_extension}" unless file_extension[0] == '.'
+  expect(page).to download_file /#{Regexp.quote(file_extension)}$/
 end
 
 Then(/^I should see an EasyBib record "(.+)" in a new window/) do |easybib_text|
