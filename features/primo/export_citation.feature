@@ -16,5 +16,6 @@ Feature: Export citations is running
   Scenario: Exporting citations on staging
     Given I visit BobCat staging
     When I search for "the physics of sorrow"
+    And I select the first multi-version record
     And I select "EasyBIB" from the "Send/Share" psuedo-dropdown in the first result
     Then I should see an EasyBib record "The Physics of Sorrow" in a new window
