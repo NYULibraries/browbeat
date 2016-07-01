@@ -18,6 +18,14 @@ if !poltergeist_driver?
   end
 end
 
+if ENV['DRIVER'] == 'sauce'
+  Before do |scenario|
+    if scenario.source_tag_names.include?("@no_sauce")
+      scenario.skip_invoke!
+    end
+  end
+end
+
 unless %w[false off].include?(ENV["FAILURE_TRACKER"])
   tracker ||= Browbeat::FailureTracker.new
 

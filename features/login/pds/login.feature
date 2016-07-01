@@ -4,7 +4,7 @@ Feature: PDS is running
   I want to be able to login
   So that I can save queries, items, etc.
 
-  @production @partial_outage
+  @production @partial_outage @no_sauce
   Scenario: Logging in on production PDS
     Given I visit PDS
     When I click on "NYU"

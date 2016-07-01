@@ -4,7 +4,7 @@ Feature: Login is running
   I want to be able to single-sign-on to Libraries' application
   So that I can maintain a persistent session.
 
-  @production @major_outage
+  @production @major_outage @no_sauce
   Scenario: Logging in on production
     Given I visit Login
     When I click on "NYU"

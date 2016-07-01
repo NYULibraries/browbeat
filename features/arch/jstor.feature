@@ -4,7 +4,7 @@ Feature: Arch is running
   I want to be able to find  databases in curated categories
   So that I can conduct my research efficiently.
 
-  @production @major_outage
+  @production @major_outage @no_sauce
   Scenario: Visiting JSTOR from Arch on production
     Given I visit Arch
     When I click on "Login"
