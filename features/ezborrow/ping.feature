@@ -4,7 +4,7 @@ Feature: EZBorrow is running
   I want to be able to get a book from EZBorrow even if Bobst doesn't have it
   So that I don't have to delay my research.
 
-  @major_outage @production
+  @major_outage @production @no_sauce
   Scenario: Visiting EZBorrow on production
     Given I visit EZBorrow
       Then my browser should resolve to Login

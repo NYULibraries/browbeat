@@ -9,7 +9,7 @@ module Browbeat
     end
 
     def privileges_web_solr_url
-      raise "Cannot access WebSolr URL while running tests in Sauce" if ENV['DRIVER'] == 'sauce'
+      raise "Cannot access WebSolr URL while running tests in Sauce" if sauce_driver?
       Figs::ENV.websolr['SOLR_URL']
     end
   end

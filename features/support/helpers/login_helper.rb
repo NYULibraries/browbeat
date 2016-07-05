@@ -5,7 +5,7 @@ module Browbeat
     end
 
     def shibboleth_password
-      raise "Cannot access production Shibboleth password while running tests in Sauce" if ENV['DRIVER'] == 'sauce'
+      raise "Cannot access production Shibboleth password while running tests in Sauce" if sauce_driver?
       Figs::ENV.nyu["production_masters_student"]["password"]
     end
 
@@ -15,6 +15,10 @@ module Browbeat
 
     def shibboleth_staging_password
       Figs::ENV.nyu["staff"]["password"]
+    end
+
+    def sauce_driver?
+      ENV['DRIVER'] == 'sauce'
     end
 
     def login_default_path

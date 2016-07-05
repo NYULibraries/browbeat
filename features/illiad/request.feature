@@ -4,7 +4,7 @@ Feature: ILLiad is running
   I want to be able to get a book from Interlibrary Loan even if Bobst doesn't have it
   So that I don't have to delay my research.
 
-  @major_outage @production @wip
+  @major_outage @production @wip @no_sauce
   Scenario: Visiting ILLiad on production
     Given I login as an NYU user
     And I visit ILLiad request sample

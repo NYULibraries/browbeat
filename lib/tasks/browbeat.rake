@@ -15,6 +15,7 @@ FEATURE_GROUPS = {
   marli: "MaRLi",
   illiad: "ILLiad",
   ezborrow: "EZBorrow",
+  ezproxy: "EZProxy",
 }
 
 namespace :browbeat do

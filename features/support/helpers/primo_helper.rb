@@ -15,5 +15,9 @@ module Browbeat
     def logo_url_regex
       /url\("?http:\/\/bobcat(dev)?\.library\.nyu\.edu\/primo_library\/libweb\/custom\/assets\/images\/nyulibraries\/nyu\/header\.png\?\d+"?\)/
     end
+
+    def first_result
+      first('.results .result')
+    end
   end
 end

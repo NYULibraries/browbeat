@@ -1,6 +1,6 @@
 module Browbeat
   module SuccessHelper
-    SUCCESS_TEXT_CONFIG_FILEPATH = 'config/success_text.yml'
+    SUCCESS_TEXT_CONFIG_FILEPATH = 'config/success_text.yml' unless defined?(SUCCESS_TEXT_CONFIG_FILEPATH)
 
     # returns URL for given case-insensitive name as defined in YAML config file
     def success_text_for(app_name)
