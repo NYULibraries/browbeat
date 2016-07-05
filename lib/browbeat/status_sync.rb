@@ -6,19 +6,31 @@ module Browbeat
     FAILURE_STATUS_TYPES = %w[major_outage partial_outage degraded_performance]
 
     def self.sync_status_page(scenario_collection)
-      @previously_failing_component_ids = get_failing_components
+      @previously_failing_components = get_failing_components
+      @previously_failing_staging_components = get_failing_staging_components
       new(scenario_collection).sync_status_page
     end
 
     def self.previously_failing?(*component_ids)
       component_ids.flatten.any? do |component_id|
-        @previously_failing_component_ids.map(&:id).include?(component_id)
+        @previously_failing_components.map(&:id).include?(component_id)
+      end
+    end
+
+    def self.previously_failing_on_staging?(*component_ids)
+      component_ids.flatten.any? do |component_id|
+        @previously_failing_staging_components.map(&:id).include?(component_id)
       end
     end
 
     def self.get_failing_components
-      component_list = StatusPage::API::ComponentList.new(ENV['STATUS_PAGE_PAGE_ID'])
+      component_list = StatusPage::API::ComponentList.new(status_page_page_id)
       component_list.get.to_a.select(&:failing?)
+    end
+
+    def self.get_failing_staging_components
+      staging_component_list = StatusPage::API::ComponentList.new(status_page_staging_page_id)
+      staging_component_list.get.to_a.select(&:failing?)
     end
 
     def initialize(scenario_collection)
@@ -27,13 +39,18 @@ module Browbeat
 
     def sync_status_page
       Application.list_all.each do |application|
-        next unless scenarios_for_application? application
-        application.set_status_page_status status_for_application(application)
+        next unless scenarios_for_application?(application)
+        if tagged_scenarios_for_application?(application, :production)
+          application.set_status_page_status status_for_application(application, :production)
+        end
+        if tagged_scenarios_for_application?(application, :staging)
+          application.set_status_page_staging_status status_for_application(application, :staging)
+        end
       end
     end
 
-    def status_for_application(application)
-      app_failures = failed_scenarios_for_application(application)
+    def status_for_application(application, *tags)
+      app_failures = failed_tagged_scenarios_for_application(application, *tags)
       if FAILURE_STATUS_TYPES.include?(app_failures.worst_failure_type)
         app_failures.worst_failure_type
       else
@@ -41,25 +58,33 @@ module Browbeat
       end
     end
 
-    def failed_scenarios_for_application(application)
-      failed_production_scenarios.select{|s| s.app_symbol == application.symbol }
+    def failed_tagged_scenarios_for_application(application, *tags)
+      failed_scenarios.with_tags(*tags).select{|s| s.app_symbol == application.symbol }
+    end
+
+    def tagged_scenarios_for_application?(application, *tags)
+      scenario_collection.with_tags(*tags).any?{|s| s.app_symbol == application.symbol }
     end
 
     def scenarios_for_application?(application)
-      production_scenario_symbols.any?{|symbol| symbol == application.symbol }
+      scenario_symbols.any?{|symbol| symbol == application.symbol }
     end
 
     private
-    def failed_production_scenarios
-      @failed_production_scenarios ||= production_scenarios.select(&:failed?).select(&:failure_severity)
+    def self.status_page_page_id
+      ENV['STATUS_PAGE_PAGE_ID'] || raise("Must specify STATUS_PAGE_PAGE_ID")
     end
 
-    def production_scenario_symbols
-      @scenario_symbols ||= production_scenarios.map(&:app_symbol).uniq
+    def self.status_page_staging_page_id
+      ENV['STATUS_PAGE_STAGING_PAGE_ID'] || raise("Must specify STATUS_PAGE_STAGING_PAGE_ID")
     end
 
-    def production_scenarios
-      @production_scenarios ||= scenario_collection.with_tags(:production)
+    def failed_scenarios
+      @failed_scenarios ||= scenario_collection.select(&:failed?).select(&:failure_severity)
+    end
+
+    def scenario_symbols
+      @scenario_symbols ||= scenario_collection.map(&:app_symbol).uniq
     end
 
   end

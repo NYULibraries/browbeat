@@ -1,42 +1,56 @@
 website:
   name: Library.nyu.edu
   status_page_id: thynp2429mrl
+  status_page_staging_id: 14qz22399vlk
 login:
   name: Login
   status_page_id: lsz65k52nb8j
+  status_page_staging_id: kndn13tq3sr3
 eshelf:
   name: E-Shelf
   status_page_id: j97ssf4rf48g
+  status_page_staging_id: k1pgq5wb19rh
 primo:
   name: BobCat (Book & More, Course Reserves)
   status_page_id: zx6y50m1jdjv
+  status_page_staging_id: kl8yq08ggfn7
 aleph:
   name: BobCat Standard
   status_page_id: 1ml524b3pf1h
+  status_page_staging_id: 79jvlh4jpfhf
 getit:
   name: GetIt (Journals, Record detail page)
   status_page_id: kl0xwlyl4y6n
+  status_page_staging_id: p0nf864q6d6y
 arch:
   name: The Arch (Articles & Databases, Databases A-Z)
   status_page_id: dnxb1np2b5zy
+  status_page_staging_id: qp1gmyztj4bh
 illiad:
   name: Interlibrary Loan (ILL)
   status_page_id: r7sjhcjpwc3h
+  status_page_staging_id: rp5p3l5d977h
 room:
   name: Room Reservation System
   status_page_id: 04tq5pv1m4tw
+  status_page_staging_id: hk1mzhg83h87
 special_collections:
   name: Archival Collections
   status_page_id: 24mxy5m1c505
+  status_page_staging_id: vwtbxnkz610f
 privileges:
   name: Privileges Guide
   status_page_id: zh4m03cjhtxl
+  status_page_staging_id: 9kd8468h7cxz
 marli:
   name: MaRLI (Manhattan Research Library Initiative)
   status_page_id: tfhq22gtmld9
+  status_page_staging_id: 5ct9z5v91t7n
 ezborrow:
   name: EZBorrow
   status_page_id: 9hgcdbqnd832
+  status_page_staging_id: mfkyzv14km1s
 ezproxy:
   name: EZProxy
   status_page_id: q23q1ggvgj60
+  status_page_staging_id: zvwwcgzmzf3y
