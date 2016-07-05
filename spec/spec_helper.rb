@@ -2,6 +2,7 @@ require 'coveralls'
 Coveralls.wear!
 require 'support/modify_env'
 require 'pry'
+require 'figs'
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate

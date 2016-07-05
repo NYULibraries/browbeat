@@ -3,3 +3,5 @@ id_rsa
 application.yml
 
 tmp
+coverage
+
