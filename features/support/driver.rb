@@ -17,9 +17,9 @@ def configure_sauce
       # ["Windows 8.1", "Internet Explorer", "11"],
       # ["Windows 8", "Internet Explorer", "10"],
       # ["Windows 7", "Internet Explorer", "9"],
-      ["Windows 7", "Internet Explorer", "9"],
+      # ["Windows 7", "Internet Explorer", "9"],
       # ["Windows XP", "Internet Explorer", "7"],
-      # ["OS X 10.9", "safari", "7"],
+      ["OS X 10.9", "safari", "7"],
       # ["OS X 10.9", "iPhone", "7.1"],
       # ["Linux", "Android", "4.4"]
     ]
