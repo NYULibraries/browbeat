@@ -1,4 +1,4 @@
-@funcionality @selenium
+@functionality @selenium
 Feature: e-Shelf is running
   As a NYU Libraries user,
   I want to be able to save items to my e-Shelf
