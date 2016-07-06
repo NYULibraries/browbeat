@@ -64,13 +64,16 @@ describe Browbeat::StatusMailer do
         end
 
         context "with scenario applications" do
-          let(:application1){ double Browbeat::Scenario, status_page_id: "aaaa" }
-          let(:application2){ double Browbeat::Scenario, status_page_id: "bbbb" }
-          let(:application3){ double Browbeat::Scenario, status_page_id: "cccc" }
+          let(:application1){ double Browbeat::Scenario, status_page_id: "aaaa", status_page_staging_id: "zzzz" }
+          let(:application2){ double Browbeat::Scenario, status_page_id: "bbbb", status_page_staging_id: "yyyy" }
+          let(:application3){ double Browbeat::Scenario, status_page_id: "cccc", status_page_staging_id: "xxxx" }
           before { allow(mailer).to receive(:scenario_applications).and_return [application1, application2, application3] }
 
-          context "with previous failures" do
-            before { allow(Browbeat::StatusSync).to receive(:previously_failing?).and_return true }
+          context "with previous production failures" do
+            before do
+              allow(Browbeat::StatusSync).to receive(:previously_failing?).and_return true
+              allow(Browbeat::StatusSync).to receive(:previously_failing_on_staging?).and_return false
+            end
 
             it "should call send_mail" do
               expect(mailer).to receive(:send_mail)
@@ -83,8 +86,28 @@ describe Browbeat::StatusMailer do
             end
           end
 
+          context "with previous staging failures" do
+            before do
+              allow(Browbeat::StatusSync).to receive(:previously_failing?).and_return false
+              allow(Browbeat::StatusSync).to receive(:previously_failing_on_staging?).and_return true
+            end
+
+            it "should call send_mail" do
+              expect(mailer).to receive(:send_mail)
+              subject
+            end
+
+            it "should call previously_failing_on_staging? correctly" do
+              expect(Browbeat::StatusSync).to receive(:previously_failing_on_staging?).with(["zzzz", "yyyy", "xxxx"])
+              subject
+            end
+          end
+
           context "without previous failures" do
-            before { allow(Browbeat::StatusSync).to receive(:previously_failing?).and_return false }
+            before do
+              allow(Browbeat::StatusSync).to receive(:previously_failing?).and_return false
+              allow(Browbeat::StatusSync).to receive(:previously_failing_on_staging?).and_return false
+            end
 
             it "should not call send_mail" do
               expect(mailer).to_not receive(:send_mail)
@@ -93,6 +116,11 @@ describe Browbeat::StatusMailer do
 
             it "should call previously_failing? correctly" do
               expect(Browbeat::StatusSync).to receive(:previously_failing?).with(["aaaa", "bbbb", "cccc"])
+              subject
+            end
+
+            it "should call previously_failing_on_staging? correctly" do
+              expect(Browbeat::StatusSync).to receive(:previously_failing_on_staging?).with(["zzzz", "yyyy", "xxxx"])
               subject
             end
           end
@@ -178,15 +206,28 @@ describe Browbeat::StatusMailer do
       subject { mailer.subject }
       let(:worst_failure_type){ "catastrophic_outage" }
       let(:failed_scenarios){ double Browbeat::ScenarioCollection }
+      let(:production_scenarios){ double Browbeat::ScenarioCollection }
       before do
         allow(mailer).to receive(:failed_scenarios).and_return failed_scenarios
-        allow(failed_scenarios).to receive(:worst_failure_type).and_return worst_failure_type
+        allow(failed_scenarios).to receive(:with_tags).and_return production_scenarios
+        allow(production_scenarios).to receive(:worst_failure_type).and_return worst_failure_type
       end
 
       context "with failures" do
         before { allow(mailer).to receive(:any_failures?).and_return true }
 
         it { is_expected.to eq "Browbeat: catastrophic outage detected" }
+
+        it "should call with_tags correctly" do
+          expect(failed_scenarios).to receive(:with_tags).with(:production)
+          subject
+        end
+
+        context "with no production failures" do
+          before { allow(production_scenarios).to receive(:worst_failure_type).and_return nil }
+
+          it { is_expected.to eq "Browbeat: staging outage detected" }
+        end
       end
 
       context "without failures" do

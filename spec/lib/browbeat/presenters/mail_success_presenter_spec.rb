@@ -65,5 +65,33 @@ describe Browbeat::Presenters::MailSuccessPresenter do
       it { is_expected.to eq applications }
     end
 
+    describe "previously_failing?" do
+      subject { presenter.previously_failing?(application) }
+      let(:status_page_id){ "abcd" }
+      let(:application){ double Browbeat::Application, status_page_id: status_page_id }
+      before { allow(Browbeat::StatusSync).to receive(:previously_failing?).and_return true }
+
+      it { is_expected.to eq true }
+
+      it "should call previously_failing? correctly" do
+        expect(Browbeat::StatusSync).to receive(:previously_failing?).with(status_page_id)
+        subject
+      end
+    end
+
+    describe "previously_failing_on_staging?" do
+      subject { presenter.previously_failing_on_staging?(application) }
+      let(:status_page_staging_id){ "xyzw" }
+      let(:application){ double Browbeat::Application, status_page_staging_id: status_page_staging_id }
+      before { allow(Browbeat::StatusSync).to receive(:previously_failing_on_staging?).and_return true }
+
+      it { is_expected.to eq true }
+
+      it "should call previously_failing_on_staging? correctly" do
+        expect(Browbeat::StatusSync).to receive(:previously_failing_on_staging?).with(status_page_staging_id)
+        subject
+      end
+    end
+
   end
 end

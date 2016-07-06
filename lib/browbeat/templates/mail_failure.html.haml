@@ -7,21 +7,19 @@
 - application_list.each do |application|
   - next unless scenarios_for_application?(application)
   %div
-    %b= "#{application.name} (#{scenarios_for_application(application).worst_failure_type.tr('_', ' ')})"
+    %b= "#{application.name} (#{(scenarios_for_application(application).with_tags(:production).worst_failure_type || 'staging outage').tr('_', ' ')})"
     %ul
       - environments.each do |environment|
         - next unless scenarios_for_application_environment?(application, environment)
         %li
           = environment
-          %ul
+          %ol
             - failure_types.each do |failure_type|
               - next unless scenarios_for_application_environment_failure_type(application, environment, failure_type).any?
-              %li
-                = failure_type.gsub('_',' ')
-                %ol
-                  - scenarios_for_application_environment_failure_type(application, environment, failure_type).each do |scenario|
-                    %li
-                      = scenario.name
-                      %ul
-                        %li= scenario.exception_message
-                        %li= scenario.backtrace_line
+              - scenarios_for_application_environment_failure_type(application, environment, failure_type).each do |scenario|
+                %li
+                  = scenario.name
+                  %em= "(#{failure_type.tr('_', ' ')})"
+                  %ul
+                    %li= scenario.exception_message
+                    %li= scenario.backtrace_line

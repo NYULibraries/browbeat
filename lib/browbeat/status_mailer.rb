@@ -34,7 +34,7 @@ module Browbeat
 
     def subject
       if any_failures?
-        "Browbeat: #{failed_scenarios.worst_failure_type.gsub('_',' ')} detected"
+        "Browbeat: #{overall_worst_failure_type} detected"
       else
         "Browbeat: services now operational"
       end
@@ -65,7 +65,12 @@ module Browbeat
     end
 
     def previous_failures?
-      StatusSync.previously_failing?(scenario_applications.map(&:status_page_id))
+      return true if StatusSync.previously_failing?(scenario_applications.map(&:status_page_id))
+      StatusSync.previously_failing_on_staging?(scenario_applications.map(&:status_page_staging_id))
+    end
+
+    def overall_worst_failure_type
+      (failed_scenarios.with_tags(:production).worst_failure_type || 'staging outage').gsub('_',' ')
     end
 
   end
