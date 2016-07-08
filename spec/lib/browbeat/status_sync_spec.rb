@@ -285,13 +285,10 @@ describe Browbeat::StatusSync do
 
       it "should call set_status_page_status on each application for which scenarios_for_application? returns true" do
         expect(application1).to receive(:set_status_page_status).with(status_production1)
-        expect(application1).to receive(:set_status_page_staging_status).with(status_staging1)
+        expect(application1).to receive(:set_status_page_status).with(status_staging1, environment: :staging)
         expect(application2).to_not receive(:set_status_page_status)
-        expect(application2).to_not receive(:set_status_page_staging_status)
         expect(application3).to receive(:set_status_page_status).with(status_production3)
-        expect(application3).to_not receive(:set_status_page_staging_status)
-        expect(application4).to_not receive(:set_status_page_status)
-        expect(application4).to receive(:set_status_page_staging_status).with(status_staging4)
+        expect(application4).to receive(:set_status_page_status).with(status_staging4, environment: :staging)
         subject
       end
     end

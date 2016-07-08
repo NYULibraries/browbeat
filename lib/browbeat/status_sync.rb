@@ -46,7 +46,7 @@ module Browbeat
           application.set_status_page_status status_for_application(application, :production)
         end
         if tagged_scenarios_for_application?(application, :staging)
-          application.set_status_page_staging_status status_for_application(application, :staging)
+          application.set_status_page_status status_for_application(application, :staging), environment: :staging
         end
       end
     end

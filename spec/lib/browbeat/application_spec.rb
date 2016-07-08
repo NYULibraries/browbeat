@@ -5,7 +5,7 @@ describe Browbeat::Application do
   describe "class methods" do
     describe "self.list_all" do
       subject{ described_class.list_all }
-      let(:yml){ "---\nlogin:\n  name: Login\n  status_page_id: abcd1234\n  status_page_staging_id: efgh9876\neshelf:\n  name: E-Shelf\n  status_page_id: wxyz1234\n  status_page_staging_id: vuts9876\n" }
+      let(:yml){ "---\nlogin:\n  name: Login\n  status_page_production_id: abcd1234\n  status_page_staging_id: efgh9876\neshelf:\n  name: E-Shelf\n  status_page_production_id: wxyz1234\n  status_page_staging_id: vuts9876\n" }
       before do
         allow(File).to receive(:open).with(described_class::LIST_FILEPATH).and_return yml
       end
@@ -19,8 +19,8 @@ describe Browbeat::Application do
         expect(subject[1]).to be_a described_class
       end
       it "should initialize with correct yml" do
-        expect(described_class).to receive(:new).with(name: "Login", status_page_id: "abcd1234", status_page_staging_id: "efgh9876", symbol: "login")
-        expect(described_class).to receive(:new).with(name: "E-Shelf", status_page_id: "wxyz1234", status_page_staging_id: "vuts9876", symbol: "eshelf")
+        expect(described_class).to receive(:new).with(name: "Login", status_page_production_id: "abcd1234", status_page_staging_id: "efgh9876", symbol: "login")
+        expect(described_class).to receive(:new).with(name: "E-Shelf", status_page_production_id: "wxyz1234", status_page_staging_id: "vuts9876", symbol: "eshelf")
         subject
       end
     end
@@ -28,37 +28,50 @@ describe Browbeat::Application do
 
   describe "instance methods" do
     let(:name){ "Login" }
-    let(:status_page_id){ "abcd1234" }
+    let(:status_page_production_id){ "abcd1234" }
     let(:status_page_staging_id){ "zyxw9876" }
     let(:symbol){ "login" }
-    let(:application){ described_class.new(name: name, status_page_id: status_page_id, status_page_staging_id: status_page_staging_id, symbol: symbol) }
+    let(:application){ described_class.new(name: name, status_page_production_id: status_page_production_id, status_page_staging_id: status_page_staging_id, symbol: symbol) }
 
     describe "set_status_page_status" do
-      subject { application.set_status_page_status "some_status" }
       let(:component){ double StatusPage::API::Component, save: true, :"status=" => true }
-      before { allow(application).to receive(:status_page_component).and_return component }
 
-      it "should set component status and save with correct parameters" do
-        expect(component).to receive(:status=).with("some_status").ordered
-        expect(component).to receive(:save).ordered
-        subject
+      context "with no environment specified" do
+        subject { application.set_status_page_status "some_status" }
+        before { allow(application).to receive(:status_page_production_component).and_return component }
+
+        it "should set component status and save with correct parameters" do
+          expect(component).to receive(:status=).with("some_status").ordered
+          expect(component).to receive(:save).ordered
+          subject
+        end
+      end
+
+      context "with environment: :staging" do
+        subject { application.set_status_page_status "some_status", environment: :staging }
+        before { allow(application).to receive(:status_page_staging_component).and_return component }
+
+        it "should set component status and save with correct parameters" do
+          expect(component).to receive(:status=).with("some_status").ordered
+          expect(component).to receive(:save).ordered
+          subject
+        end
+      end
+
+      context "with environment: :production" do
+        subject { application.set_status_page_status "some_status", environment: :production }
+        before { allow(application).to receive(:status_page_production_component).and_return component }
+
+        it "should set component status and save with correct parameters" do
+          expect(component).to receive(:status=).with("some_status").ordered
+          expect(component).to receive(:save).ordered
+          subject
+        end
       end
     end
 
-    describe "set_status_page_staging_status" do
-      subject { application.set_status_page_staging_status "some_status" }
-      let(:component){ double StatusPage::API::Component, save: true, :"status=" => true }
-      before { allow(application).to receive(:status_page_staging_component).and_return component }
-
-      it "should set component status and save with correct parameters" do
-        expect(component).to receive(:status=).with("some_status").ordered
-        expect(component).to receive(:save).ordered
-        subject
-      end
-    end
-
-    describe "status_page_component" do
-      subject { application.status_page_component }
+    describe "status_page_production_component" do
+      subject { application.status_page_production_component }
       let(:component){ double StatusPage::API::Component, get: true }
       before { allow(StatusPage::API::Component).to receive(:new).and_return component }
       around do |example|
@@ -73,7 +86,7 @@ describe Browbeat::Application do
         it { is_expected.to eq component }
 
         it "should call initialize with correct params" do
-          expect(StatusPage::API::Component).to receive(:new).with(status_page_id, "xxxx")
+          expect(StatusPage::API::Component).to receive(:new).with(status_page_production_id, "xxxx")
           subject
         end
 
