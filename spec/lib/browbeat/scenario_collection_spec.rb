@@ -3,9 +3,9 @@ require 'browbeat'
 
 describe Browbeat::ScenarioCollection do
   describe "instance methods" do
-    let(:scenario1){ double Browbeat::Scenario }
-    let(:scenario2){ double Browbeat::Scenario }
-    let(:scenario3){ double Browbeat::Scenario }
+    let(:scenario1){ instance_double Browbeat::Scenario }
+    let(:scenario2){ instance_double Browbeat::Scenario }
+    let(:scenario3){ instance_double Browbeat::Scenario }
     let(:collection){ described_class.new scenarios }
 
     describe "with_tags" do
@@ -42,12 +42,12 @@ describe Browbeat::ScenarioCollection do
     end
 
     describe "select" do
-      context "using app_name" do
-        subject{ collection.select{|s| s.app_name == 'app2' } }
+      context "using app_symbol" do
+        subject{ collection.select{|s| s.app_symbol == 'app2' } }
         before do
-          allow(scenario1).to receive(:app_name).and_return 'app1'
-          allow(scenario2).to receive(:app_name).and_return 'app2'
-          allow(scenario3).to receive(:app_name).and_return 'app2'
+          allow(scenario1).to receive(:app_symbol).and_return 'app1'
+          allow(scenario2).to receive(:app_symbol).and_return 'app2'
+          allow(scenario3).to receive(:app_symbol).and_return 'app2'
         end
 
         context "with scenarios" do
@@ -61,11 +61,11 @@ describe Browbeat::ScenarioCollection do
 
     describe "group_by" do
       context "using app_name" do
-        subject{ collection.group_by(&:app_name) }
+        subject{ collection.group_by(&:app_symbol) }
         before do
-          allow(scenario1).to receive(:app_name).and_return 'app1'
-          allow(scenario2).to receive(:app_name).and_return 'app2'
-          allow(scenario3).to receive(:app_name).and_return 'app1'
+          allow(scenario1).to receive(:app_symbol).and_return 'app1'
+          allow(scenario2).to receive(:app_symbol).and_return 'app2'
+          allow(scenario3).to receive(:app_symbol).and_return 'app1'
         end
 
         context "with scenarios" do
@@ -98,25 +98,25 @@ describe Browbeat::ScenarioCollection do
         let(:scenarios){ [scenario1, scenario2, scenario3] }
 
         context "all having failure severity" do
-          let(:scenario1){ double Browbeat::ScenarioCollection, failure_type: 'abc', failure_severity: 1 }
-          let(:scenario2){ double Browbeat::ScenarioCollection, failure_type: 'efg', failure_severity: 0 }
-          let(:scenario3){ double Browbeat::ScenarioCollection, failure_type: 'hij', failure_severity: 2 }
+          let(:scenario1){ instance_double Browbeat::Scenario, failure_type: 'abc', failure_severity: 1 }
+          let(:scenario2){ instance_double Browbeat::Scenario, failure_type: 'efg', failure_severity: 0 }
+          let(:scenario3){ instance_double Browbeat::Scenario, failure_type: 'hij', failure_severity: 2 }
 
           it{ is_expected.to eq 'efg' }
         end
 
         context "some having failure severity" do
-          let(:scenario1){ double Browbeat::ScenarioCollection, failure_type: 'abc', failure_severity: nil }
-          let(:scenario2){ double Browbeat::ScenarioCollection, failure_type: 'efg', failure_severity: 1 }
-          let(:scenario3){ double Browbeat::ScenarioCollection, failure_type: 'hij', failure_severity: 0 }
+          let(:scenario1){ instance_double Browbeat::Scenario, failure_type: 'abc', failure_severity: nil }
+          let(:scenario2){ instance_double Browbeat::Scenario, failure_type: 'efg', failure_severity: 1 }
+          let(:scenario3){ instance_double Browbeat::Scenario, failure_type: 'hij', failure_severity: 0 }
 
           it{ is_expected.to eq 'hij' }
         end
 
         context "none having failure severity" do
-          let(:scenario1){ double Browbeat::ScenarioCollection, failure_type: 'abc', failure_severity: nil }
-          let(:scenario2){ double Browbeat::ScenarioCollection, failure_type: 'efg', failure_severity: nil }
-          let(:scenario3){ double Browbeat::ScenarioCollection, failure_type: 'hij', failure_severity: nil }
+          let(:scenario1){ instance_double Browbeat::Scenario, failure_type: 'abc', failure_severity: nil }
+          let(:scenario2){ instance_double Browbeat::Scenario, failure_type: 'efg', failure_severity: nil }
+          let(:scenario3){ instance_double Browbeat::Scenario, failure_type: 'hij', failure_severity: nil }
 
           it{ is_expected.to eq nil }
         end

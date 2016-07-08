@@ -30,9 +30,9 @@ describe Browbeat::ApplicationCollection do
     context "using name" do
       subject{ collection.select{|s| s.name == 'Test' } }
       let(:collection){ described_class.new applications }
-      let(:application1){ double Browbeat::Application, name: "Test" }
-      let(:application2){ double Browbeat::Application, name: "Test 1" }
-      let(:application3){ double Browbeat::Application, name: "Test 2" }
+      let(:application1){ instance_double Browbeat::Application, name: "Test" }
+      let(:application2){ instance_double Browbeat::Application, name: "Test 1" }
+      let(:application3){ instance_double Browbeat::Application, name: "Test 2" }
 
       context "with applications" do
         let(:applications){ [application1, application2, application3] }

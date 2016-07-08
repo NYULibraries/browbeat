@@ -5,8 +5,8 @@ describe Browbeat::StatusMailer do
   describe "class methods" do
     describe "self.send_status" do
       subject { described_class.send_status scenario_collection }
-      let(:mailer){ double described_class }
-      let(:scenario_collection){ double Browbeat::ScenarioCollection }
+      let(:mailer){ instance_double described_class }
+      let(:scenario_collection){ instance_double Browbeat::ScenarioCollection }
       before do
         allow(described_class).to receive(:new).and_return mailer
         allow(mailer).to receive(:send_status_if_failed).and_return true
@@ -26,7 +26,7 @@ describe Browbeat::StatusMailer do
 
   describe "instance methods" do
     let(:mailer){ described_class.new scenario_collection }
-    let(:scenario_collection){ double Browbeat::ScenarioCollection }
+    let(:scenario_collection){ instance_double Browbeat::ScenarioCollection }
 
     describe "send_status_if_failed" do
       subject { mailer.send_status_if_failed }
@@ -170,8 +170,8 @@ describe Browbeat::StatusMailer do
       subject { mailer.body }
       let(:failure_body){ "<div>Hello world</div>" }
       let(:success_body){ "<em>Hello world</em>" }
-      let(:failed_scenarios){ double Browbeat::ScenarioCollection }
-      let(:applications){ double Array }
+      let(:failed_scenarios){ instance_double Browbeat::ScenarioCollection }
+      let(:applications){ instance_double Array }
       before do
         allow(Browbeat::Presenters::MailFailurePresenter).to receive(:render).and_return failure_body
         allow(Browbeat::Presenters::MailSuccessPresenter).to receive(:render).and_return success_body
@@ -205,8 +205,8 @@ describe Browbeat::StatusMailer do
     describe "subject" do
       subject { mailer.subject }
       let(:worst_failure_type){ "catastrophic_outage" }
-      let(:failed_scenarios){ double Browbeat::ScenarioCollection }
-      let(:production_scenarios){ double Browbeat::ScenarioCollection }
+      let(:failed_scenarios){ instance_double Browbeat::ScenarioCollection }
+      let(:production_scenarios){ instance_double Browbeat::ScenarioCollection }
       before do
         allow(mailer).to receive(:failed_scenarios).and_return failed_scenarios
         allow(failed_scenarios).to receive(:with_tags).and_return production_scenarios
@@ -241,10 +241,10 @@ describe Browbeat::StatusMailer do
       describe "with scenarios" do
         subject { mailer.failed_scenarios }
         let(:scenario_collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2, scenario3, scenario4] }
-        let(:scenario1){ double Browbeat::Scenario, failed?: false }
-        let(:scenario2){ double Browbeat::Scenario, failed?: true }
-        let(:scenario3){ double Browbeat::Scenario, failed?: true }
-        let(:scenario4){ double Browbeat::Scenario, failed?: false }
+        let(:scenario1){ instance_double Browbeat::Scenario, failed?: false }
+        let(:scenario2){ instance_double Browbeat::Scenario, failed?: true }
+        let(:scenario3){ instance_double Browbeat::Scenario, failed?: true }
+        let(:scenario4){ instance_double Browbeat::Scenario, failed?: false }
 
         it { is_expected.to match_array [scenario2, scenario3] }
         it { is_expected.to be_a Browbeat::ScenarioCollection }
@@ -263,16 +263,16 @@ describe Browbeat::StatusMailer do
       subject { mailer.any_failures? }
       context "with failing scenarios" do
         let(:scenario_collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2] }
-        let(:scenario1){ double Browbeat::Scenario, failed?: false }
-        let(:scenario2){ double Browbeat::Scenario, failed?: true }
+        let(:scenario1){ instance_double Browbeat::Scenario, failed?: false }
+        let(:scenario2){ instance_double Browbeat::Scenario, failed?: true }
 
         it { is_expected.to be_truthy }
       end
 
       context "without failing scenarios" do
         let(:scenario_collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2] }
-        let(:scenario1){ double Browbeat::Scenario, failed?: false }
-        let(:scenario2){ double Browbeat::Scenario, failed?: false }
+        let(:scenario1){ instance_double Browbeat::Scenario, failed?: false }
+        let(:scenario2){ instance_double Browbeat::Scenario, failed?: false }
 
         it { is_expected.to be_falsy }
       end
@@ -286,12 +286,12 @@ describe Browbeat::StatusMailer do
 
     describe "scenario_applications" do
       subject { mailer.scenario_applications }
-      let(:scenario1){ double Browbeat::Scenario, app_symbol: "aaaa" }
-      let(:scenario2){ double Browbeat::Scenario, app_symbol: "zzzz" }
-      let(:scenario3){ double Browbeat::Scenario, app_symbol: "xxxx" }
-      let(:application1){ double Browbeat::Application, symbol: "xxxx" }
-      let(:application2){ double Browbeat::Application, symbol: "yyyy" }
-      let(:application3){ double Browbeat::Application, symbol: "zzzz" }
+      let(:scenario1){ instance_double Browbeat::Scenario, app_symbol: "aaaa" }
+      let(:scenario2){ instance_double Browbeat::Scenario, app_symbol: "zzzz" }
+      let(:scenario3){ instance_double Browbeat::Scenario, app_symbol: "xxxx" }
+      let(:application1){ instance_double Browbeat::Application, symbol: "xxxx" }
+      let(:application2){ instance_double Browbeat::Application, symbol: "yyyy" }
+      let(:application3){ instance_double Browbeat::Application, symbol: "zzzz" }
       let(:application_list){ Browbeat::ApplicationCollection.new(applications) }
       before do
         allow_any_instance_of(Browbeat::ApplicationCollection).to receive(:load_yml).and_return application_list

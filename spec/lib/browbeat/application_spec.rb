@@ -18,7 +18,7 @@ describe Browbeat::Application do
     let(:application){ described_class.new(name: name, status_page_production_id: status_page_production_id, status_page_staging_id: status_page_staging_id, symbol: symbol) }
 
     describe "set_status_page_status" do
-      let(:component){ double StatusPage::API::Component, save: true, :"status=" => true }
+      let(:component){ instance_double StatusPage::API::Component, save: true, :"status=" => true }
 
       context "with no environment specified" do
         subject { application.set_status_page_status "some_status" }
@@ -56,7 +56,7 @@ describe Browbeat::Application do
 
     describe "status_page_production_component" do
       subject { application.status_page_production_component }
-      let(:component){ double StatusPage::API::Component, get: true }
+      let(:component){ instance_double StatusPage::API::Component, get: true }
       before { allow(StatusPage::API::Component).to receive(:new).and_return component }
       around do |example|
         with_modified_env STATUS_PAGE_PAGE_ID: page_id do
@@ -91,7 +91,7 @@ describe Browbeat::Application do
 
     describe "status_page_staging_component" do
       subject { application.status_page_staging_component }
-      let(:component){ double StatusPage::API::Component, get: true }
+      let(:component){ instance_double StatusPage::API::Component, get: true }
       before { allow(StatusPage::API::Component).to receive(:new).and_return component }
       around do |example|
         with_modified_env STATUS_PAGE_STAGING_PAGE_ID: page_id do

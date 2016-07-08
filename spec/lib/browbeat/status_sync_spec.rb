@@ -5,8 +5,8 @@ describe Browbeat::StatusSync do
   describe "class methods" do
     describe "self.sync_status_page" do
       subject{ described_class.sync_status_page collection }
-      let(:collection){ double Browbeat::ScenarioCollection }
-      let(:instance){ double described_class, sync_status_page: true }
+      let(:collection){ instance_double Browbeat::ScenarioCollection }
+      let(:instance){ instance_double described_class, sync_status_page: true }
       before do
         allow(described_class).to receive(:new).and_return instance
         allow(described_class).to receive(:get_failing_components).and_return []
@@ -35,11 +35,11 @@ describe Browbeat::StatusSync do
       subject { described_class.previously_failing? application_symbols }
       context "after calling sync_status_page" do
         context "when components were failing" do
-          let(:component1){ double StatusPage::API::Component, id: "aaaa" }
-          let(:component2){ double StatusPage::API::Component, id: "bbbb" }
-          let(:component3){ double StatusPage::API::Component, id: "cccc" }
-          let(:component4){ double StatusPage::API::Component, id: "dddd" }
-          let(:component5){ double StatusPage::API::Component, id: "eeee" }
+          let(:component1){ instance_double StatusPage::API::Component, id: "aaaa" }
+          let(:component2){ instance_double StatusPage::API::Component, id: "bbbb" }
+          let(:component3){ instance_double StatusPage::API::Component, id: "cccc" }
+          let(:component4){ instance_double StatusPage::API::Component, id: "dddd" }
+          let(:component5){ instance_double StatusPage::API::Component, id: "eeee" }
           before do
             allow(described_class).to receive(:get_failing_components).and_return [component1, component2, component3]
             allow(described_class).to receive(:get_failing_staging_components).and_return [component4, component5]
@@ -93,11 +93,11 @@ describe Browbeat::StatusSync do
       subject { described_class.previously_failing_on_staging? application_symbols }
       context "after calling sync_status_page" do
         context "when components were failing" do
-          let(:component1){ double StatusPage::API::Component, id: "aaaa" }
-          let(:component2){ double StatusPage::API::Component, id: "bbbb" }
-          let(:component3){ double StatusPage::API::Component, id: "cccc" }
-          let(:component4){ double StatusPage::API::Component, id: "dddd" }
-          let(:component5){ double StatusPage::API::Component, id: "eeee" }
+          let(:component1){ instance_double StatusPage::API::Component, id: "aaaa" }
+          let(:component2){ instance_double StatusPage::API::Component, id: "bbbb" }
+          let(:component3){ instance_double StatusPage::API::Component, id: "cccc" }
+          let(:component4){ instance_double StatusPage::API::Component, id: "dddd" }
+          let(:component5){ instance_double StatusPage::API::Component, id: "eeee" }
           before do
             allow(described_class).to receive(:get_failing_components).and_return [component1, component2, component3]
             allow(described_class).to receive(:get_failing_staging_components).and_return [component4, component5]
@@ -150,10 +150,10 @@ describe Browbeat::StatusSync do
     describe "self.get_failing_components" do
       subject { described_class.get_failing_components }
       let(:status_page_page_id){ "abcd" }
-      let(:component_list){ double StatusPage::API::ComponentList, get: [component1, component2, component3] }
-      let(:component1){ double StatusPage::API::Component, failing?: true }
-      let(:component2){ double StatusPage::API::Component, failing?: false }
-      let(:component3){ double StatusPage::API::Component, failing?: true }
+      let(:component_list){ instance_double StatusPage::API::ComponentList, get: [component1, component2, component3] }
+      let(:component1){ instance_double StatusPage::API::Component, failing?: true }
+      let(:component2){ instance_double StatusPage::API::Component, failing?: false }
+      let(:component3){ instance_double StatusPage::API::Component, failing?: true }
       before { allow(StatusPage::API::ComponentList).to receive(:new).and_return component_list }
 
       context "with STATUS_PAGE_PAGE_ID" do
@@ -190,10 +190,10 @@ describe Browbeat::StatusSync do
     describe "self.get_failing_staging_components" do
       subject { described_class.get_failing_staging_components }
       let(:status_page_staging_page_id){ "abcd" }
-      let(:component_list){ double StatusPage::API::ComponentList, get: [component1, component2, component3] }
-      let(:component1){ double StatusPage::API::Component, failing?: true }
-      let(:component2){ double StatusPage::API::Component, failing?: false }
-      let(:component3){ double StatusPage::API::Component, failing?: true }
+      let(:component_list){ instance_double StatusPage::API::ComponentList, get: [component1, component2, component3] }
+      let(:component1){ instance_double StatusPage::API::Component, failing?: true }
+      let(:component2){ instance_double StatusPage::API::Component, failing?: false }
+      let(:component3){ instance_double StatusPage::API::Component, failing?: true }
       before { allow(StatusPage::API::ComponentList).to receive(:new).and_return component_list }
 
       context "with STATUS_PAGE_STAGING_PAGE_ID" do
@@ -228,16 +228,16 @@ describe Browbeat::StatusSync do
   end
 
   describe "instance methods" do
-    let(:collection){ double Browbeat::ScenarioCollection }
-    let(:new_collection){ double Browbeat::ScenarioCollection }
+    let(:collection){ instance_double Browbeat::ScenarioCollection }
+    let(:new_collection){ instance_double Browbeat::ScenarioCollection }
     let(:instance){ described_class.new collection }
 
     describe "sync_status_page" do
       subject{ instance.sync_status_page }
-      let(:application1){ double Browbeat::Application, set_status_page_status: true, set_status_page_staging_status: true }
-      let(:application2){ double Browbeat::Application, set_status_page_status: true, set_status_page_staging_status: true }
-      let(:application3){ double Browbeat::Application, set_status_page_status: true, set_status_page_staging_status: true }
-      let(:application4){ double Browbeat::Application, set_status_page_status: true, set_status_page_staging_status: true }
+      let(:application1){ instance_double Browbeat::Application, set_status_page_status: true }
+      let(:application2){ instance_double Browbeat::Application, set_status_page_status: true }
+      let(:application3){ instance_double Browbeat::Application, set_status_page_status: true }
+      let(:application4){ instance_double Browbeat::Application, set_status_page_status: true }
       let(:status_production1){ 'operational' }
       let(:status_staging1){ 'partial_outage' }
       let(:status_production3){ 'major_outage' }
@@ -286,18 +286,18 @@ describe Browbeat::StatusSync do
       end
 
       it "should call set_status_page_status on each application for which scenarios_for_application? returns true" do
-        expect(application1).to receive(:set_status_page_status).with(status_production1)
-        expect(application1).to receive(:set_status_page_status).with(status_staging1, environment: :staging)
+        expect(application1).to receive(:set_status_page_status).once.with(status_production1)
+        expect(application1).to receive(:set_status_page_status).once.with(status_staging1, environment: :staging)
         expect(application2).to_not receive(:set_status_page_status)
-        expect(application3).to receive(:set_status_page_status).with(status_production3)
-        expect(application4).to receive(:set_status_page_status).with(status_staging4, environment: :staging)
+        expect(application3).to receive(:set_status_page_status).once.with(status_production3)
+        expect(application4).to receive(:set_status_page_status).once.with(status_staging4, environment: :staging)
         subject
       end
     end
 
     describe "status_for_application" do
       subject{ instance.status_for_application(application, :production) }
-      let(:application){ double Browbeat::Application }
+      let(:application){ instance_double Browbeat::Application }
       before do
         allow(instance).to receive(:failed_tagged_scenarios_for_application).and_return new_collection
       end
@@ -363,13 +363,13 @@ describe Browbeat::StatusSync do
       subject{ instance.failed_tagged_scenarios_for_application application, :production }
 
       context "with failing scenarios" do
-        let(:application){ double Browbeat::Application, symbol: "wxyz" }
-        let(:scenario1){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario2){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
-        let(:scenario3){ double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario4){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
-        let(:scenario5){ double Browbeat::Scenario, app_symbol: "abcd", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
-        let(:scenario6){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:application){ instance_double Browbeat::Application, symbol: "wxyz" }
+        let(:scenario1){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario2){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:scenario3){ instance_double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario4){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:scenario5){ instance_double Browbeat::Scenario, app_symbol: "abcd", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:scenario6){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
         let(:collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2, scenario3, scenario4, scenario5, scenario6] }
         # # stub out has_tags? only for production
         before do
@@ -386,13 +386,13 @@ describe Browbeat::StatusSync do
       end
 
       context "with failing production scenarios for other applications" do
-        let(:application){ double Browbeat::Application, symbol: "1234" }
-        let(:scenario1){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario2){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
-        let(:scenario3){ double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario4){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
-        let(:scenario5){ double Browbeat::Scenario, app_symbol: "abcd", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
-        let(:scenario6){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:application){ instance_double Browbeat::Application, symbol: "1234" }
+        let(:scenario1){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario2){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:scenario3){ instance_double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario4){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:scenario5){ instance_double Browbeat::Scenario, app_symbol: "abcd", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:scenario6){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
         let(:collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2, scenario3, scenario4, scenario5, scenario6] }
         # stub out has_tags? only for production
         before do
@@ -409,13 +409,13 @@ describe Browbeat::StatusSync do
       end
 
       context "with failing scenarios only on staging" do
-        let(:application){ double Browbeat::Application, symbol: "wxyz" }
-        let(:scenario1){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario2){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
-        let(:scenario3){ double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario4){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
-        let(:scenario5){ double Browbeat::Scenario, app_symbol: "abcd", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
-        let(:scenario6){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:application){ instance_double Browbeat::Application, symbol: "wxyz" }
+        let(:scenario1){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario2){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:scenario3){ instance_double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario4){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:scenario5){ instance_double Browbeat::Scenario, app_symbol: "abcd", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:scenario6){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
         let(:collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2, scenario3, scenario4, scenario5, scenario6] }
         # stub out has_tags? only for production
         before do
@@ -433,13 +433,13 @@ describe Browbeat::StatusSync do
 
       context "with failing scenarios without failure type" do
         subject{ instance.failed_tagged_scenarios_for_application application }
-        let(:application){ double Browbeat::Application, symbol: "wxyz" }
-        let(:scenario1){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario2){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: nil, failure_type: nil }
-        let(:scenario3){ double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario4){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: nil, failure_type: nil }
-        let(:scenario5){ double Browbeat::Scenario, app_symbol: "abcd", failed?: true, failure_severity: nil, failure_type: nil }
-        let(:scenario6){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: nil, failure_type: nil }
+        let(:application){ instance_double Browbeat::Application, symbol: "wxyz" }
+        let(:scenario1){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario2){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: nil, failure_type: nil }
+        let(:scenario3){ instance_double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario4){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: nil, failure_type: nil }
+        let(:scenario5){ instance_double Browbeat::Scenario, app_symbol: "abcd", failed?: true, failure_severity: nil, failure_type: nil }
+        let(:scenario6){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: nil, failure_type: nil }
         let(:collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2, scenario3, scenario4, scenario5, scenario6] }
         # stub out has_tags? only for production
         before do
@@ -460,13 +460,13 @@ describe Browbeat::StatusSync do
       subject{ instance.tagged_scenarios_for_application? application, :staging }
 
       context "with successful scenarios matching the tag" do
-        let(:application){ double Browbeat::Application, symbol: "wxyz" }
-        let(:scenario1){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario2){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario3){ double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario4){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario5){ double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario6){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:application){ instance_double Browbeat::Application, symbol: "wxyz" }
+        let(:scenario1){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario2){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario3){ instance_double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario4){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario5){ instance_double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario6){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
         let(:collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2, scenario3, scenario4, scenario5, scenario6] }
         # stub out has_tags? only for production
         before do
@@ -482,13 +482,13 @@ describe Browbeat::StatusSync do
       end
 
       context "with failing scenarios matching the tag" do
-        let(:application){ double Browbeat::Application, symbol: "wxyz" }
-        let(:scenario1){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario2){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
-        let(:scenario3){ double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario4){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
-        let(:scenario5){ double Browbeat::Scenario, app_symbol: "abcd", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
-        let(:scenario6){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:application){ instance_double Browbeat::Application, symbol: "wxyz" }
+        let(:scenario1){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario2){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:scenario3){ instance_double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario4){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:scenario5){ instance_double Browbeat::Scenario, app_symbol: "abcd", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:scenario6){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
         let(:collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2, scenario3, scenario4, scenario5, scenario6] }
         # stub out has_tags? only for production
         before do
@@ -504,13 +504,13 @@ describe Browbeat::StatusSync do
       end
 
       context "with failing scenarios for other applications matching the tag" do
-        let(:application){ double Browbeat::Application, symbol: "1234" }
-        let(:scenario1){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario2){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
-        let(:scenario3){ double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario4){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
-        let(:scenario5){ double Browbeat::Scenario, app_symbol: "abcd", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
-        let(:scenario6){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:application){ instance_double Browbeat::Application, symbol: "1234" }
+        let(:scenario1){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario2){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:scenario3){ instance_double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario4){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:scenario5){ instance_double Browbeat::Scenario, app_symbol: "abcd", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:scenario6){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
         let(:collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2, scenario3, scenario4, scenario5, scenario6] }
         # stub out has_tags? only for production
         before do
@@ -526,13 +526,13 @@ describe Browbeat::StatusSync do
       end
 
       context "with failing scenarios not matching the tag" do
-        let(:application){ double Browbeat::Application, symbol: "wxyz" }
-        let(:scenario1){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario2){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
-        let(:scenario3){ double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario4){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
-        let(:scenario5){ double Browbeat::Scenario, app_symbol: "abcd", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
-        let(:scenario6){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:application){ instance_double Browbeat::Application, symbol: "wxyz" }
+        let(:scenario1){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario2){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:scenario3){ instance_double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario4){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:scenario5){ instance_double Browbeat::Scenario, app_symbol: "abcd", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:scenario6){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
         let(:collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2, scenario3, scenario4, scenario5, scenario6] }
         # stub out has_tags? only for production
         before do
@@ -548,7 +548,7 @@ describe Browbeat::StatusSync do
       end
 
       context "without scenarios" do
-        let(:application){ double Browbeat::Application, symbol: "wxyz" }
+        let(:application){ instance_double Browbeat::Application, symbol: "wxyz" }
         let(:collection){ Browbeat::ScenarioCollection.new([]) }
 
         it { is_expected.to be_falsy }
@@ -559,13 +559,13 @@ describe Browbeat::StatusSync do
       subject{ instance.scenarios_for_application? application }
 
       context "with successful production scenarios" do
-        let(:application){ double Browbeat::Application, symbol: "wxyz" }
-        let(:scenario1){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario2){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario3){ double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario4){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario5){ double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario6){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:application){ instance_double Browbeat::Application, symbol: "wxyz" }
+        let(:scenario1){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario2){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario3){ instance_double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario4){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario5){ instance_double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario6){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
         let(:collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2, scenario3, scenario4, scenario5, scenario6] }
         # stub out has_tags? only for production
         before do
@@ -581,13 +581,13 @@ describe Browbeat::StatusSync do
       end
 
       context "with failing production scenarios" do
-        let(:application){ double Browbeat::Application, symbol: "wxyz" }
-        let(:scenario1){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario2){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
-        let(:scenario3){ double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario4){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
-        let(:scenario5){ double Browbeat::Scenario, app_symbol: "abcd", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
-        let(:scenario6){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:application){ instance_double Browbeat::Application, symbol: "wxyz" }
+        let(:scenario1){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario2){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:scenario3){ instance_double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario4){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:scenario5){ instance_double Browbeat::Scenario, app_symbol: "abcd", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:scenario6){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
         let(:collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2, scenario3, scenario4, scenario5, scenario6] }
         # stub out has_tags? only for production
         before do
@@ -603,13 +603,13 @@ describe Browbeat::StatusSync do
       end
 
       context "with failing production scenarios for other applications" do
-        let(:application){ double Browbeat::Application, symbol: "1234" }
-        let(:scenario1){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario2){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
-        let(:scenario3){ double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario4){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
-        let(:scenario5){ double Browbeat::Scenario, app_symbol: "abcd", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
-        let(:scenario6){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:application){ instance_double Browbeat::Application, symbol: "1234" }
+        let(:scenario1){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario2){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:scenario3){ instance_double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario4){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:scenario5){ instance_double Browbeat::Scenario, app_symbol: "abcd", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:scenario6){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
         let(:collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2, scenario3, scenario4, scenario5, scenario6] }
         # stub out has_tags? only for production
         before do
@@ -625,13 +625,13 @@ describe Browbeat::StatusSync do
       end
 
       context "with failing scenarios only on staging" do
-        let(:application){ double Browbeat::Application, symbol: "wxyz" }
-        let(:scenario1){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario2){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
-        let(:scenario3){ double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario4){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
-        let(:scenario5){ double Browbeat::Scenario, app_symbol: "abcd", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
-        let(:scenario6){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:application){ instance_double Browbeat::Application, symbol: "wxyz" }
+        let(:scenario1){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario2){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:scenario3){ instance_double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario4){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:scenario5){ instance_double Browbeat::Scenario, app_symbol: "abcd", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
+        let(:scenario6){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: 0, failure_type: 'major_outage' }
         let(:collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2, scenario3, scenario4, scenario5, scenario6] }
         # stub out has_tags? only for production
         before do
@@ -647,13 +647,13 @@ describe Browbeat::StatusSync do
       end
 
       context "with failing scenarios with no failure type" do
-        let(:application){ double Browbeat::Application, symbol: "wxyz" }
-        let(:scenario1){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario2){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: nil, failure_type: nil }
-        let(:scenario3){ double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
-        let(:scenario4){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: nil, failure_type: nil }
-        let(:scenario5){ double Browbeat::Scenario, app_symbol: "abcd", failed?: true, failure_severity: nil, failure_type: nil }
-        let(:scenario6){ double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: nil, failure_type: nil }
+        let(:application){ instance_double Browbeat::Application, symbol: "wxyz" }
+        let(:scenario1){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario2){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: nil, failure_type: nil }
+        let(:scenario3){ instance_double Browbeat::Scenario, app_symbol: "abcd", failed?: false, failure_severity: nil, failure_type: nil }
+        let(:scenario4){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: nil, failure_type: nil }
+        let(:scenario5){ instance_double Browbeat::Scenario, app_symbol: "abcd", failed?: true, failure_severity: nil, failure_type: nil }
+        let(:scenario6){ instance_double Browbeat::Scenario, app_symbol: "wxyz", failed?: true, failure_severity: nil, failure_type: nil }
         let(:collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2, scenario3, scenario4, scenario5, scenario6] }
         # stub out has_tags? only for production
         before do
@@ -669,7 +669,7 @@ describe Browbeat::StatusSync do
       end
 
       context "without scenarios" do
-        let(:application){ double Browbeat::Application, symbol: "wxyz" }
+        let(:application){ instance_double Browbeat::Application, symbol: "wxyz" }
         let(:collection){ Browbeat::ScenarioCollection.new([]) }
 
         it { is_expected.to be_falsy }

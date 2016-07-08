@@ -7,7 +7,7 @@ describe Browbeat::FailureTracker do
   describe "scenarios"
 
   describe "register_scenario" do
-    let(:scenario){ double Cucumber::Ast::Scenario }
+    let(:scenario){ instance_double Cucumber::Ast::Scenario }
 
     context "initial call" do
       subject{ tracker.register_scenario scenario }
@@ -24,8 +24,8 @@ describe Browbeat::FailureTracker do
         tracker.register_scenario scenario2
         tracker.register_scenario scenario3
       end
-      let(:scenario2){ double Browbeat::Scenario }
-      let(:scenario3){ double Browbeat::Scenario }
+      let(:scenario2){ instance_double Browbeat::Scenario }
+      let(:scenario3){ instance_double Browbeat::Scenario }
 
       it "should retain all scenarios in collection" do
         subject
