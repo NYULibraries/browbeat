@@ -91,5 +91,42 @@ describe Browbeat::Application do
         end
       end
     end
+
+    describe "status_page_staging_component" do
+      subject { application.status_page_staging_component }
+      let(:component){ double StatusPage::API::Component, get: true }
+      before { allow(StatusPage::API::Component).to receive(:new).and_return component }
+      around do |example|
+        with_modified_env STATUS_PAGE_STAGING_PAGE_ID: page_id do
+          example.run
+        end
+      end
+
+      context "with STATUS_PAGE_STAGING_PAGE_ID set" do
+        let(:page_id){ "xxxx" }
+
+        it { is_expected.to eq component }
+
+        it "should call initialize with correct params" do
+          expect(StatusPage::API::Component).to receive(:new).with(status_page_staging_id, "xxxx")
+          subject
+        end
+
+        it "should call get" do
+          expect(component).to receive(:get)
+          subject
+        end
+      end
+
+      context "without STATUS_PAGE_STAGING_PAGE_ID set" do
+        let(:page_id){ nil }
+
+        it "should raise an error" do
+          expect{ subject }.to raise_error "Must define STATUS_PAGE_STAGING_PAGE_ID"
+        end
+      end
+    end
+
+
   end
 end
