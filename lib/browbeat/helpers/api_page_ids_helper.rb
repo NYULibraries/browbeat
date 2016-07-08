@@ -1,7 +1,7 @@
 module Browbeat
   module Helpers
     module ApiPageIdsHelper
-      def status_page_page_id
+      def status_page_production_page_id
         ENV['STATUS_PAGE_PAGE_ID'] || raise("Must specify STATUS_PAGE_PAGE_ID")
       end
 

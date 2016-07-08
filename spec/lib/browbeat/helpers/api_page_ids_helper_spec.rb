@@ -4,8 +4,8 @@ require 'browbeat'
 describe Browbeat::Helpers::ApiPageIdsHelper do
   let(:helper){ Class.new{ extend Browbeat::Helpers::ApiPageIdsHelper } }
 
-  describe "status_page_page_id" do
-    subject{ helper.status_page_page_id }
+  describe "status_page_production_page_id" do
+    subject{ helper.status_page_production_page_id }
 
     around do |example|
       with_modified_env STATUS_PAGE_PAGE_ID: page_id do

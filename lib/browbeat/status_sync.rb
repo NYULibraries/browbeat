@@ -26,7 +26,7 @@ module Browbeat
     end
 
     def self.get_failing_components
-      component_list = StatusPage::API::ComponentList.new(status_page_page_id)
+      component_list = StatusPage::API::ComponentList.new(status_page_production_page_id)
       component_list.get.to_a.select(&:failing?)
     end
 

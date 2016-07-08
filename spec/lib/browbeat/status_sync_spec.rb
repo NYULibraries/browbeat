@@ -149,7 +149,7 @@ describe Browbeat::StatusSync do
 
     describe "self.get_failing_components" do
       subject { described_class.get_failing_components }
-      let(:status_page_page_id){ "abcd" }
+      let(:status_page_production_page_id){ "abcd" }
       let(:component_list){ instance_double StatusPage::API::ComponentList, get: [component1, component2, component3] }
       let(:component1){ instance_double StatusPage::API::Component, failing?: true }
       let(:component2){ instance_double StatusPage::API::Component, failing?: false }
@@ -158,7 +158,7 @@ describe Browbeat::StatusSync do
 
       context "with STATUS_PAGE_PAGE_ID" do
         around do |example|
-          with_modified_env STATUS_PAGE_PAGE_ID: status_page_page_id do
+          with_modified_env STATUS_PAGE_PAGE_ID: status_page_production_page_id do
             example.run
           end
         end
@@ -168,7 +168,7 @@ describe Browbeat::StatusSync do
         it { is_expected.to be_a Array }
 
         it "should initialize with page ID" do
-          expect(StatusPage::API::ComponentList).to receive(:new).with status_page_page_id
+          expect(StatusPage::API::ComponentList).to receive(:new).with status_page_production_page_id
           subject
         end
       end

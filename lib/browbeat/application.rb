@@ -22,7 +22,7 @@ module Browbeat
     end
 
     def status_page_production_component
-      @component ||= get_status_page_component(status_page_production_id, status_page_page_id)
+      @component ||= get_status_page_component(status_page_production_id, status_page_production_page_id)
     end
 
     def status_page_staging_component
