@@ -69,7 +69,7 @@ module Browbeat
     end
 
     def previous_failures?
-      return true if StatusSync.previously_failing?(scenario_applications.map(&:status_page_id))
+      return true if StatusSync.previously_failing?(scenario_applications.map(&:status_page_production_id))
       StatusSync.previously_failing_on_staging?(scenario_applications.map(&:status_page_staging_id))
     end
 

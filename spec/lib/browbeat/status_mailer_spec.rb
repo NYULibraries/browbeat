@@ -64,9 +64,9 @@ describe Browbeat::StatusMailer do
         end
 
         context "with scenario applications" do
-          let(:application1){ double Browbeat::Scenario, status_page_id: "aaaa", status_page_staging_id: "zzzz" }
-          let(:application2){ double Browbeat::Scenario, status_page_id: "bbbb", status_page_staging_id: "yyyy" }
-          let(:application3){ double Browbeat::Scenario, status_page_id: "cccc", status_page_staging_id: "xxxx" }
+          let(:application1){ instance_double Browbeat::Application, status_page_production_id: "aaaa", status_page_staging_id: "zzzz" }
+          let(:application2){ instance_double Browbeat::Application, status_page_production_id: "bbbb", status_page_staging_id: "yyyy" }
+          let(:application3){ instance_double Browbeat::Application, status_page_production_id: "cccc", status_page_staging_id: "xxxx" }
           before { allow(mailer).to receive(:scenario_applications).and_return [application1, application2, application3] }
 
           context "with previous production failures" do
