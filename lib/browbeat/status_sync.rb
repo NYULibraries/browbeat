@@ -8,32 +8,8 @@ module Browbeat
     FAILURE_STATUS_TYPES = %w[major_outage partial_outage degraded_performance]
 
     def self.sync_status_page(scenario_collection)
-      # @previously_failing_components = get_failing_components
-      # @previously_failing_staging_components = get_failing_staging_components
       new(scenario_collection).sync_status_page
     end
-
-    # def self.previously_failing?(*component_ids)
-    #   component_ids.flatten.any? do |component_id|
-    #     @previously_failing_components.map(&:id).include?(component_id)
-    #   end
-    # end
-    #
-    # def self.previously_failing_on_staging?(*component_ids)
-    #   component_ids.flatten.any? do |component_id|
-    #     @previously_failing_staging_components.map(&:id).include?(component_id)
-    #   end
-    # end
-
-    # def self.get_failing_components
-    #   component_list = StatusPage::API::ComponentList.new(status_page_production_page_id)
-    #   component_list.get.to_a.select(&:failing?)
-    # end
-    #
-    # def self.get_failing_staging_components
-    #   staging_component_list = StatusPage::API::ComponentList.new(status_page_staging_page_id)
-    #   staging_component_list.get.to_a.select(&:failing?)
-    # end
 
     def initialize(scenario_collection)
       @scenario_collection = scenario_collection

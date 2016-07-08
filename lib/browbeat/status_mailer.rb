@@ -57,12 +57,6 @@ module Browbeat
           comp.failing? && send("scenario_#{environment}_component_ids").include?(comp.id)
         end
       end
-      # [status_page_production_page_id, status_page_staging_page_id].any? do |page_id|
-      #   components = StatusPage::API::ComponentList.new(page_id).get
-      #   components.any? do |comp|
-      #     comp.failing? && scenario_component_ids.include?(comp.id)
-      #   end
-      # end
     end
 
     def scenario_applications
@@ -92,11 +86,6 @@ module Browbeat
     def scenario_staging_component_ids
       scenario_applications.map(&:status_page_staging_id)
     end
-
-    # def previous_failures?
-    #   return true if StatusSync.previously_failing?(scenario_applications.map(&:status_page_production_id))
-    #   StatusSync.previously_failing_on_staging?(scenario_applications.map(&:status_page_staging_id))
-    # end
 
     def overall_worst_failure_type
       (failed_scenarios.with_tags(:production).worst_failure_type || 'staging outage').gsub('_',' ')
