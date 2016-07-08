@@ -28,23 +28,17 @@ module Browbeat
     end
 
     def status_page_component
-      @component ||= get_status_page_component
+      @component ||= get_status_page_component(status_page_id, status_page_page_id)
     end
 
     def status_page_staging_component
-      @staging_component ||= get_status_page_staging_component
+      @staging_component ||= get_status_page_component(status_page_staging_id, status_page_staging_page_id)
     end
 
     private
 
-    def get_status_page_component
-      comp = StatusPage::API::Component.new(status_page_id, status_page_page_id)
-      comp.get
-      comp
-    end
-
-    def get_status_page_staging_component
-      comp = StatusPage::API::Component.new(status_page_staging_id, status_page_staging_page_id)
+    def get_status_page_component(component_id, page_id)
+      comp = StatusPage::API::Component.new(component_id, page_id)
       comp.get
       comp
     end
