@@ -5,8 +5,8 @@ describe Browbeat::Presenters::MailSuccessPresenter do
   describe "class methods" do
     describe "self.render" do
       subject { described_class.render applications }
-      let(:presenter){ double described_class }
-      let(:applications){ [double(Browbeat::Application), double(Browbeat::Application)] }
+      let(:presenter){ instance_double described_class }
+      let(:applications){ [instance_double(Browbeat::Application), instance_double(Browbeat::Application)] }
       let(:result){ "<div>Hello!</div>" }
       before do
         allow(described_class).to receive(:new).and_return presenter
@@ -29,12 +29,12 @@ describe Browbeat::Presenters::MailSuccessPresenter do
 
   describe "instance methods" do
     let(:presenter){ described_class.new applications }
-    let(:applications){ [double(Browbeat::Application), double(Browbeat::Application)] }
+    let(:applications){ [instance_double(Browbeat::Application), instance_double(Browbeat::Application)] }
 
     describe "render" do
       subject { presenter.render }
       let(:file_text){ "%div =environments" }
-      let(:engine){ double Haml::Engine }
+      let(:engine){ instance_double Haml::Engine }
       let(:result){ "Hello world!" }
       before do
         allow(File).to receive(:read).and_return file_text
@@ -67,14 +67,14 @@ describe Browbeat::Presenters::MailSuccessPresenter do
 
     describe "previously_failing?" do
       subject { presenter.previously_failing?(application) }
-      let(:status_page_id){ "abcd" }
-      let(:application){ double Browbeat::Application, status_page_id: status_page_id }
+      let(:status_page_production_id){ "abcd" }
+      let(:application){ instance_double Browbeat::Application, status_page_production_id: status_page_production_id }
       before { allow(Browbeat::StatusSync).to receive(:previously_failing?).and_return true }
 
       it { is_expected.to eq true }
 
       it "should call previously_failing? correctly" do
-        expect(Browbeat::StatusSync).to receive(:previously_failing?).with(status_page_id)
+        expect(Browbeat::StatusSync).to receive(:previously_failing?).with(status_page_production_id)
         subject
       end
     end
@@ -82,7 +82,7 @@ describe Browbeat::Presenters::MailSuccessPresenter do
     describe "previously_failing_on_staging?" do
       subject { presenter.previously_failing_on_staging?(application) }
       let(:status_page_staging_id){ "xyzw" }
-      let(:application){ double Browbeat::Application, status_page_staging_id: status_page_staging_id }
+      let(:application){ instance_double Browbeat::Application, status_page_staging_id: status_page_staging_id }
       before { allow(Browbeat::StatusSync).to receive(:previously_failing_on_staging?).and_return true }
 
       it { is_expected.to eq true }

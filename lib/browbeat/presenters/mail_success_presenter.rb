@@ -18,7 +18,7 @@ module Browbeat
       end
 
       def previously_failing?(application)
-        StatusSync.previously_failing?(application.status_page_id)
+        StatusSync.previously_failing?(application.status_page_production_id)
       end
 
       def previously_failing_on_staging?(application)
