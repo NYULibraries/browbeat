@@ -1,5 +1,7 @@
 module Browbeat
   class Application
+    include Browbeat::Helpers::ApiPageIdsHelper
+
     LIST_FILEPATH = 'config/application_list.yml'
 
     attr_accessor :name, :symbol, :status_page_id, :status_page_staging_id
@@ -41,14 +43,6 @@ module Browbeat
       comp = StatusPage::API::Component.new(component_id, page_id)
       comp.get
       comp
-    end
-
-    def status_page_page_id
-      ENV['STATUS_PAGE_PAGE_ID'] || raise("Must define STATUS_PAGE_PAGE_ID")
-    end
-
-    def status_page_staging_page_id
-      ENV['STATUS_PAGE_STAGING_PAGE_ID'] || raise("Must define STATUS_PAGE_STAGING_PAGE_ID")
     end
 
     def self.all_applications_yaml

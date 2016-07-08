@@ -87,7 +87,7 @@ describe Browbeat::Application do
         let(:page_id){ nil }
 
         it "should raise an error" do
-          expect{ subject }.to raise_error "Must define STATUS_PAGE_PAGE_ID"
+          expect{ subject }.to raise_error "Must specify STATUS_PAGE_PAGE_ID"
         end
       end
     end
@@ -122,7 +122,7 @@ describe Browbeat::Application do
         let(:page_id){ nil }
 
         it "should raise an error" do
-          expect{ subject }.to raise_error "Must define STATUS_PAGE_STAGING_PAGE_ID"
+          expect{ subject }.to raise_error "Must specify STATUS_PAGE_STAGING_PAGE_ID"
         end
       end
     end

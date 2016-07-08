@@ -1,5 +1,7 @@
 module Browbeat
   class StatusSync
+    extend Browbeat::Helpers::ApiPageIdsHelper
+
     attr_accessor :scenario_collection
 
     SUCCESS_STATUS_TYPE = 'operational'
@@ -71,14 +73,6 @@ module Browbeat
     end
 
     private
-    def self.status_page_page_id
-      ENV['STATUS_PAGE_PAGE_ID'] || raise("Must specify STATUS_PAGE_PAGE_ID")
-    end
-
-    def self.status_page_staging_page_id
-      ENV['STATUS_PAGE_STAGING_PAGE_ID'] || raise("Must specify STATUS_PAGE_STAGING_PAGE_ID")
-    end
-
     def failed_scenarios
       @failed_scenarios ||= scenario_collection.select(&:failed?).select(&:failure_severity)
     end
