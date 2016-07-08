@@ -1,10 +1,12 @@
 %p The following applications previously had failures but are now operational:
 %ul
   - application_list.each do |application|
-    - next unless previously_failing?(application)
-    %li= application.name
+    - next unless failing_on_production?(application) || failing_on_staging?(application)
+    %li
+      = application.name
+      = "(staging-only outage)" unless failing_on_production?(application)
 %p The following applications remained operational:
 %ul
   - application_list.each do |application|
-    - next if previously_failing?(application)
+    - next if failing_on_production?(application) || failing_on_staging?(application)
     %li= application.name

@@ -1,5 +1,7 @@
 module Browbeat
   class StatusMailer
+    include Browbeat::Helpers::ApiPageIdsHelper
+
     attr_reader :scenario_collection
 
     def self.send_status(scenario_collection)
@@ -11,7 +13,7 @@ module Browbeat
     end
 
     def send_status_if_failed
-      if any_failures? || previous_failures?
+      if any_failures? || status_page_failures?
         send_mail
       end
     end
@@ -34,7 +36,7 @@ module Browbeat
 
     def subject
       if any_failures?
-        "Browbeat: #{failed_scenarios.worst_failure_type.gsub('_',' ')} detected"
+        "Browbeat: #{overall_worst_failure_type} detected"
       else
         "Browbeat: services now operational"
       end
@@ -48,6 +50,15 @@ module Browbeat
       @any_failures ||= @scenario_collection.any?(&:failed?)
     end
 
+    def status_page_failures?
+      %w[production staging].any? do |environment|
+        components = StatusPage::API::ComponentList.new(send("status_page_#{environment}_page_id")).get
+        components.any? do |comp|
+          comp.failing? && send("scenario_#{environment}_component_ids").include?(comp.id)
+        end
+      end
+    end
+
     def scenario_applications
       @scenario_applications ||= get_scenario_applications
     end
@@ -55,17 +66,29 @@ module Browbeat
     private
 
     def get_scenario_applications
-      Application.list_all.select do |application|
+      application_list.select do |application|
         scenario_application_symbols.include?(application.symbol)
       end
+    end
+
+    def application_list
+      @application_list ||= ApplicationCollection.new.load_yml
     end
 
     def scenario_application_symbols
       @symbols ||= @scenario_collection.map(&:app_symbol)
     end
 
-    def previous_failures?
-      StatusSync.previously_failing?(scenario_applications.map(&:status_page_id))
+    def scenario_production_component_ids
+      scenario_applications.map(&:status_page_production_id)
+    end
+
+    def scenario_staging_component_ids
+      scenario_applications.map(&:status_page_staging_id)
+    end
+
+    def overall_worst_failure_type
+      (failed_scenarios.with_tags(:production).worst_failure_type || 'staging outage').gsub('_',' ')
     end
 
   end

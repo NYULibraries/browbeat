@@ -17,8 +17,12 @@ module Browbeat
         Haml::Engine.new(File.read(TEMPLATE)).render(self)
       end
 
-      def previously_failing?(application)
-        StatusSync.previously_failing?(application.status_page_id)
+      def failing_on_production?(application)
+        application.status_page_production_component.failing?
+      end
+
+      def failing_on_staging?(application)
+        application.status_page_staging_component.failing?
       end
     end
   end

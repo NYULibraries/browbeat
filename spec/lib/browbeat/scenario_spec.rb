@@ -3,7 +3,7 @@ require 'browbeat'
 
 describe Browbeat::Scenario do
   describe "scenario methods" do
-    let(:cucumber_scenario){ double Cucumber::Ast::Scenario }
+    let(:cucumber_scenario){ instance_double Cucumber::Ast::Scenario }
     let(:scenario){ described_class.new cucumber_scenario }
 
     describe "cucumber_scenario" do
@@ -97,9 +97,9 @@ describe Browbeat::Scenario do
 
     describe "failed_step" do
       subject{ scenario.failed_step }
-      let(:step1){ double Cucumber::Ast::StepInvocation }
-      let(:step2){ double Cucumber::Ast::StepInvocation }
-      let(:step3){ double Cucumber::Ast::StepInvocation }
+      let(:step1){ instance_double Cucumber::Ast::StepInvocation }
+      let(:step2){ instance_double Cucumber::Ast::StepInvocation }
+      let(:step3){ instance_double Cucumber::Ast::StepInvocation }
       before do
         allow(scenario).to receive(:steps).and_return [step1, step2, step3]
       end

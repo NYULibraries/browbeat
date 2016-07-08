@@ -5,8 +5,8 @@ describe Browbeat::Presenters::MailSuccessPresenter do
   describe "class methods" do
     describe "self.render" do
       subject { described_class.render applications }
-      let(:presenter){ double described_class }
-      let(:applications){ [double(Browbeat::Application), double(Browbeat::Application)] }
+      let(:presenter){ instance_double described_class }
+      let(:applications){ [instance_double(Browbeat::Application), instance_double(Browbeat::Application)] }
       let(:result){ "<div>Hello!</div>" }
       before do
         allow(described_class).to receive(:new).and_return presenter
@@ -29,12 +29,12 @@ describe Browbeat::Presenters::MailSuccessPresenter do
 
   describe "instance methods" do
     let(:presenter){ described_class.new applications }
-    let(:applications){ [double(Browbeat::Application), double(Browbeat::Application)] }
+    let(:applications){ [instance_double(Browbeat::Application), instance_double(Browbeat::Application)] }
 
     describe "render" do
       subject { presenter.render }
       let(:file_text){ "%div =environments" }
-      let(:engine){ double Haml::Engine }
+      let(:engine){ instance_double Haml::Engine }
       let(:result){ "Hello world!" }
       before do
         allow(File).to receive(:read).and_return file_text
@@ -63,6 +63,34 @@ describe Browbeat::Presenters::MailSuccessPresenter do
     describe "application_list" do
       subject { presenter.application_list }
       it { is_expected.to eq applications }
+    end
+
+    describe "failing_on_production?" do
+      subject { presenter.failing_on_production?(application) }
+      let(:status_page_production_id){ "abcd" }
+      let(:application){ instance_double Browbeat::Application, status_page_production_component: component }
+      let(:component){ instance_double StatusPage::API::Component, failing?: true }
+
+      it { is_expected.to eq true }
+
+      it "should call failing? correctly" do
+        expect(component).to receive(:failing?)
+        subject
+      end
+    end
+
+    describe "failing_on_staging?" do
+      subject { presenter.failing_on_staging?(application) }
+      let(:status_page_staging_id){ "xyzw" }
+      let(:application){ instance_double Browbeat::Application, status_page_staging_component: component }
+      let(:component){ instance_double StatusPage::API::Component, failing?: true }
+
+      it { is_expected.to eq true }
+
+      it "should call failing? correctly" do
+        expect(component).to receive(:failing?)
+        subject
+      end
     end
 
   end

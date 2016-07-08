@@ -5,9 +5,9 @@ describe Browbeat::Presenters::MailFailurePresenter do
   describe "class methods" do
     describe "self.render" do
       subject { described_class.render scenario_collection, applications }
-      let(:presenter){ double described_class }
-      let(:scenario_collection){ double Browbeat::ScenarioCollection }
-      let(:applications){ [double(Browbeat::Application), double(Browbeat::Application)] }
+      let(:presenter){ instance_double described_class }
+      let(:scenario_collection){ instance_double Browbeat::ScenarioCollection }
+      let(:applications){ [instance_double(Browbeat::Application), instance_double(Browbeat::Application)] }
       let(:result){ "<div>Hello!</div>" }
       before do
         allow(described_class).to receive(:new).and_return presenter
@@ -29,14 +29,14 @@ describe Browbeat::Presenters::MailFailurePresenter do
   end
 
   describe "instance methods" do
-    let(:scenario_collection){ double Browbeat::ScenarioCollection }
-    let(:applications){ [double(Browbeat::Application), double(Browbeat::Application)] }
+    let(:scenario_collection){ instance_double Browbeat::ScenarioCollection }
+    let(:applications){ [instance_double(Browbeat::Application), instance_double(Browbeat::Application)] }
     let(:presenter){ described_class.new scenario_collection, applications }
 
     describe "render" do
       subject { presenter.render }
       let(:file_text){ "%div =environments" }
-      let(:engine){ double Haml::Engine }
+      let(:engine){ instance_double Haml::Engine }
       let(:result){ "Hello world!" }
       before do
         allow(File).to receive(:read).and_return file_text
@@ -82,16 +82,16 @@ describe Browbeat::Presenters::MailFailurePresenter do
 
       context "with scenarios" do
         let(:scenario_collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2] }
-        let(:scenario1){ double Browbeat::Scenario, app_symbol: 'abcd' }
-        let(:scenario2){ double Browbeat::Scenario, app_symbol: 'wxyz' }
+        let(:scenario1){ instance_double Browbeat::Scenario, app_symbol: 'abcd' }
+        let(:scenario2){ instance_double Browbeat::Scenario, app_symbol: 'wxyz' }
 
         context "with corresponding application" do
-          let(:application){ double Browbeat::Application, symbol: 'wxyz' }
+          let(:application){ instance_double Browbeat::Application, symbol: 'wxyz' }
           it { is_expected.to be_truthy }
         end
 
         context "with non-corresponding application" do
-          let(:application){ double Browbeat::Application, symbol: '1234' }
+          let(:application){ instance_double Browbeat::Application, symbol: '1234' }
           it { is_expected.to be_falsy }
         end
       end
@@ -102,25 +102,25 @@ describe Browbeat::Presenters::MailFailurePresenter do
 
       context "with scenarios" do
         let(:scenario_collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2, scenario3, scenario4] }
-        let(:scenario1){ double Browbeat::Scenario, app_symbol: 'abcd' }
-        let(:scenario2){ double Browbeat::Scenario, app_symbol: 'wxyz' }
-        let(:scenario3){ double Browbeat::Scenario, app_symbol: 'wxyz' }
-        let(:scenario4){ double Browbeat::Scenario, app_symbol: '4567' }
+        let(:scenario1){ instance_double Browbeat::Scenario, app_symbol: 'abcd' }
+        let(:scenario2){ instance_double Browbeat::Scenario, app_symbol: 'wxyz' }
+        let(:scenario3){ instance_double Browbeat::Scenario, app_symbol: 'wxyz' }
+        let(:scenario4){ instance_double Browbeat::Scenario, app_symbol: '4567' }
 
         context "with corresponding application" do
-          let(:application){ double Browbeat::Application, symbol: '4567' }
+          let(:application){ instance_double Browbeat::Application, symbol: '4567' }
           it { is_expected.to match_array [scenario4] }
           it { is_expected.to be_a Browbeat::ScenarioCollection }
         end
 
         context "with corresponding application matching multiple" do
-          let(:application){ double Browbeat::Application, symbol: 'wxyz' }
+          let(:application){ instance_double Browbeat::Application, symbol: 'wxyz' }
           it { is_expected.to match_array [scenario2, scenario3] }
           it { is_expected.to be_a Browbeat::ScenarioCollection }
         end
 
         context "with non-corresponding application" do
-          let(:application){ double Browbeat::Application, symbol: '1234' }
+          let(:application){ instance_double Browbeat::Application, symbol: '1234' }
           it { is_expected.to match_array [] }
           it { is_expected.to be_a Browbeat::ScenarioCollection }
         end
@@ -130,7 +130,7 @@ describe Browbeat::Presenters::MailFailurePresenter do
 
     describe "scenarios_for_application_environment?" do
       subject { presenter.scenarios_for_application_environment? application, environment }
-      let(:application){ double Browbeat::Application }
+      let(:application){ instance_double Browbeat::Application }
       let(:environment){ "something" }
 
       context "with application scenarios" do
@@ -138,9 +138,9 @@ describe Browbeat::Presenters::MailFailurePresenter do
         before { allow(presenter).to receive(:scenarios_for_application).and_return subcollection }
 
         context "with environment tag" do
-          let(:scenario1){ double Browbeat::Scenario, has_tag?: false }
-          let(:scenario2){ double Browbeat::Scenario, has_tag?: true }
-          let(:scenario3){ double Browbeat::Scenario, has_tag?: false }
+          let(:scenario1){ instance_double Browbeat::Scenario, has_tag?: false }
+          let(:scenario2){ instance_double Browbeat::Scenario, has_tag?: true }
+          let(:scenario3){ instance_double Browbeat::Scenario, has_tag?: false }
 
           it { is_expected.to be_truthy }
 
@@ -154,9 +154,9 @@ describe Browbeat::Presenters::MailFailurePresenter do
         end
 
         context "without environment tag" do
-          let(:scenario1){ double Browbeat::Scenario, has_tag?: false }
-          let(:scenario2){ double Browbeat::Scenario, has_tag?: false }
-          let(:scenario3){ double Browbeat::Scenario, has_tag?: false }
+          let(:scenario1){ instance_double Browbeat::Scenario, has_tag?: false }
+          let(:scenario2){ instance_double Browbeat::Scenario, has_tag?: false }
+          let(:scenario3){ instance_double Browbeat::Scenario, has_tag?: false }
 
           it { is_expected.to be_falsy }
 
@@ -180,11 +180,11 @@ describe Browbeat::Presenters::MailFailurePresenter do
 
     describe "scenarios_for_application_environment_failure_type" do
       subject { presenter.scenarios_for_application_environment_failure_type application, environment, failure_type }
-      let(:application){ double Browbeat::Application }
+      let(:application){ instance_double Browbeat::Application }
       let(:environment){ "something" }
       let(:failure_type){ "catastrophic" }
-      let(:subcollection){ double Browbeat::ScenarioCollection }
-      let(:subsubcollection){ double Browbeat::ScenarioCollection }
+      let(:subcollection){ instance_double Browbeat::ScenarioCollection }
+      let(:subsubcollection){ instance_double Browbeat::ScenarioCollection }
       before do
         allow(presenter).to receive(:scenarios_for_application).and_return subcollection
         allow(subcollection).to receive(:with_tags).and_return subsubcollection
