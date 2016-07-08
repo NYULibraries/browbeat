@@ -1,24 +1,13 @@
 module Browbeat
-  class ApplicationCollection
-    extend Forwardable
-    delegate [:<<, :[], :first, :last, :map, :each, :to_a, :to_ary, :any?, :none?, :empty?, :include?, :length] => :@applications
+  class ApplicationCollection < CollectionBase
 
     LIST_FILEPATH = 'config/application_list.yml'
 
-    def initialize(applications = [])
-      @applications = applications
-    end
-
     def load_yml
-      @applications = all_applications_yaml.map do |app_symbol, attributes|
+      @members = all_applications_yaml.map do |app_symbol, attributes|
         Application.new(**symbolize_keys(attributes).merge(symbol: app_symbol))
       end
       self
-    end
-
-    # wrapper for Array#select that returns instance of this class
-    def select(&block)
-      self.class.new @applications.select(&block)
     end
 
     private
