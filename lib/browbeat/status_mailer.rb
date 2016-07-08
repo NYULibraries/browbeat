@@ -55,9 +55,13 @@ module Browbeat
     private
 
     def get_scenario_applications
-      Application.list_all.select do |application|
+      application_list.select do |application|
         scenario_application_symbols.include?(application.symbol)
       end
+    end
+
+    def application_list
+      @application_list ||= ApplicationCollection.new.load_yml
     end
 
     def scenario_application_symbols

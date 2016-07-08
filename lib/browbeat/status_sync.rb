@@ -40,7 +40,7 @@ module Browbeat
     end
 
     def sync_status_page
-      Application.list_all.each do |application|
+      application_list.each do |application|
         next unless scenarios_for_application?(application)
         if tagged_scenarios_for_application?(application, :production)
           application.set_status_page_status status_for_application(application, :production)
@@ -73,6 +73,10 @@ module Browbeat
     end
 
     private
+    def application_list
+      @application_list ||= ApplicationCollection.new.load_yml
+    end
+
     def failed_scenarios
       @failed_scenarios ||= scenario_collection.select(&:failed?).select(&:failure_severity)
     end

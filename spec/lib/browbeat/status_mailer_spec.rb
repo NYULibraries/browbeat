@@ -292,20 +292,24 @@ describe Browbeat::StatusMailer do
       let(:application1){ double Browbeat::Application, symbol: "xxxx" }
       let(:application2){ double Browbeat::Application, symbol: "yyyy" }
       let(:application3){ double Browbeat::Application, symbol: "zzzz" }
+      let(:application_list){ Browbeat::ApplicationCollection.new(applications) }
+      before do
+        allow_any_instance_of(Browbeat::ApplicationCollection).to receive(:load_yml).and_return application_list
+      end
 
       context "with scenarios" do
         let(:scenario_collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2, scenario3] }
 
         context "with applications" do
-          before { allow(Browbeat::Application).to receive(:list_all).and_return [application1, application2, application3] }
+          let(:applications){ [application1, application2, application3] }
 
           it { is_expected.to match_array [application1, application3] }
         end
 
         context "without applications" do
-          before { allow(Browbeat::Application).to receive(:list_all).and_return [] }
+          let(:applications){ [] }
 
-          it { is_expected.to eq [] }
+          it { is_expected.to match_array [] }
         end
       end
 
@@ -313,15 +317,15 @@ describe Browbeat::StatusMailer do
         let(:scenario_collection){ Browbeat::ScenarioCollection.new [] }
 
         context "with applications" do
-          before { allow(Browbeat::Application).to receive(:list_all).and_return [application1, application2, application3] }
+          let(:applications){ [application1, application2, application3] }
 
-          it { is_expected.to eq [] }
+          it { is_expected.to match_array [] }
         end
 
         context "without applications" do
-          before { allow(Browbeat::Application).to receive(:list_all).and_return [] }
+          let(:applications){ [] }
 
-          it { is_expected.to eq [] }
+          it { is_expected.to match_array [] }
         end
       end
     end

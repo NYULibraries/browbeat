@@ -2,15 +2,7 @@ module Browbeat
   class Application
     include Browbeat::Helpers::ApiPageIdsHelper
 
-    LIST_FILEPATH = 'config/application_list.yml'
-
-    attr_accessor :name, :symbol, :status_page_production_id, :status_page_staging_id
-
-    def self.list_all
-      all_applications_yaml.map do |app_symbol, attributes|
-        new(**symbolize_keys(attributes).merge(symbol: app_symbol))
-      end
-    end
+    attr_reader :name, :symbol, :status_page_production_id, :status_page_staging_id
 
     def initialize(name:, symbol:, status_page_production_id:, status_page_staging_id:)
       @name = name
@@ -43,14 +35,6 @@ module Browbeat
       comp = StatusPage::API::Component.new(component_id, page_id)
       comp.get
       comp
-    end
-
-    def self.all_applications_yaml
-      YAML.load File.open(LIST_FILEPATH){|f| f.read}
-    end
-
-    def self.symbolize_keys(hash)
-      hash.map{|k,v| [k.to_sym, v] }.to_h
     end
   end
 end

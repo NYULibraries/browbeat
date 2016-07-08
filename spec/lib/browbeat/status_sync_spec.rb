@@ -242,8 +242,10 @@ describe Browbeat::StatusSync do
       let(:status_staging1){ 'partial_outage' }
       let(:status_production3){ 'major_outage' }
       let(:status_staging4){ 'degraded_performance' }
+      let(:application_list){ Browbeat::ApplicationCollection.new(applications) }
+      let(:applications){ [application1, application2, application3, application4] }
       before do
-        allow(Browbeat::Application).to receive(:list_all).and_return [application1, application2, application3, application4]
+        allow_any_instance_of(Browbeat::ApplicationCollection).to receive(:load_yml).and_return application_list
         # no scenarios exist for application2
         allow(instance).to receive(:scenarios_for_application?).and_return true, false, true, true
         # no stagings scenarios for application3, nor production scenarios for application4
