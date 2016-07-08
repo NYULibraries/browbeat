@@ -39,90 +39,26 @@ describe Browbeat::StatusMailer do
           expect(mailer).to receive(:send_mail)
           subject
         end
-
-        it "should not call previously_failing?" do
-          expect(Browbeat::StatusSync).to_not receive(:previously_failing?)
-          subject
-        end
       end
 
       context "without failures" do
         before { allow(mailer).to receive(:any_failures?).and_return false }
 
-        context "without scenarios" do
-          let(:scenario_collection){ Browbeat::ScenarioCollection.new [] }
+        context "with status page failures" do
+          before { allow(mailer).to receive(:status_page_failures?).and_return true }
 
-          it "should not call send_mail" do
-            expect(mailer).to_not receive(:send_mail)
-            subject
-          end
-
-          it "should call previously_failing? correctly" do
-            expect(Browbeat::StatusSync).to receive(:previously_failing?).with([])
+          it "should call send_mail" do
+            expect(mailer).to receive(:send_mail)
             subject
           end
         end
 
-        context "with scenario applications" do
-          let(:application1){ instance_double Browbeat::Application, status_page_production_id: "aaaa", status_page_staging_id: "zzzz" }
-          let(:application2){ instance_double Browbeat::Application, status_page_production_id: "bbbb", status_page_staging_id: "yyyy" }
-          let(:application3){ instance_double Browbeat::Application, status_page_production_id: "cccc", status_page_staging_id: "xxxx" }
-          before { allow(mailer).to receive(:scenario_applications).and_return [application1, application2, application3] }
+        context "without status page failures" do
+          before { allow(mailer).to receive(:status_page_failures?).and_return false }
 
-          context "with previous production failures" do
-            before do
-              allow(Browbeat::StatusSync).to receive(:previously_failing?).and_return true
-              allow(Browbeat::StatusSync).to receive(:previously_failing_on_staging?).and_return false
-            end
-
-            it "should call send_mail" do
-              expect(mailer).to receive(:send_mail)
-              subject
-            end
-
-            it "should call previously_failing? correctly" do
-              expect(Browbeat::StatusSync).to receive(:previously_failing?).with(["aaaa", "bbbb", "cccc"])
-              subject
-            end
-          end
-
-          context "with previous staging failures" do
-            before do
-              allow(Browbeat::StatusSync).to receive(:previously_failing?).and_return false
-              allow(Browbeat::StatusSync).to receive(:previously_failing_on_staging?).and_return true
-            end
-
-            it "should call send_mail" do
-              expect(mailer).to receive(:send_mail)
-              subject
-            end
-
-            it "should call previously_failing_on_staging? correctly" do
-              expect(Browbeat::StatusSync).to receive(:previously_failing_on_staging?).with(["zzzz", "yyyy", "xxxx"])
-              subject
-            end
-          end
-
-          context "without previous failures" do
-            before do
-              allow(Browbeat::StatusSync).to receive(:previously_failing?).and_return false
-              allow(Browbeat::StatusSync).to receive(:previously_failing_on_staging?).and_return false
-            end
-
-            it "should not call send_mail" do
-              expect(mailer).to_not receive(:send_mail)
-              subject
-            end
-
-            it "should call previously_failing? correctly" do
-              expect(Browbeat::StatusSync).to receive(:previously_failing?).with(["aaaa", "bbbb", "cccc"])
-              subject
-            end
-
-            it "should call previously_failing_on_staging? correctly" do
-              expect(Browbeat::StatusSync).to receive(:previously_failing_on_staging?).with(["zzzz", "yyyy", "xxxx"])
-              subject
-            end
+          it "should call send_mail" do
+            expect(mailer).to_not receive(:send_mail)
+            subject
           end
         end
       end
@@ -282,6 +218,134 @@ describe Browbeat::StatusMailer do
 
         it { is_expected.to be_falsy }
       end
+    end
+
+    describe "status_page_failures?" do
+      subject { mailer.status_page_failures? }
+      let(:production_component_list){ instance_double StatusPage::API::ComponentList, get: production_components }
+      let(:staging_component_list){ instance_double StatusPage::API::ComponentList, get: staging_components }
+      before do
+        allow(StatusPage::API::ComponentList).to receive(:new).with(production_page_id).and_return production_component_list
+        allow(StatusPage::API::ComponentList).to receive(:new).with(staging_page_id).and_return staging_component_list
+      end
+
+      context "with page ids defined" do
+        let(:production_page_id){ "abcd" }
+        let(:staging_page_id){ "wxyz" }
+
+        around do |example|
+          with_modified_env STATUS_PAGE_PAGE_ID: production_page_id do
+            with_modified_env STATUS_PAGE_STAGING_PAGE_ID: staging_page_id do
+              example.run
+            end
+          end
+        end
+
+        context "with scenario applications" do
+          let(:application1){ instance_double Browbeat::Application, status_page_production_id: "aaaa", status_page_staging_id: "zzzz" }
+          let(:application2){ instance_double Browbeat::Application, status_page_production_id: "bbbb", status_page_staging_id: "yyyy" }
+          let(:application3){ instance_double Browbeat::Application, status_page_production_id: "cccc", status_page_staging_id: "xxxx" }
+          before { allow(mailer).to receive(:scenario_applications).and_return [application1, application2, application3] }
+
+          context "with matching, failing production components" do
+            let(:production_component1){ instance_double StatusPage::API::Component, id: "cccc", failing?: false }
+            let(:production_component2){ instance_double StatusPage::API::Component, id: "bbbb", failing?: true }
+            let(:production_components){ [production_component1, production_component2] }
+            let(:staging_components){ [] }
+
+            it { is_expected.to eq true }
+          end
+
+          context "with non-matching, failing production components" do
+            let(:production_component1){ instance_double StatusPage::API::Component, id: "abcd", failing?: false }
+            let(:production_component2){ instance_double StatusPage::API::Component, id: "1234", failing?: true }
+            let(:production_components){ [production_component1, production_component2] }
+
+            context "without staging components" do
+              let(:staging_components){ [] }
+
+              it { is_expected.to eq false }
+            end
+
+            context "with matching, failing staging components" do
+              let(:staging_component1){ instance_double StatusPage::API::Component, id: "xxxx", failing?: true }
+              let(:staging_component2){ instance_double StatusPage::API::Component, id: "yyyy", failing?: false }
+              let(:staging_components){ [staging_component1, staging_component2] }
+
+              it { is_expected.to eq true }
+            end
+
+            context "with non-matching, failing staging components" do
+              let(:staging_component1){ instance_double StatusPage::API::Component, id: "aaaa", failing?: true }
+              let(:staging_component2){ instance_double StatusPage::API::Component, id: "abcd", failing?: false }
+              let(:staging_components){ [staging_component1, staging_component2] }
+
+              it { is_expected.to eq false }
+            end
+
+            context "with matching, operational staging components" do
+              let(:staging_component1){ instance_double StatusPage::API::Component, id: "xxxx", failing?: false }
+              let(:staging_component2){ instance_double StatusPage::API::Component, id: "yyyy", failing?: false }
+              let(:staging_components){ [staging_component1, staging_component2] }
+
+              it { is_expected.to eq false }
+            end
+          end
+
+          context "with matching, operational production components" do
+            let(:production_component1){ instance_double StatusPage::API::Component, id: "cccc", failing?: false }
+            let(:production_component2){ instance_double StatusPage::API::Component, id: "bbbb", failing?: false }
+            let(:production_components){ [production_component1, production_component2] }
+
+            context "without staging components" do
+              let(:staging_components){ [] }
+
+              it { is_expected.to eq false }
+            end
+
+            context "with matching, failing staging components" do
+              let(:staging_component1){ instance_double StatusPage::API::Component, id: "xxxx", failing?: true }
+              let(:staging_component2){ instance_double StatusPage::API::Component, id: "yyyy", failing?: false }
+              let(:staging_components){ [staging_component1, staging_component2] }
+
+              it { is_expected.to eq true }
+            end
+
+            context "with non-matching, failing staging components" do
+              let(:staging_component1){ instance_double StatusPage::API::Component, id: "aaaa", failing?: true }
+              let(:staging_component2){ instance_double StatusPage::API::Component, id: "abcd", failing?: false }
+              let(:staging_components){ [staging_component1, staging_component2] }
+
+              it { is_expected.to eq false }
+            end
+
+            context "with matching, operational staging components" do
+              let(:staging_component1){ instance_double StatusPage::API::Component, id: "xxxx", failing?: false }
+              let(:staging_component2){ instance_double StatusPage::API::Component, id: "yyyy", failing?: false }
+              let(:staging_components){ [staging_component1, staging_component2] }
+
+              it { is_expected.to eq false }
+            end
+          end
+        end
+
+        context "without scenario applications" do
+          before { allow(mailer).to receive(:scenario_applications).and_return [] }
+
+          context "with components" do
+            let(:production_component1){ instance_double StatusPage::API::Component, id: "cccc", failing?: false }
+            let(:production_component2){ instance_double StatusPage::API::Component, id: "bbbb", failing?: true }
+            let(:staging_component1){ instance_double StatusPage::API::Component, id: "xxxx", failing?: true }
+            let(:staging_component2){ instance_double StatusPage::API::Component, id: "yyyy", failing?: false }
+            let(:production_components){ [production_component1, production_component2] }
+            let(:staging_components){ [staging_component1, staging_component2] }
+
+            it { is_expected.to eq false }
+          end
+        end
+      end
+
+
     end
 
     describe "scenario_applications" do

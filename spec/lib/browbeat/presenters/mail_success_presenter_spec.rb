@@ -65,30 +65,30 @@ describe Browbeat::Presenters::MailSuccessPresenter do
       it { is_expected.to eq applications }
     end
 
-    describe "previously_failing?" do
-      subject { presenter.previously_failing?(application) }
+    describe "failing_on_production?" do
+      subject { presenter.failing_on_production?(application) }
       let(:status_page_production_id){ "abcd" }
-      let(:application){ instance_double Browbeat::Application, status_page_production_id: status_page_production_id }
-      before { allow(Browbeat::StatusSync).to receive(:previously_failing?).and_return true }
+      let(:application){ instance_double Browbeat::Application, status_page_production_component: component }
+      let(:component){ instance_double StatusPage::API::Component, failing?: true }
 
       it { is_expected.to eq true }
 
-      it "should call previously_failing? correctly" do
-        expect(Browbeat::StatusSync).to receive(:previously_failing?).with(status_page_production_id)
+      it "should call failing? correctly" do
+        expect(component).to receive(:failing?)
         subject
       end
     end
 
-    describe "previously_failing_on_staging?" do
-      subject { presenter.previously_failing_on_staging?(application) }
+    describe "failing_on_staging?" do
+      subject { presenter.failing_on_staging?(application) }
       let(:status_page_staging_id){ "xyzw" }
-      let(:application){ instance_double Browbeat::Application, status_page_staging_id: status_page_staging_id }
-      before { allow(Browbeat::StatusSync).to receive(:previously_failing_on_staging?).and_return true }
+      let(:application){ instance_double Browbeat::Application, status_page_staging_component: component }
+      let(:component){ instance_double StatusPage::API::Component, failing?: true }
 
       it { is_expected.to eq true }
 
-      it "should call previously_failing_on_staging? correctly" do
-        expect(Browbeat::StatusSync).to receive(:previously_failing_on_staging?).with(status_page_staging_id)
+      it "should call failing? correctly" do
+        expect(component).to receive(:failing?)
         subject
       end
     end

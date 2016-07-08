@@ -9,8 +9,8 @@ describe Browbeat::StatusSync do
       let(:instance){ instance_double described_class, sync_status_page: true }
       before do
         allow(described_class).to receive(:new).and_return instance
-        allow(described_class).to receive(:get_failing_components).and_return []
-        allow(described_class).to receive(:get_failing_staging_components).and_return []
+        # allow(described_class).to receive(:get_failing_components).and_return []
+        # allow(described_class).to receive(:get_failing_staging_components).and_return []
       end
 
       it "should call new with given collection" do
@@ -24,207 +24,207 @@ describe Browbeat::StatusSync do
       end
 
       it "should call get_failing_components before initializing" do
-        expect(described_class).to receive(:get_failing_components).ordered
-        expect(described_class).to receive(:get_failing_staging_components).ordered
+        # expect(described_class).to receive(:get_failing_components).ordered
+        # expect(described_class).to receive(:get_failing_staging_components).ordered
         expect(described_class).to receive(:new).ordered
         subject
       end
     end
 
-    describe "self.previously_failing?" do
-      subject { described_class.previously_failing? application_symbols }
-      context "after calling sync_status_page" do
-        context "when components were failing" do
-          let(:component1){ instance_double StatusPage::API::Component, id: "aaaa" }
-          let(:component2){ instance_double StatusPage::API::Component, id: "bbbb" }
-          let(:component3){ instance_double StatusPage::API::Component, id: "cccc" }
-          let(:component4){ instance_double StatusPage::API::Component, id: "dddd" }
-          let(:component5){ instance_double StatusPage::API::Component, id: "eeee" }
-          before do
-            allow(described_class).to receive(:get_failing_components).and_return [component1, component2, component3]
-            allow(described_class).to receive(:get_failing_staging_components).and_return [component4, component5]
-            described_class.sync_status_page Browbeat::ScenarioCollection.new []
-          end
-          context "given matching application symbols" do
-            let(:application_symbols){ %w[bbbb cccc] }
-            it { is_expected.to be_truthy }
-            context "as splat" do
-              subject { described_class.previously_failing?(*application_symbols) }
-              it { is_expected.to be_truthy }
-            end
-          end
-          context "given non-matching application symbols" do
-            let(:application_symbols){ %w[dddd] }
-            it { is_expected.to be_falsy }
-            context "as splat" do
-              subject { described_class.previously_failing?(*application_symbols) }
-              it { is_expected.to be_falsy }
-            end
-          end
-          context "given no application symbols" do
-            let(:application_symbols){ [] }
-            it { is_expected.to be_falsy }
-          end
-        end
-
-        context "when no components were failing" do
-          before do
-            allow(described_class).to receive(:get_failing_components).and_return []
-            allow(described_class).to receive(:get_failing_staging_components).and_return []
-            described_class.sync_status_page Browbeat::ScenarioCollection.new []
-          end
-          context "given application symbols" do
-            let(:application_symbols){ %w[bbbb cccc] }
-            it { is_expected.to be_falsy }
-            context "as splat" do
-              subject { described_class.previously_failing?(*application_symbols) }
-              it { is_expected.to be_falsy }
-            end
-          end
-          context "given no application symbols" do
-            let(:application_symbols){ [] }
-            it { is_expected.to be_falsy }
-          end
-        end
-      end
-    end
-
-    describe "self.previously_failing_on_staging?" do
-      subject { described_class.previously_failing_on_staging? application_symbols }
-      context "after calling sync_status_page" do
-        context "when components were failing" do
-          let(:component1){ instance_double StatusPage::API::Component, id: "aaaa" }
-          let(:component2){ instance_double StatusPage::API::Component, id: "bbbb" }
-          let(:component3){ instance_double StatusPage::API::Component, id: "cccc" }
-          let(:component4){ instance_double StatusPage::API::Component, id: "dddd" }
-          let(:component5){ instance_double StatusPage::API::Component, id: "eeee" }
-          before do
-            allow(described_class).to receive(:get_failing_components).and_return [component1, component2, component3]
-            allow(described_class).to receive(:get_failing_staging_components).and_return [component4, component5]
-            described_class.sync_status_page Browbeat::ScenarioCollection.new []
-          end
-          context "given matching application symbols" do
-            let(:application_symbols){ %w[dddd eeee] }
-            it { is_expected.to be_truthy }
-            context "as splat" do
-              subject { described_class.previously_failing_on_staging?(*application_symbols) }
-              it { is_expected.to be_truthy }
-            end
-          end
-          context "given non-matching application symbols" do
-            let(:application_symbols){ %w[bbbb] }
-            it { is_expected.to be_falsy }
-            context "as splat" do
-              subject { described_class.previously_failing_on_staging?(*application_symbols) }
-              it { is_expected.to be_falsy }
-            end
-          end
-          context "given no application symbols" do
-            let(:application_symbols){ [] }
-            it { is_expected.to be_falsy }
-          end
-        end
-
-        context "when no components were failing" do
-          before do
-            allow(described_class).to receive(:get_failing_components).and_return []
-            allow(described_class).to receive(:get_failing_staging_components).and_return []
-            described_class.sync_status_page Browbeat::ScenarioCollection.new []
-          end
-          context "given application symbols" do
-            let(:application_symbols){ %w[eeee] }
-            it { is_expected.to be_falsy }
-            context "as splat" do
-              subject { described_class.previously_failing_on_staging?(*application_symbols) }
-              it { is_expected.to be_falsy }
-            end
-          end
-          context "given no application symbols" do
-            let(:application_symbols){ [] }
-            it { is_expected.to be_falsy }
-          end
-        end
-      end
-    end
-
-    describe "self.get_failing_components" do
-      subject { described_class.get_failing_components }
-      let(:status_page_production_page_id){ "abcd" }
-      let(:component_list){ instance_double StatusPage::API::ComponentList, get: [component1, component2, component3] }
-      let(:component1){ instance_double StatusPage::API::Component, failing?: true }
-      let(:component2){ instance_double StatusPage::API::Component, failing?: false }
-      let(:component3){ instance_double StatusPage::API::Component, failing?: true }
-      before { allow(StatusPage::API::ComponentList).to receive(:new).and_return component_list }
-
-      context "with STATUS_PAGE_PAGE_ID" do
-        around do |example|
-          with_modified_env STATUS_PAGE_PAGE_ID: status_page_production_page_id do
-            example.run
-          end
-        end
-
-        it { is_expected.to match_array [component1, component3] }
-
-        it { is_expected.to be_a Array }
-
-        it "should initialize with page ID" do
-          expect(StatusPage::API::ComponentList).to receive(:new).with status_page_production_page_id
-          subject
-        end
-      end
-
-      context "without STATUS_PAGE_PAGE_ID" do
-        around do |example|
-          with_modified_env STATUS_PAGE_PAGE_ID: nil do
-            example.run
-          end
-        end
-
-        it "should raise error" do
-          expect{ subject }.to raise_error "Must specify STATUS_PAGE_PAGE_ID"
-        end
-      end
-
-    end
-
-    describe "self.get_failing_staging_components" do
-      subject { described_class.get_failing_staging_components }
-      let(:status_page_staging_page_id){ "abcd" }
-      let(:component_list){ instance_double StatusPage::API::ComponentList, get: [component1, component2, component3] }
-      let(:component1){ instance_double StatusPage::API::Component, failing?: true }
-      let(:component2){ instance_double StatusPage::API::Component, failing?: false }
-      let(:component3){ instance_double StatusPage::API::Component, failing?: true }
-      before { allow(StatusPage::API::ComponentList).to receive(:new).and_return component_list }
-
-      context "with STATUS_PAGE_STAGING_PAGE_ID" do
-        around do |example|
-          with_modified_env STATUS_PAGE_STAGING_PAGE_ID: status_page_staging_page_id do
-            example.run
-          end
-        end
-
-        it { is_expected.to match_array [component1, component3] }
-
-        it { is_expected.to be_a Array }
-
-        it "should initialize with page ID" do
-          expect(StatusPage::API::ComponentList).to receive(:new).with status_page_staging_page_id
-          subject
-        end
-      end
-
-      context "without STATUS_PAGE_STAGING_PAGE_ID" do
-        around do |example|
-          with_modified_env STATUS_PAGE_STAGING_PAGE_ID: nil do
-            example.run
-          end
-        end
-
-        it "should raise error" do
-          expect{ subject }.to raise_error "Must specify STATUS_PAGE_STAGING_PAGE_ID"
-        end
-      end
-    end
+    # describe "self.previously_failing?" do
+    #   subject { described_class.previously_failing? application_symbols }
+    #   context "after calling sync_status_page" do
+    #     context "when components were failing" do
+    #       let(:component1){ instance_double StatusPage::API::Component, id: "aaaa" }
+    #       let(:component2){ instance_double StatusPage::API::Component, id: "bbbb" }
+    #       let(:component3){ instance_double StatusPage::API::Component, id: "cccc" }
+    #       let(:component4){ instance_double StatusPage::API::Component, id: "dddd" }
+    #       let(:component5){ instance_double StatusPage::API::Component, id: "eeee" }
+    #       before do
+    #         allow(described_class).to receive(:get_failing_components).and_return [component1, component2, component3]
+    #         allow(described_class).to receive(:get_failing_staging_components).and_return [component4, component5]
+    #         described_class.sync_status_page Browbeat::ScenarioCollection.new []
+    #       end
+    #       context "given matching application symbols" do
+    #         let(:application_symbols){ %w[bbbb cccc] }
+    #         it { is_expected.to be_truthy }
+    #         context "as splat" do
+    #           subject { described_class.previously_failing?(*application_symbols) }
+    #           it { is_expected.to be_truthy }
+    #         end
+    #       end
+    #       context "given non-matching application symbols" do
+    #         let(:application_symbols){ %w[dddd] }
+    #         it { is_expected.to be_falsy }
+    #         context "as splat" do
+    #           subject { described_class.previously_failing?(*application_symbols) }
+    #           it { is_expected.to be_falsy }
+    #         end
+    #       end
+    #       context "given no application symbols" do
+    #         let(:application_symbols){ [] }
+    #         it { is_expected.to be_falsy }
+    #       end
+    #     end
+    #
+    #     context "when no components were failing" do
+    #       before do
+    #         allow(described_class).to receive(:get_failing_components).and_return []
+    #         allow(described_class).to receive(:get_failing_staging_components).and_return []
+    #         described_class.sync_status_page Browbeat::ScenarioCollection.new []
+    #       end
+    #       context "given application symbols" do
+    #         let(:application_symbols){ %w[bbbb cccc] }
+    #         it { is_expected.to be_falsy }
+    #         context "as splat" do
+    #           subject { described_class.previously_failing?(*application_symbols) }
+    #           it { is_expected.to be_falsy }
+    #         end
+    #       end
+    #       context "given no application symbols" do
+    #         let(:application_symbols){ [] }
+    #         it { is_expected.to be_falsy }
+    #       end
+    #     end
+    #   end
+    # end
+    #
+    # describe "self.previously_failing_on_staging?" do
+    #   subject { described_class.previously_failing_on_staging? application_symbols }
+    #   context "after calling sync_status_page" do
+    #     context "when components were failing" do
+    #       let(:component1){ instance_double StatusPage::API::Component, id: "aaaa" }
+    #       let(:component2){ instance_double StatusPage::API::Component, id: "bbbb" }
+    #       let(:component3){ instance_double StatusPage::API::Component, id: "cccc" }
+    #       let(:component4){ instance_double StatusPage::API::Component, id: "dddd" }
+    #       let(:component5){ instance_double StatusPage::API::Component, id: "eeee" }
+    #       before do
+    #         allow(described_class).to receive(:get_failing_components).and_return [component1, component2, component3]
+    #         allow(described_class).to receive(:get_failing_staging_components).and_return [component4, component5]
+    #         described_class.sync_status_page Browbeat::ScenarioCollection.new []
+    #       end
+    #       context "given matching application symbols" do
+    #         let(:application_symbols){ %w[dddd eeee] }
+    #         it { is_expected.to be_truthy }
+    #         context "as splat" do
+    #           subject { described_class.previously_failing_on_staging?(*application_symbols) }
+    #           it { is_expected.to be_truthy }
+    #         end
+    #       end
+    #       context "given non-matching application symbols" do
+    #         let(:application_symbols){ %w[bbbb] }
+    #         it { is_expected.to be_falsy }
+    #         context "as splat" do
+    #           subject { described_class.previously_failing_on_staging?(*application_symbols) }
+    #           it { is_expected.to be_falsy }
+    #         end
+    #       end
+    #       context "given no application symbols" do
+    #         let(:application_symbols){ [] }
+    #         it { is_expected.to be_falsy }
+    #       end
+    #     end
+    #
+    #     context "when no components were failing" do
+    #       before do
+    #         allow(described_class).to receive(:get_failing_components).and_return []
+    #         allow(described_class).to receive(:get_failing_staging_components).and_return []
+    #         described_class.sync_status_page Browbeat::ScenarioCollection.new []
+    #       end
+    #       context "given application symbols" do
+    #         let(:application_symbols){ %w[eeee] }
+    #         it { is_expected.to be_falsy }
+    #         context "as splat" do
+    #           subject { described_class.previously_failing_on_staging?(*application_symbols) }
+    #           it { is_expected.to be_falsy }
+    #         end
+    #       end
+    #       context "given no application symbols" do
+    #         let(:application_symbols){ [] }
+    #         it { is_expected.to be_falsy }
+    #       end
+    #     end
+    #   end
+    # end
+    #
+    # describe "self.get_failing_components" do
+    #   subject { described_class.get_failing_components }
+    #   let(:status_page_production_page_id){ "abcd" }
+    #   let(:component_list){ instance_double StatusPage::API::ComponentList, get: [component1, component2, component3] }
+    #   let(:component1){ instance_double StatusPage::API::Component, failing?: true }
+    #   let(:component2){ instance_double StatusPage::API::Component, failing?: false }
+    #   let(:component3){ instance_double StatusPage::API::Component, failing?: true }
+    #   before { allow(StatusPage::API::ComponentList).to receive(:new).and_return component_list }
+    #
+    #   context "with STATUS_PAGE_PAGE_ID" do
+    #     around do |example|
+    #       with_modified_env STATUS_PAGE_PAGE_ID: status_page_production_page_id do
+    #         example.run
+    #       end
+    #     end
+    #
+    #     it { is_expected.to match_array [component1, component3] }
+    #
+    #     it { is_expected.to be_a Array }
+    #
+    #     it "should initialize with page ID" do
+    #       expect(StatusPage::API::ComponentList).to receive(:new).with status_page_production_page_id
+    #       subject
+    #     end
+    #   end
+    #
+    #   context "without STATUS_PAGE_PAGE_ID" do
+    #     around do |example|
+    #       with_modified_env STATUS_PAGE_PAGE_ID: nil do
+    #         example.run
+    #       end
+    #     end
+    #
+    #     it "should raise error" do
+    #       expect{ subject }.to raise_error "Must specify STATUS_PAGE_PAGE_ID"
+    #     end
+    #   end
+    #
+    # end
+    #
+    # describe "self.get_failing_staging_components" do
+    #   subject { described_class.get_failing_staging_components }
+    #   let(:status_page_staging_page_id){ "abcd" }
+    #   let(:component_list){ instance_double StatusPage::API::ComponentList, get: [component1, component2, component3] }
+    #   let(:component1){ instance_double StatusPage::API::Component, failing?: true }
+    #   let(:component2){ instance_double StatusPage::API::Component, failing?: false }
+    #   let(:component3){ instance_double StatusPage::API::Component, failing?: true }
+    #   before { allow(StatusPage::API::ComponentList).to receive(:new).and_return component_list }
+    #
+    #   context "with STATUS_PAGE_STAGING_PAGE_ID" do
+    #     around do |example|
+    #       with_modified_env STATUS_PAGE_STAGING_PAGE_ID: status_page_staging_page_id do
+    #         example.run
+    #       end
+    #     end
+    #
+    #     it { is_expected.to match_array [component1, component3] }
+    #
+    #     it { is_expected.to be_a Array }
+    #
+    #     it "should initialize with page ID" do
+    #       expect(StatusPage::API::ComponentList).to receive(:new).with status_page_staging_page_id
+    #       subject
+    #     end
+    #   end
+    #
+    #   context "without STATUS_PAGE_STAGING_PAGE_ID" do
+    #     around do |example|
+    #       with_modified_env STATUS_PAGE_STAGING_PAGE_ID: nil do
+    #         example.run
+    #       end
+    #     end
+    #
+    #     it "should raise error" do
+    #       expect{ subject }.to raise_error "Must specify STATUS_PAGE_STAGING_PAGE_ID"
+    #     end
+    #   end
+    # end
   end
 
   describe "instance methods" do

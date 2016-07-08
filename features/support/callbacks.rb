@@ -35,10 +35,10 @@ unless %w[false off].include?(ENV["FAILURE_TRACKER"])
 
   # after all, process failures
   at_exit do
-    puts "Syncing with StatusPage..."
-    tracker.sync_status_page
     puts "Sending mail..."
     tracker.send_status_mail
+    puts "Syncing with StatusPage..."
+    tracker.sync_status_page
     puts "Done"
   end
 end
