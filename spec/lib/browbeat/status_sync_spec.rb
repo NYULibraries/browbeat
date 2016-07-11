@@ -54,6 +54,7 @@ describe Browbeat::StatusSync do
         # no stagings scenarios for application3, nor production scenarios for application4
         allow(instance).to receive(:tagged_scenarios_for_application?).and_return true, true, true, false, false, true
         allow(instance).to receive(:status_for_application).and_return status_production1, status_staging1, status_production3, status_staging4
+        allow(instance).to receive(:sleep)
       end
 
       it "should call scenarios_for_application? with each application" do
@@ -94,6 +95,11 @@ describe Browbeat::StatusSync do
         expect(application2).to_not receive(:set_status_page_status)
         expect(application3).to receive(:set_status_page_status).once.with(status_production3)
         expect(application4).to receive(:set_status_page_status).once.with(status_staging4, environment: :staging)
+        subject
+      end
+
+      it "should call sleep for each application with scenarios" do
+        expect(instance).to receive(:sleep).exactly(3).times
         subject
       end
     end

@@ -24,6 +24,8 @@ module Browbeat
         if tagged_scenarios_for_application?(application, :staging)
           application.set_status_page_status status_for_application(application, :staging), environment: :staging
         end
+        # space out requests to avoid hitting limits
+        sleep 1
       end
     end
 
