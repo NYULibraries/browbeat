@@ -98,8 +98,8 @@ describe Browbeat::StatusSync do
         subject
       end
 
-      it "should call sleep for each application with scenarios" do
-        expect(instance).to receive(:sleep).exactly(3).times
+      it "should call sleep for each application-environment with scenarios" do
+        expect(instance).to receive(:sleep).exactly(4).times
         subject
       end
     end

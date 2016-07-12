@@ -20,12 +20,12 @@ module Browbeat
         next unless scenarios_for_application?(application)
         if tagged_scenarios_for_application?(application, :production)
           application.set_status_page_status status_for_application(application, :production)
+          sleep 1
         end
         if tagged_scenarios_for_application?(application, :staging)
           application.set_status_page_status status_for_application(application, :staging), environment: :staging
+          sleep 1
         end
-        # space out requests to avoid hitting limits
-        sleep 1
       end
     end
 
