@@ -5,7 +5,7 @@ module Browbeat
 
     def initialize
       @scenarios = ScenarioCollection.new
-      @applications = ApplicationCollection.new.load_yml
+      @applications = ApplicationCollection.new.load_yml.load_components
     end
 
     def register_scenario(scenario)

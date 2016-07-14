@@ -3,6 +3,7 @@ module Browbeat
     include Browbeat::Helpers::ApiPageIdsHelper
 
     attr_reader :name, :symbol, :status_page_production_id, :status_page_staging_id
+    attr_accessor :status_page_production_component, :status_page_staging_component
 
     def initialize(name:, symbol:, status_page_production_id:, status_page_staging_id:)
       @name = name
@@ -23,11 +24,11 @@ module Browbeat
     end
 
     def status_page_production_component
-      @component ||= get_status_page_component(status_page_production_id, status_page_production_page_id)
+      @status_page_production_component ||= get_status_page_component(status_page_production_id, status_page_production_page_id)
     end
 
     def status_page_staging_component
-      @staging_component ||= get_status_page_component(status_page_staging_id, status_page_staging_page_id)
+      @status_page_staging_component ||= get_status_page_component(status_page_staging_id, status_page_staging_page_id)
     end
 
     private
