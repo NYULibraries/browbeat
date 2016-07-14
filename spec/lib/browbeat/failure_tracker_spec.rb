@@ -4,15 +4,13 @@ require 'browbeat'
 describe Browbeat::FailureTracker do
   let(:tracker){ described_class.new }
 
-  describe "scenarios"
-
   describe "register_scenario" do
     let(:scenario){ instance_double Cucumber::Ast::Scenario }
 
     context "initial call" do
       subject{ tracker.register_scenario scenario }
 
-      it "should add scenario to collection" do
+      it "should add scenario to scenario_collection" do
         subject
         expect(tracker.scenarios.to_a.map(&:cucumber_scenario)).to include scenario
       end
@@ -27,7 +25,7 @@ describe Browbeat::FailureTracker do
       let(:scenario2){ instance_double Browbeat::Scenario }
       let(:scenario3){ instance_double Browbeat::Scenario }
 
-      it "should retain all scenarios in collection" do
+      it "should retain all scenarios in scenario_collection" do
         subject
         expect(tracker.scenarios.to_a.map(&:cucumber_scenario)).to include scenario
         expect(tracker.scenarios.to_a.map(&:cucumber_scenario)).to include scenario2
@@ -38,9 +36,11 @@ describe Browbeat::FailureTracker do
 
   describe "sync_status_page" do
     subject{ tracker.sync_status_page }
-    let(:collection){ Browbeat::ScenarioCollection }
+    let(:scenario_collection){ instance_double Browbeat::ScenarioCollection }
+    let(:application_collection){ instance_double Browbeat::ApplicationCollection }
     before do
-      allow(tracker).to receive(:scenarios).and_return collection
+      allow_any_instance_of(Browbeat::ApplicationCollection).to receive(:load_yml).and_return application_collection
+      allow(tracker).to receive(:scenarios).and_return scenario_collection
       allow(Browbeat::StatusSync).to receive(:sync_status_page)
     end
 
@@ -50,16 +50,18 @@ describe Browbeat::FailureTracker do
     end
 
     it "should call sync_status_page with scenarios" do
-      expect(Browbeat::StatusSync).to receive(:sync_status_page).with(collection)
+      expect(Browbeat::StatusSync).to receive(:sync_status_page).with(scenario_collection, application_collection)
       subject
     end
   end
 
   describe "send_status_mail" do
     subject{ tracker.send_status_mail }
-    let(:collection){ Browbeat::ScenarioCollection }
+    let(:scenario_collection){ instance_double Browbeat::ScenarioCollection }
+    let(:application_collection){ instance_double Browbeat::ApplicationCollection }
     before do
-      allow(tracker).to receive(:scenarios).and_return collection
+      allow_any_instance_of(Browbeat::ApplicationCollection).to receive(:load_yml).and_return application_collection
+      allow(tracker).to receive(:scenarios).and_return scenario_collection
       allow(Browbeat::StatusMailer).to receive(:send_status)
     end
 
@@ -69,7 +71,7 @@ describe Browbeat::FailureTracker do
     end
 
     it "should call sync_status_page with scenarios" do
-      expect(Browbeat::StatusMailer).to receive(:send_status).with(collection)
+      expect(Browbeat::StatusMailer).to receive(:send_status).with(scenario_collection, application_collection)
       subject
     end
   end
