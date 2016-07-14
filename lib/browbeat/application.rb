@@ -17,6 +17,7 @@ module Browbeat
     #   application.set_status_page_status 'major_outage', environment: :staging
     def set_status_page_status(status_type, environment: :production)
       component = send("status_page_#{environment}_component")
+      return if component.status == status_type
       component.status = status_type
       component.save
     end
