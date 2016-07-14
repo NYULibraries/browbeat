@@ -2,13 +2,6 @@ require 'spec_helper'
 require 'browbeat'
 
 describe Browbeat::Application do
-  # describe "class methods" do
-  #   describe "self.list_all" do
-  #     subject{ described_class.list_all }
-  #     
-  #
-  #   end
-  # end
 
   describe "instance methods" do
     let(:name){ "Login" }
@@ -18,39 +11,95 @@ describe Browbeat::Application do
     let(:application){ described_class.new(name: name, status_page_production_id: status_page_production_id, status_page_staging_id: status_page_staging_id, symbol: symbol) }
 
     describe "set_status_page_status" do
-      let(:component){ instance_double StatusPage::API::Component, save: true, :"status=" => true }
+      let(:component){ instance_double StatusPage::API::Component, save: true, :"status=" => true, status: previous_status }
 
       context "with no environment specified" do
         subject { application.set_status_page_status "some_status" }
         before { allow(application).to receive(:status_page_production_component).and_return component }
 
-        it "should set component status and save with correct parameters" do
-          expect(component).to receive(:status=).with("some_status").ordered
-          expect(component).to receive(:save).ordered
-          subject
+        context "with different status previously" do
+          let(:previous_status){ "other_status" }
+          
+          it { is_expected.to be_truthy }
+          
+          it "should set component status and save with correct parameters" do
+            expect(component).to receive(:status=).with("some_status").ordered
+            expect(component).to receive(:save).ordered
+            subject
+          end
+        end
+        
+        context "with same status previously" do
+          let(:previous_status){ "some_status" }
+          
+          it { is_expected.to be_falsy }
+          
+          it "should not set component status to avoid API call" do
+            expect(component).to_not receive(:status=)
+            expect(component).to_not receive(:save)
+            subject
+          end
         end
       end
 
       context "with environment: :staging" do
         subject { application.set_status_page_status "some_status", environment: :staging }
         before { allow(application).to receive(:status_page_staging_component).and_return component }
-
-        it "should set component status and save with correct parameters" do
-          expect(component).to receive(:status=).with("some_status").ordered
-          expect(component).to receive(:save).ordered
-          subject
+        
+        context "with different status previously" do
+          let(:previous_status){ "other_status" }
+          
+          it { is_expected.to be_truthy }
+          
+          it "should set component status and save with correct parameters" do
+            expect(component).to receive(:status=).with("some_status").ordered
+            expect(component).to receive(:save).ordered
+            subject
+          end
         end
+        
+        context "with same status previously" do
+          let(:previous_status){ "some_status" }
+          
+          it { is_expected.to be_falsy }
+          
+          it "should not set component status to avoid API call" do
+            expect(component).to_not receive(:status=)
+            expect(component).to_not receive(:save)
+            subject
+          end
+        end
+        
       end
 
       context "with environment: :production" do
         subject { application.set_status_page_status "some_status", environment: :production }
         before { allow(application).to receive(:status_page_production_component).and_return component }
-
-        it "should set component status and save with correct parameters" do
-          expect(component).to receive(:status=).with("some_status").ordered
-          expect(component).to receive(:save).ordered
-          subject
+        
+        context "with different status previously" do
+          let(:previous_status){ "other_status" }
+          
+          it { is_expected.to be_truthy }
+          
+          it "should set component status and save with correct parameters" do
+            expect(component).to receive(:status=).with("some_status").ordered
+            expect(component).to receive(:save).ordered
+            subject
+          end
         end
+        
+        context "with same status previously" do
+          let(:previous_status){ "some_status" }
+          
+          it { is_expected.to be_falsy }
+          
+          it "should not set component status to avoid API call" do
+            expect(component).to_not receive(:status=)
+            expect(component).to_not receive(:save)
+            subject
+          end
+        end
+        
       end
     end
 

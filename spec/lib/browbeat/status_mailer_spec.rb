@@ -4,16 +4,17 @@ require 'browbeat'
 describe Browbeat::StatusMailer do
   describe "class methods" do
     describe "self.send_status" do
-      subject { described_class.send_status scenario_collection }
+      subject { described_class.send_status scenario_collection, application_collection }
       let(:mailer){ instance_double described_class }
       let(:scenario_collection){ instance_double Browbeat::ScenarioCollection }
+      let(:application_collection){ instance_double Browbeat::ApplicationCollection }
       before do
         allow(described_class).to receive(:new).and_return mailer
         allow(mailer).to receive(:send_status_if_failed).and_return true
       end
 
       it "should instantiate instance correctly" do
-        expect(described_class).to receive(:new).with scenario_collection
+        expect(described_class).to receive(:new).with scenario_collection, application_collection
         subject
       end
 
@@ -25,8 +26,9 @@ describe Browbeat::StatusMailer do
   end
 
   describe "instance methods" do
-    let(:mailer){ described_class.new scenario_collection }
+    let(:mailer){ described_class.new scenario_collection, application_collection }
     let(:scenario_collection){ instance_double Browbeat::ScenarioCollection }
+    let(:application_collection){ instance_double Browbeat::ApplicationCollection }
 
     describe "send_status_if_failed" do
       subject { mailer.send_status_if_failed }
@@ -356,10 +358,7 @@ describe Browbeat::StatusMailer do
       let(:application1){ instance_double Browbeat::Application, symbol: "xxxx" }
       let(:application2){ instance_double Browbeat::Application, symbol: "yyyy" }
       let(:application3){ instance_double Browbeat::Application, symbol: "zzzz" }
-      let(:application_list){ Browbeat::ApplicationCollection.new(applications) }
-      before do
-        allow_any_instance_of(Browbeat::ApplicationCollection).to receive(:load_yml).and_return application_list
-      end
+      let(:application_collection){ Browbeat::ApplicationCollection.new(applications) }
 
       context "with scenarios" do
         let(:scenario_collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2, scenario3] }
