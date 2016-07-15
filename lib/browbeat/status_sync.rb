@@ -2,21 +2,22 @@ module Browbeat
   class StatusSync
     extend Browbeat::Helpers::ApiPageIdsHelper
 
-    attr_accessor :scenario_collection
+    attr_accessor :scenario_collection, :application_collection
 
     SUCCESS_STATUS_TYPE = 'operational'
     FAILURE_STATUS_TYPES = %w[major_outage partial_outage degraded_performance]
 
-    def self.sync_status_page(scenario_collection)
-      new(scenario_collection).sync_status_page
+    def self.sync_status_page(scenario_collection, application_collection)
+      new(scenario_collection, application_collection).sync_status_page
     end
 
-    def initialize(scenario_collection)
+    def initialize(scenario_collection, application_collection)
       @scenario_collection = scenario_collection
+      @application_collection = application_collection
     end
 
     def sync_status_page
-      application_list.each do |application|
+      application_collection.each do |application|
         next unless scenarios_for_application?(application)
         if tagged_scenarios_for_application?(application, :production)
           application.set_status_page_status status_for_application(application, :production)
@@ -51,10 +52,6 @@ module Browbeat
     end
 
     private
-    def application_list
-      @application_list ||= ApplicationCollection.new.load_yml
-    end
-
     def failed_scenarios
       @failed_scenarios ||= scenario_collection.select(&:failed?).select(&:failure_severity)
     end

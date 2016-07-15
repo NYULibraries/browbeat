@@ -2,14 +2,15 @@ module Browbeat
   class StatusMailer
     include Browbeat::Helpers::ApiPageIdsHelper
 
-    attr_reader :scenario_collection
+    attr_reader :scenario_collection, :application_collection
 
-    def self.send_status(scenario_collection)
-      new(scenario_collection).send_status_if_failed
+    def self.send_status(scenario_collection, application_collection)
+      new(scenario_collection, application_collection).send_status_if_failed
     end
 
-    def initialize(scenario_collection)
+    def initialize(scenario_collection, application_collection)
       @scenario_collection = scenario_collection
+      @application_collection = application_collection
     end
 
     def send_status_if_failed
@@ -64,15 +65,10 @@ module Browbeat
     end
 
     private
-
     def get_scenario_applications
-      application_list.select do |application|
+      application_collection.select do |application|
         scenario_application_symbols.include?(application.symbol)
       end
-    end
-
-    def application_list
-      @application_list ||= ApplicationCollection.new.load_yml
     end
 
     def scenario_application_symbols
