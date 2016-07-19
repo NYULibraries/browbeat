@@ -110,11 +110,13 @@ describe Browbeat::StatusMailer do
       let(:success_body){ "<em>Hello world</em>" }
       let(:failed_scenarios){ instance_double Browbeat::ScenarioCollection }
       let(:applications){ instance_double Array }
+      let(:environments){ instance_double Array }
       before do
         allow(Browbeat::Presenters::MailFailurePresenter).to receive(:render).and_return failure_body
         allow(Browbeat::Presenters::MailSuccessPresenter).to receive(:render).and_return success_body
         allow(mailer).to receive(:failed_scenarios).and_return failed_scenarios
         allow(mailer).to receive(:scenario_applications).and_return applications
+        allow(mailer).to receive(:scenario_environments).and_return environments
       end
 
       context "with failures" do
@@ -123,7 +125,7 @@ describe Browbeat::StatusMailer do
         it { is_expected.to eq failure_body }
 
         it "should call failure presenter correctly" do
-          expect(Browbeat::Presenters::MailFailurePresenter).to receive(:render).with failed_scenarios, applications
+          expect(Browbeat::Presenters::MailFailurePresenter).to receive(:render).with failed_scenarios, applications, environments
           subject
         end
       end
@@ -134,7 +136,7 @@ describe Browbeat::StatusMailer do
         it { is_expected.to eq success_body }
 
         it "should call success presenter correctly" do
-          expect(Browbeat::Presenters::MailSuccessPresenter).to receive(:render).with applications
+          expect(Browbeat::Presenters::MailSuccessPresenter).to receive(:render).with applications, environments
           subject
         end
       end
@@ -229,6 +231,8 @@ describe Browbeat::StatusMailer do
       before do
         allow(StatusPage::API::ComponentList).to receive(:new).with(production_page_id).and_return production_component_list
         allow(StatusPage::API::ComponentList).to receive(:new).with(staging_page_id).and_return staging_component_list
+        allow(mailer).to receive(:scenario_applications).and_return applications
+        allow(mailer).to receive(:scenario_environments).and_return environments
       end
 
       context "with page ids defined" do
@@ -247,92 +251,150 @@ describe Browbeat::StatusMailer do
           let(:application1){ instance_double Browbeat::Application, status_page_production_id: "aaaa", status_page_staging_id: "zzzz" }
           let(:application2){ instance_double Browbeat::Application, status_page_production_id: "bbbb", status_page_staging_id: "yyyy" }
           let(:application3){ instance_double Browbeat::Application, status_page_production_id: "cccc", status_page_staging_id: "xxxx" }
-          before { allow(mailer).to receive(:scenario_applications).and_return [application1, application2, application3] }
+          let(:applications){ [application1, application2, application3] }
 
-          context "with matching, failing production components" do
-            let(:production_component1){ instance_double StatusPage::API::Component, id: "cccc", failing?: false }
-            let(:production_component2){ instance_double StatusPage::API::Component, id: "bbbb", failing?: true }
-            let(:production_components){ [production_component1, production_component2] }
-            let(:staging_components){ [] }
+          context "checking both environments" do
+            let(:environments){ %w[production staging] }
 
-            it { is_expected.to eq true }
-          end
-
-          context "with non-matching, failing production components" do
-            let(:production_component1){ instance_double StatusPage::API::Component, id: "abcd", failing?: false }
-            let(:production_component2){ instance_double StatusPage::API::Component, id: "1234", failing?: true }
-            let(:production_components){ [production_component1, production_component2] }
-
-            context "without staging components" do
+            context "with matching, failing production components" do
+              let(:production_component1){ instance_double StatusPage::API::Component, id: "cccc", failing?: false }
+              let(:production_component2){ instance_double StatusPage::API::Component, id: "bbbb", failing?: true }
+              let(:production_components){ [production_component1, production_component2] }
               let(:staging_components){ [] }
-
-              it { is_expected.to eq false }
-            end
-
-            context "with matching, failing staging components" do
-              let(:staging_component1){ instance_double StatusPage::API::Component, id: "xxxx", failing?: true }
-              let(:staging_component2){ instance_double StatusPage::API::Component, id: "yyyy", failing?: false }
-              let(:staging_components){ [staging_component1, staging_component2] }
 
               it { is_expected.to eq true }
             end
 
-            context "with non-matching, failing staging components" do
-              let(:staging_component1){ instance_double StatusPage::API::Component, id: "aaaa", failing?: true }
-              let(:staging_component2){ instance_double StatusPage::API::Component, id: "abcd", failing?: false }
-              let(:staging_components){ [staging_component1, staging_component2] }
+            context "with non-matching, failing production components" do
+              let(:production_component1){ instance_double StatusPage::API::Component, id: "abcd", failing?: false }
+              let(:production_component2){ instance_double StatusPage::API::Component, id: "1234", failing?: true }
+              let(:production_components){ [production_component1, production_component2] }
 
-              it { is_expected.to eq false }
+              context "without staging components" do
+                let(:staging_components){ [] }
+
+                it { is_expected.to eq false }
+              end
+
+              context "with matching, failing staging components" do
+                let(:staging_component1){ instance_double StatusPage::API::Component, id: "xxxx", failing?: true }
+                let(:staging_component2){ instance_double StatusPage::API::Component, id: "yyyy", failing?: false }
+                let(:staging_components){ [staging_component1, staging_component2] }
+
+                it { is_expected.to eq true }
+              end
+
+              context "with non-matching, failing staging components" do
+                let(:staging_component1){ instance_double StatusPage::API::Component, id: "aaaa", failing?: true }
+                let(:staging_component2){ instance_double StatusPage::API::Component, id: "abcd", failing?: false }
+                let(:staging_components){ [staging_component1, staging_component2] }
+
+                it { is_expected.to eq false }
+              end
+
+              context "with matching, operational staging components" do
+                let(:staging_component1){ instance_double StatusPage::API::Component, id: "xxxx", failing?: false }
+                let(:staging_component2){ instance_double StatusPage::API::Component, id: "yyyy", failing?: false }
+                let(:staging_components){ [staging_component1, staging_component2] }
+
+                it { is_expected.to eq false }
+              end
             end
 
-            context "with matching, operational staging components" do
-              let(:staging_component1){ instance_double StatusPage::API::Component, id: "xxxx", failing?: false }
-              let(:staging_component2){ instance_double StatusPage::API::Component, id: "yyyy", failing?: false }
-              let(:staging_components){ [staging_component1, staging_component2] }
+            context "with matching, operational production components" do
+              let(:production_component1){ instance_double StatusPage::API::Component, id: "cccc", failing?: false }
+              let(:production_component2){ instance_double StatusPage::API::Component, id: "bbbb", failing?: false }
+              let(:production_components){ [production_component1, production_component2] }
 
-              it { is_expected.to eq false }
+              context "without staging components" do
+                let(:staging_components){ [] }
+
+                it { is_expected.to eq false }
+              end
+
+              context "with matching, failing staging components" do
+                let(:staging_component1){ instance_double StatusPage::API::Component, id: "xxxx", failing?: true }
+                let(:staging_component2){ instance_double StatusPage::API::Component, id: "yyyy", failing?: false }
+                let(:staging_components){ [staging_component1, staging_component2] }
+
+                it { is_expected.to eq true }
+              end
+
+              context "with non-matching, failing staging components" do
+                let(:staging_component1){ instance_double StatusPage::API::Component, id: "aaaa", failing?: true }
+                let(:staging_component2){ instance_double StatusPage::API::Component, id: "abcd", failing?: false }
+                let(:staging_components){ [staging_component1, staging_component2] }
+
+                it { is_expected.to eq false }
+              end
+
+              context "with matching, operational staging components" do
+                let(:staging_component1){ instance_double StatusPage::API::Component, id: "xxxx", failing?: false }
+                let(:staging_component2){ instance_double StatusPage::API::Component, id: "yyyy", failing?: false }
+                let(:staging_components){ [staging_component1, staging_component2] }
+
+                it { is_expected.to eq false }
+              end
             end
           end
 
-          context "with matching, operational production components" do
-            let(:production_component1){ instance_double StatusPage::API::Component, id: "cccc", failing?: false }
-            let(:production_component2){ instance_double StatusPage::API::Component, id: "bbbb", failing?: false }
-            let(:production_components){ [production_component1, production_component2] }
+          context "checking only production" do
+            let(:environments){ %w[production] }
 
-            context "without staging components" do
+            context "with matching, failing production components" do
+              let(:production_component1){ instance_double StatusPage::API::Component, id: "cccc", failing?: false }
+              let(:production_component2){ instance_double StatusPage::API::Component, id: "bbbb", failing?: true }
+              let(:production_components){ [production_component1, production_component2] }
               let(:staging_components){ [] }
-
-              it { is_expected.to eq false }
-            end
-
-            context "with matching, failing staging components" do
-              let(:staging_component1){ instance_double StatusPage::API::Component, id: "xxxx", failing?: true }
-              let(:staging_component2){ instance_double StatusPage::API::Component, id: "yyyy", failing?: false }
-              let(:staging_components){ [staging_component1, staging_component2] }
 
               it { is_expected.to eq true }
             end
 
-            context "with non-matching, failing staging components" do
-              let(:staging_component1){ instance_double StatusPage::API::Component, id: "aaaa", failing?: true }
-              let(:staging_component2){ instance_double StatusPage::API::Component, id: "abcd", failing?: false }
-              let(:staging_components){ [staging_component1, staging_component2] }
+            context "with non-matching, failing production components" do
+              let(:production_component1){ instance_double StatusPage::API::Component, id: "abcd", failing?: false }
+              let(:production_component2){ instance_double StatusPage::API::Component, id: "1234", failing?: true }
+              let(:production_components){ [production_component1, production_component2] }
 
-              it { is_expected.to eq false }
+              context "without staging components" do
+                let(:staging_components){ [] }
+
+                it { is_expected.to eq false }
+              end
+
+              context "with matching, failing staging components" do
+                let(:staging_component1){ instance_double StatusPage::API::Component, id: "xxxx", failing?: true }
+                let(:staging_component2){ instance_double StatusPage::API::Component, id: "yyyy", failing?: false }
+                let(:staging_components){ [staging_component1, staging_component2] }
+
+                it { is_expected.to eq false }
+              end
             end
 
-            context "with matching, operational staging components" do
-              let(:staging_component1){ instance_double StatusPage::API::Component, id: "xxxx", failing?: false }
-              let(:staging_component2){ instance_double StatusPage::API::Component, id: "yyyy", failing?: false }
-              let(:staging_components){ [staging_component1, staging_component2] }
+            context "with matching, operational production components" do
+              let(:production_component1){ instance_double StatusPage::API::Component, id: "cccc", failing?: false }
+              let(:production_component2){ instance_double StatusPage::API::Component, id: "bbbb", failing?: false }
+              let(:production_components){ [production_component1, production_component2] }
 
-              it { is_expected.to eq false }
+              context "without staging components" do
+                let(:staging_components){ [] }
+
+                it { is_expected.to eq false }
+              end
+
+              context "with matching, failing staging components" do
+                let(:staging_component1){ instance_double StatusPage::API::Component, id: "xxxx", failing?: true }
+                let(:staging_component2){ instance_double StatusPage::API::Component, id: "yyyy", failing?: false }
+                let(:staging_components){ [staging_component1, staging_component2] }
+
+                it { is_expected.to eq false }
+              end
             end
           end
         end
 
         context "without scenario applications" do
-          before { allow(mailer).to receive(:scenario_applications).and_return [] }
+          let(:applications){ [] }
+          let(:environments){ %w[production staging] }
 
           context "with components" do
             let(:production_component1){ instance_double StatusPage::API::Component, id: "cccc", failing?: false }
@@ -346,8 +408,46 @@ describe Browbeat::StatusMailer do
           end
         end
       end
+    end
 
+    describe "scenario_environments" do
+      subject { mailer.scenario_environments }
+      let(:production_scenario1){ instance_double Browbeat::Scenario }
+      let(:production_scenario2){ instance_double Browbeat::Scenario }
+      let(:staging_scenario1){ instance_double Browbeat::Scenario }
 
+      before do
+        allow(production_scenario1).to receive(:has_tag?).with('production').and_return true
+        allow(production_scenario2).to receive(:has_tag?).with('production').and_return true
+        allow(staging_scenario1).to receive(:has_tag?).with('production').and_return false
+        allow(production_scenario1).to receive(:has_tag?).with('staging').and_return false
+        allow(production_scenario2).to receive(:has_tag?).with('staging').and_return false
+        allow(staging_scenario1).to receive(:has_tag?).with('staging').and_return true
+      end
+
+      context "with production and staging scenarios" do
+        let(:scenario_collection){ Browbeat::ScenarioCollection.new [production_scenario1, production_scenario2, staging_scenario1] }
+
+        it { is_expected.to match_array %w[production staging] }
+      end
+
+      context "with only production scenarios" do
+        let(:scenario_collection){ Browbeat::ScenarioCollection.new [production_scenario1, production_scenario2] }
+
+        it { is_expected.to match_array %w[production] }
+      end
+
+      context "with only staging scenarios" do
+        let(:scenario_collection){ Browbeat::ScenarioCollection.new [staging_scenario1] }
+
+        it { is_expected.to match_array %w[staging] }
+      end
+
+      context "with no scenarios" do
+        let(:scenario_collection){ Browbeat::ScenarioCollection.new [] }
+
+        it { is_expected.to eq [] }
+      end
     end
 
     describe "scenario_applications" do

@@ -4,10 +4,11 @@ require 'browbeat'
 describe Browbeat::Presenters::MailFailurePresenter do
   describe "class methods" do
     describe "self.render" do
-      subject { described_class.render scenario_collection, applications }
+      subject { described_class.render scenario_collection, applications, environments }
       let(:presenter){ instance_double described_class }
       let(:scenario_collection){ instance_double Browbeat::ScenarioCollection }
       let(:applications){ [instance_double(Browbeat::Application), instance_double(Browbeat::Application)] }
+      let(:environments){ %w[production staging] }
       let(:result){ "<div>Hello!</div>" }
       before do
         allow(described_class).to receive(:new).and_return presenter
@@ -17,7 +18,7 @@ describe Browbeat::Presenters::MailFailurePresenter do
       it { is_expected.to eq result }
 
       it "should instantiate instance correctly" do
-        expect(described_class).to receive(:new).with scenario_collection, applications
+        expect(described_class).to receive(:new).with scenario_collection, applications, environments
         subject
       end
 
@@ -31,7 +32,8 @@ describe Browbeat::Presenters::MailFailurePresenter do
   describe "instance methods" do
     let(:scenario_collection){ instance_double Browbeat::ScenarioCollection }
     let(:applications){ [instance_double(Browbeat::Application), instance_double(Browbeat::Application)] }
-    let(:presenter){ described_class.new scenario_collection, applications }
+    let(:environments){ %w[some_env another_env] }
+    let(:presenter){ described_class.new scenario_collection, applications, environments }
 
     describe "render" do
       subject { presenter.render }
@@ -69,7 +71,7 @@ describe Browbeat::Presenters::MailFailurePresenter do
 
     describe "environments" do
       subject { presenter.environments }
-      it { is_expected.to eq %w[production staging] }
+      it { is_expected.to eq environments }
     end
 
     describe "failure_types" do
