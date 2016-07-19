@@ -1,26 +1,23 @@
 module Browbeat
   module Presenters
     class MailFailurePresenter
-      attr_accessor :scenario_collection, :application_list
+      attr_accessor :scenario_collection, :application_list, :environments
 
       ENVIRONMENTS = %w[production staging]
       TEMPLATE = "lib/browbeat/templates/mail_failure.html.haml"
 
-      def self.render(failed_scenarios, scenario_applications)
-        new(failed_scenarios, scenario_applications).render
+      def self.render(failed_scenarios, scenario_applications, scenario_environments)
+        new(failed_scenarios, scenario_applications, scenario_environments).render
       end
 
-      def initialize(failed_scenarios, scenario_applications)
+      def initialize(failed_scenarios, scenario_applications, scenario_environments)
         @scenario_collection = failed_scenarios
         @application_list = scenario_applications
+        @environments = scenario_environments
       end
 
       def render
         Haml::Engine.new(File.read(TEMPLATE)).render(self)
-      end
-
-      def environments
-        ENVIRONMENTS
       end
 
       def failure_types

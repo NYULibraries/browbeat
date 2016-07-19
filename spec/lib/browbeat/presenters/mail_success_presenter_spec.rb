@@ -4,9 +4,10 @@ require 'browbeat'
 describe Browbeat::Presenters::MailSuccessPresenter do
   describe "class methods" do
     describe "self.render" do
-      subject { described_class.render applications }
+      subject { described_class.render applications, environments }
       let(:presenter){ instance_double described_class }
       let(:applications){ [instance_double(Browbeat::Application), instance_double(Browbeat::Application)] }
+      let(:environments){ %w[some_env another_env] }
       let(:result){ "<div>Hello!</div>" }
       before do
         allow(described_class).to receive(:new).and_return presenter
@@ -16,7 +17,7 @@ describe Browbeat::Presenters::MailSuccessPresenter do
       it { is_expected.to eq result }
 
       it "should instantiate instance correctly" do
-        expect(described_class).to receive(:new).with applications
+        expect(described_class).to receive(:new).with applications, environments
         subject
       end
 
@@ -28,8 +29,9 @@ describe Browbeat::Presenters::MailSuccessPresenter do
   end
 
   describe "instance methods" do
-    let(:presenter){ described_class.new applications }
+    let(:presenter){ described_class.new applications, environments }
     let(:applications){ [instance_double(Browbeat::Application), instance_double(Browbeat::Application)] }
+    let(:environments){ %w[production staging] }
 
     describe "render" do
       subject { presenter.render }
@@ -71,11 +73,19 @@ describe Browbeat::Presenters::MailSuccessPresenter do
       let(:application){ instance_double Browbeat::Application, status_page_production_component: component }
       let(:component){ instance_double StatusPage::API::Component, failing?: true }
 
-      it { is_expected.to eq true }
+      context "with all environments" do
+        it { is_expected.to eq true }
 
-      it "should call failing? correctly" do
-        expect(component).to receive(:failing?)
-        subject
+        it "should call failing? correctly" do
+          expect(component).to receive(:failing?)
+          subject
+        end
+      end
+
+      context "with only staging environment" do
+        let(:environments){ %w[staging] }
+
+        it { is_expected.to eq false }
       end
     end
 
@@ -85,11 +95,19 @@ describe Browbeat::Presenters::MailSuccessPresenter do
       let(:application){ instance_double Browbeat::Application, status_page_staging_component: component }
       let(:component){ instance_double StatusPage::API::Component, failing?: true }
 
-      it { is_expected.to eq true }
+      context "with all environments" do
+        it { is_expected.to eq true }
 
-      it "should call failing? correctly" do
-        expect(component).to receive(:failing?)
-        subject
+        it "should call failing? correctly" do
+          expect(component).to receive(:failing?)
+          subject
+        end
+      end
+
+      context "with only production environment" do
+        let(:environments){ %w[production] }
+
+        it { is_expected.to eq false }
       end
     end
 

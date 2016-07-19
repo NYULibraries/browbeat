@@ -29,9 +29,9 @@ module Browbeat
 
     def body
       if any_failures?
-        Presenters::MailFailurePresenter.render(failed_scenarios, scenario_applications)
+        Presenters::MailFailurePresenter.render(failed_scenarios, scenario_applications, scenario_environments)
       else
-        Presenters::MailSuccessPresenter.render(scenario_applications)
+        Presenters::MailSuccessPresenter.render(scenario_applications, scenario_environments)
       end
     end
 
