@@ -52,7 +52,7 @@ module Browbeat
     end
 
     def status_page_failures?
-      %w[production staging].any? do |environment|
+      scenario_environments.any? do |environment|
         components = StatusPage::API::ComponentList.new(send("status_page_#{environment}_page_id")).get
         components.any? do |comp|
           comp.failing? && send("scenario_#{environment}_component_ids").include?(comp.id)
@@ -64,7 +64,16 @@ module Browbeat
       @scenario_applications ||= get_scenario_applications
     end
 
+    def scenario_environments
+      %w[production staging].select do |environment|
+        scenario_collection.any? do |scenario|
+          scenario.has_tag?(environment)
+        end
+      end
+    end
+
     private
+
     def get_scenario_applications
       application_collection.select do |application|
         scenario_application_symbols.include?(application.symbol)
