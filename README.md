@@ -27,6 +27,39 @@ rake browbeat:check:login
 rake browbeat:check:pds
 ```
 
+#### Environment-variable configuration
+
+Specify recipient of email notifications:
+
+```
+rake browbeat:check:all FAILURE_EMAIL_RECIPIENT=example@nyu.edu
+```
+
+Disable StatusPage integration and email notifications:
+
+```
+rake browbeat:check:all FAILURE_TRACKER=false
+```
+
+Specify PhantomJS installation:
+
+```
+rake browbeat:check:all PHANTOMJS=/full/path/to/phantomjs
+```
+
+Specify timeout and max wait:
+
+```
+rake browbeat:check:all MAX_WAIT=30 TIMEOUT=6
+```
+
+Run tests only for a specific app environment:
+
+```
+rake browbeat:check:all BROWBEAT_ENV=production
+rake browbeat:check:all BROWBEAT_ENV=staging
+```
+
 ### Run on Docker
 
 First, install docker and ensure your environment is configured per `DOCKER.md`.
@@ -47,7 +80,7 @@ rake docker:browbeat:check:login
 rake docker:browbeat:check:pds
 ```
 
-### Run on SauceLabs
+### Run on Selenium and SauceLabs
 
 Using a configuration based on one described in [a post by dankohn](https://github.com/saucelabs/sauce_ruby/issues/261), we can trigger running on sauce with the `DRIVER` environment variable set to `"sauce"`, e.g.:
 
