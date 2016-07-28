@@ -1,6 +1,7 @@
 module Browbeat
   class ApplicationCollection < CollectionBase
     include Browbeat::Helpers::ApiPageIdsHelper
+    include Browbeat::Helpers::EnvironmentHelper
 
     LIST_FILEPATH = 'config/application_list.yml'
 
@@ -12,7 +13,7 @@ module Browbeat
     end
 
     def load_components
-      %w[production staging].each do |environment|
+      all_environments.each do |environment|
         load_components_for(environment)
       end
       self
@@ -26,7 +27,7 @@ module Browbeat
     def symbolize_keys(hash)
       hash.map{|k,v| [k.to_sym, v] }.to_h
     end
-    
+
     def load_components_for(environment)
       components = StatusPage::API::ComponentList.new(send("status_page_#{environment}_page_id")).get.to_a
       each do |application|
