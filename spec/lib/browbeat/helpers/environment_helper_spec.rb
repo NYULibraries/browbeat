@@ -24,24 +24,20 @@ describe Browbeat::Helpers::EnvironmentHelper do
   describe "specified_env" do
     subject{ helper.specified_env }
 
+    around do |example|
+      with_modified_env BROWBEAT_ENV: browbeat_env do
+        example.run
+      end
+    end
+
     context "when BROWBEAT_ENV is set" do
       let(:browbeat_env){ "something" }
-
-      around do |example|
-        with_modified_env BROWBEAT_ENV: browbeat_env do
-          example.run
-        end
-      end
 
       it { is_expected.to eq browbeat_env }
     end
 
     context "when BROWBEAT_ENV is not set" do
-      around do |example|
-        with_modified_env BROWBEAT_ENV: nil do
-          example.run
-        end
-      end
+      let(:browbeat_env){ nil }
 
       it { is_expected.to eq nil }
     end
