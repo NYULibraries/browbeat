@@ -1,7 +1,7 @@
 module Browbeat
   module Helpers
     module RakeHelper
-      include Browbeat::Helpers::EnvironmentHelper
+      include EnvironmentHelper
 
       FEATURE_GROUPS = {
         primo: "Primo",
