@@ -1,6 +1,6 @@
 module Browbeat
   class StatusSync
-    extend Browbeat::Helpers::ApiPageIdsHelper
+    extend Helpers::ApiPageIdsHelper
 
     attr_accessor :scenario_collection, :application_collection
 

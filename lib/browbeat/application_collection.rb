@@ -1,7 +1,7 @@
 module Browbeat
   class ApplicationCollection < CollectionBase
-    include Browbeat::Helpers::ApiPageIdsHelper
-    include Browbeat::Helpers::EnvironmentHelper
+    include Helpers::ApiPageIdsHelper
+    include Helpers::EnvironmentHelper
 
     LIST_FILEPATH = 'config/application_list.yml'
 

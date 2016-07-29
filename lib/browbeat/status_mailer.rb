@@ -1,6 +1,6 @@
 module Browbeat
   class StatusMailer
-    include Browbeat::Helpers::ApiPageIdsHelper
+    include Helpers::ApiPageIdsHelper
 
     attr_reader :scenario_collection, :application_collection
 
