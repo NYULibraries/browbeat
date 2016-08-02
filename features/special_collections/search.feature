@@ -7,13 +7,11 @@ Feature: Special Collections is running
   @production @major_outage
   Scenario: Searching on production
     Given I visit Special Collections
-    When I search for "cuba" in Special Collections
-    And I click on external link "Cuban Letters Collection"
-    Then my browser should open a new window with finding aid base URL
+    When I search for "letters" in Special Collections
+    Then I should see Special Collections results
 
   @staging @major_outage @wip
   Scenario: Searching on staging
     Given I visit Special Collections staging
-    When I search for "cuba" in Special Collections
-    And I click on external link "Cuban Letters Collection"
-    Then my browser should open a new window with finding aid base URL
+    When I search for "letters" in Special Collections
+    Then I should see Special Collections results
