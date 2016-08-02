@@ -30,9 +30,9 @@ namespace :browbeat do
     desc "For applications failing in Status Page, run all cucumber features (ping.feature files first)"
     task :failures do
       if failing_applications.any?
-        sh "bundle exec cucumber #{tag_filtering} --require features/ #{failing_application_features}"
+        sh "bundle exec cucumber #{tag_filtering} --require features/ #{failing_application_features} RECHECK=true"
       else
-        puts "All applications operational in StatusPage #{all_environments.join(" or ")}"
+        puts "All applications operational in StatusPage #{all_environments.join(" and ")}"
       end
     end
   end
