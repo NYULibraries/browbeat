@@ -29,3 +29,7 @@ Then(/^my browser should open a new window with finding aid base URL$/) do
     expect(page.current_url).to match finding_aid_base_url
   end
 end
+
+Then(/^I should see Special Collections results$/) do
+  expect(page).to have_css '.document'
+end

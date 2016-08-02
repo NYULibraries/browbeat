@@ -1,29 +1,10 @@
+require 'figs'; Figs.load()
 require 'rubygems'
 require 'cucumber'
 require 'cucumber/rake/task'
+require 'browbeat'
 
-FEATURE_GROUPS = {
-  primo: "Primo",
-  login: "Login",
-  eshelf: "e-Shelf",
-  getit: "GetIt",
-  aleph: "Aleph",
-  arch: "Arch",
-  special_collections: "Special Collections",
-  privileges: "Privileges",
-  website: "Library.nyu.edu website",
-  marli: "MaRLi",
-  illiad: "ILLiad",
-  ezborrow: "EZBorrow",
-  ezproxy: "EZProxy",
-}
-
-def tag_filtering
-  tags = ""
-  tags += " --tags @#{ENV['BROWBEAT_ENV']}" if ENV['BROWBEAT_ENV']
-  tags += " --tags ~@no_sauce" if ENV['DRIVER'] == 'sauce'
-  tags
-end
+include Browbeat::Helpers::RakeHelper
 
 namespace :browbeat do
   namespace :check do
@@ -41,7 +22,18 @@ namespace :browbeat do
 
     desc "Run cucumber features for PDS (ping.feature first)"
     task :pds do
-      sh 'bundle exec cucumber #{tag_filtering} --require features/ features/login/pds/ping.feature features/login/pds/'
+      sh "bundle exec cucumber #{tag_filtering} --require features/ features/login/pds/ping.feature features/login/pds/"
+    end
+  end
+
+  namespace :recheck do
+    desc "For applications failing in Status Page, run all cucumber features (ping.feature files first)"
+    task :failures do
+      if failing_applications.any?
+        sh "bundle exec cucumber #{tag_filtering} --require features/ #{failing_application_features} RECHECK=true"
+      else
+        puts "All applications operational in StatusPage #{all_environments.join(" and ")}"
+      end
     end
   end
 end

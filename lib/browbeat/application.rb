@@ -1,6 +1,6 @@
 module Browbeat
   class Application
-    include Browbeat::Helpers::ApiPageIdsHelper
+    include Helpers::ApiPageIdsHelper
 
     attr_reader :name, :symbol, :status_page_production_id, :status_page_staging_id
     attr_accessor :status_page_production_component, :status_page_staging_component

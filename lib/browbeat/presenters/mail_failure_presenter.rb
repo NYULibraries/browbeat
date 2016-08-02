@@ -3,7 +3,6 @@ module Browbeat
     class MailFailurePresenter
       attr_accessor :scenario_collection, :application_list, :environments
 
-      ENVIRONMENTS = %w[production staging]
       TEMPLATE = "lib/browbeat/templates/mail_failure.html.haml"
 
       def self.render(failed_scenarios, scenario_applications, scenario_environments)

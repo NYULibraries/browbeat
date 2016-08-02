@@ -1,6 +1,6 @@
 module Browbeat
   class StatusMailer
-    include Browbeat::Helpers::ApiPageIdsHelper
+    include Helpers::ApiPageIdsHelper
 
     attr_reader :scenario_collection, :application_collection
 
@@ -14,9 +14,9 @@ module Browbeat
     end
 
     def send_status_if_failed
-      if any_failures? || status_page_failures?
-        send_mail
-      end
+      return if recheck? && all_failures?
+      return if !recheck? && !any_failures? && !status_page_failures?
+      send_mail
     end
 
     def send_mail
@@ -51,6 +51,10 @@ module Browbeat
       @any_failures ||= @scenario_collection.any?(&:failed?)
     end
 
+    def all_failures?
+      application_collection.any? && any_failures? && failing_scenario_application_symbols.sort == scenario_application_symbols.sort
+    end
+
     def status_page_failures?
       scenario_environments.any? do |environment|
         components = StatusPage::API::ComponentList.new(send("status_page_#{environment}_page_id")).get
@@ -74,14 +78,22 @@ module Browbeat
 
     private
 
+    def recheck?
+      ENV['RECHECK']
+    end
+
     def get_scenario_applications
       application_collection.select do |application|
         scenario_application_symbols.include?(application.symbol)
       end
     end
 
+    def failing_scenario_application_symbols
+      @failing_symbols ||= failed_scenarios.map(&:app_symbol).uniq
+    end
+
     def scenario_application_symbols
-      @symbols ||= @scenario_collection.map(&:app_symbol)
+      @symbols ||= @scenario_collection.map(&:app_symbol).uniq
     end
 
     def scenario_production_component_ids
