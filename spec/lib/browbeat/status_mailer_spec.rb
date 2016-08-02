@@ -34,20 +34,17 @@ describe Browbeat::StatusMailer do
       subject { mailer.send_status_if_failed }
       before { allow(mailer).to receive(:send_mail).and_return true }
 
-      context "with failures" do
-        before { allow(mailer).to receive(:any_failures?).and_return true }
-
-        it "should call send_mail" do
-          expect(mailer).to receive(:send_mail)
-          subject
+      around do |example|
+        with_modified_env RECHECK: recheck do
+          example.run
         end
       end
 
-      context "without failures" do
-        before { allow(mailer).to receive(:any_failures?).and_return false }
+      context "with RECHECK unspecified" do
+        let(:recheck){ nil }
 
-        context "with status page failures" do
-          before { allow(mailer).to receive(:status_page_failures?).and_return true }
+        context "with failures" do
+          before { allow(mailer).to receive(:any_failures?).and_return true }
 
           it "should call send_mail" do
             expect(mailer).to receive(:send_mail)
@@ -55,15 +52,50 @@ describe Browbeat::StatusMailer do
           end
         end
 
-        context "without status page failures" do
-          before { allow(mailer).to receive(:status_page_failures?).and_return false }
+        context "without failures" do
+          before { allow(mailer).to receive(:any_failures?).and_return false }
 
-          it "should call send_mail" do
+          context "with status page failures" do
+            before { allow(mailer).to receive(:status_page_failures?).and_return true }
+
+            it "should call send_mail" do
+              expect(mailer).to receive(:send_mail)
+              subject
+            end
+          end
+
+          context "without status page failures" do
+            before { allow(mailer).to receive(:status_page_failures?).and_return false }
+
+            it "should call send_mail" do
+              expect(mailer).to_not receive(:send_mail)
+              subject
+            end
+          end
+        end # end "without failures"
+      end # end "with RECHECK unspecified"
+
+      context "with RECHECK specified" do
+        let(:recheck){ 'true' }
+
+        context "with all applications failing" do
+          before { allow(mailer).to receive(:all_failures?).and_return true }
+
+          it "should not call send_mail" do
             expect(mailer).to_not receive(:send_mail)
             subject
           end
         end
-      end
+
+        context "with some applications failing" do
+          before { allow(mailer).to receive(:all_failures?).and_return false }
+
+          it "should call send_mail" do
+            expect(mailer).to receive(:send_mail)
+            subject
+          end
+        end
+      end # end "with RECHECK specified"
     end
 
     describe "send_mail" do
@@ -222,6 +254,92 @@ describe Browbeat::StatusMailer do
 
         it { is_expected.to be_falsy }
       end
+    end
+
+    describe "all_failures?" do
+      subject { mailer.all_failures? }
+
+      context "with applications" do
+        let(:application_collection){ Browbeat::ApplicationCollection.new [application1, application2] }
+        let(:application1){ instance_double Browbeat::Application, symbol: 'abc' }
+        let(:application2){ instance_double Browbeat::Application, symbol: 'def' }
+
+        context "with at least one failing scenario each" do
+          let(:scenario_collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2, scenario3, scenario4] }
+          let(:scenario1){ instance_double Browbeat::Scenario, app_symbol: 'abc', failed?: true }
+          let(:scenario2){ instance_double Browbeat::Scenario, app_symbol: 'def', failed?: false }
+          let(:scenario3){ instance_double Browbeat::Scenario, app_symbol: 'abc', failed?: false }
+          let(:scenario4){ instance_double Browbeat::Scenario, app_symbol: 'def', failed?: true }
+
+          it { is_expected.to be_truthy }
+        end
+
+        context "with all failing scenarios" do
+          let(:scenario_collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2, scenario3, scenario4] }
+          let(:scenario1){ instance_double Browbeat::Scenario, app_symbol: 'abc', failed?: true }
+          let(:scenario2){ instance_double Browbeat::Scenario, app_symbol: 'def', failed?: true }
+          let(:scenario3){ instance_double Browbeat::Scenario, app_symbol: 'abc', failed?: true }
+          let(:scenario4){ instance_double Browbeat::Scenario, app_symbol: 'def', failed?: true }
+
+          it { is_expected.to be_truthy }
+        end
+
+        context "with only failing scenario for one app" do
+          let(:scenario_collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2, scenario3, scenario4] }
+          let(:scenario1){ instance_double Browbeat::Scenario, app_symbol: 'abc', failed?: true }
+          let(:scenario2){ instance_double Browbeat::Scenario, app_symbol: 'def', failed?: false }
+          let(:scenario3){ instance_double Browbeat::Scenario, app_symbol: 'abc', failed?: false }
+          let(:scenario4){ instance_double Browbeat::Scenario, app_symbol: 'def', failed?: false }
+
+          it { is_expected.to be_falsy }
+        end
+
+        context "with no failing scenarios" do
+          let(:scenario_collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2, scenario3, scenario4] }
+          let(:scenario1){ instance_double Browbeat::Scenario, app_symbol: 'abc', failed?: false }
+          let(:scenario2){ instance_double Browbeat::Scenario, app_symbol: 'def', failed?: false }
+          let(:scenario3){ instance_double Browbeat::Scenario, app_symbol: 'abc', failed?: false }
+          let(:scenario4){ instance_double Browbeat::Scenario, app_symbol: 'def', failed?: false }
+
+          it { is_expected.to be_falsy }
+        end
+
+        context "with no scenarios" do
+          let(:scenario_collection){ Browbeat::ScenarioCollection.new [] }
+
+          it { is_expected.to be_falsy }
+        end
+      end
+
+      context "without applications" do
+        let(:application_collection){ Browbeat::ApplicationCollection.new [] }
+
+        it { is_expected.to be_falsy }
+      end
+
+
+      # context "with some failing scenarios" do
+      #   let(:scenario_collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2, scenario3] }
+      #   let(:scenario1){ instance_double Browbeat::Scenario, app_symbol: 'abc', failed?: true }
+      #   let(:scenario2){ instance_double Browbeat::Scenario, app_symbol: 'def', failed?: true }
+      #   let(:scenario3){ instance_double Browbeat::Scenario, app_symbol: 'abc', failed?: false }
+      #
+      #   it { is_expected.to be_falsy }
+      # end
+      #
+      # context "without failing scenarios" do
+      #   let(:scenario_collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2] }
+      #   let(:scenario1){ instance_double Browbeat::Scenario, app_symbol: 'abc', failed?: false }
+      #   let(:scenario2){ instance_double Browbeat::Scenario, app_symbol: 'abc', failed?: false }
+      #
+      #   it { is_expected.to be_falsy }
+      # end
+      #
+      # context "without scenarios" do
+      #   let(:scenario_collection){ Browbeat::ScenarioCollection.new [] }
+      #
+      #   it { is_expected.to be_falsy }
+      # end
     end
 
     describe "status_page_failures?" do
