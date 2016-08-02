@@ -27,6 +27,12 @@ rake browbeat:check:login
 rake browbeat:check:pds
 ```
 
+Run only tests for previously failing applications (per StatusPage):
+
+```
+rake browbeat:recheck:failures
+```
+
 #### Environment-variable configuration
 
 Specify recipient of email notifications:
@@ -59,6 +65,8 @@ Run tests only for a specific app environment:
 rake browbeat:check:all BROWBEAT_ENV=production
 rake browbeat:check:all BROWBEAT_ENV=staging
 ```
+
+All above configuration is also available to `browbeat:recheck:failures` task. 
 
 ### Run on Docker
 
