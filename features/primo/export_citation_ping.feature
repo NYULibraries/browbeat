@@ -9,7 +9,7 @@ Feature: Export citations is running
     Given I visit BobCat export citation link
     Then I should download an ".openurl" file
 
-  @staging @partial_outage @wip
+  @staging @partial_outage
   Scenario: Exporting citations on staging
     Given I visit BobCat staging export citation link
     Then I should download an ".openurl" file
