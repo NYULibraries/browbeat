@@ -66,7 +66,13 @@ rake browbeat:check:all BROWBEAT_ENV=production
 rake browbeat:check:all BROWBEAT_ENV=staging
 ```
 
-All above configuration is also available to `browbeat:recheck:failures` task. 
+Capture HTML and PNG screenshots on failures:
+
+```
+rake browbeat:check:all SCREENSHOT_FAILURES=true
+```
+
+All above configuration is also available to `browbeat:recheck:failures` task.
 
 ### Run on Docker
 
