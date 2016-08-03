@@ -7,6 +7,7 @@ require 'rspec'
 require 'pry'
 require 'yaml'
 require 'browbeat'
+require 'capybara-screenshot/cucumber' if ENV['SCREENSHOT_FAILURES']
 
 # add project directory to load path
 project_dir = File.expand_path(File.join(File.dirname(__FILE__), '../..'))

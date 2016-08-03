@@ -4,6 +4,7 @@ group :test do
   gem 'rspec'
   gem 'factory_girl'
   gem 'capybara'
+  gem 'capybara-screenshot'
 
   gem 'cucumber', '< 2.0'
   gem 'selenium-webdriver'
