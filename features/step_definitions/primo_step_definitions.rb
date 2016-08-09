@@ -28,8 +28,12 @@ Then(/^I should download an "(.+)" file$/) do |file_extension|
   expect(page).to download_file /#{Regexp.quote(file_extension)}$/
 end
 
-Then(/^I should see an EasyBib record "(.+)" in a new window/) do |easybib_text|
+Then(/^I should see an EasyBib record "(.+)" in a new window$/) do |easybib_text|
   within_new_window do
     expect(page).to have_css('.citation', text: easybib_text)
   end
+end
+
+Then(/^the institution should render as "(.+)"$/) do |institution_text|
+  expect(page.find('.institution')).to have_text institution_text
 end
