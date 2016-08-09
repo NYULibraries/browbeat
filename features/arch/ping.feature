@@ -10,6 +10,18 @@ Feature: Arch is running
     Then my browser should respond with a success for Arch
     And my browser should resolve to Arch
 
+  @production @warning
+  Scenario: Visiting Arch NYUSH on production
+    Given I visit Arch NYUSH
+    Then my browser should respond with a success for Arch
+    And my browser should resolve to Arch NYUSH
+
+  @production @warning
+  Scenario: Visiting Arch NYUAD on production
+    Given I visit Arch NYUAD
+    Then my browser should respond with a success for Arch
+    And my browser should resolve to Arch NYUAD
+
   @staging @major_outage
   Scenario: Visiting Arch on staging
     Given I visit Arch staging

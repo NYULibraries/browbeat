@@ -22,6 +22,20 @@ Feature: Primo is running
     Then my browser should respond with a success for Primo
     And my browser should resolve to BobCat
 
+  @production @warning
+  Scenario: Visiting BobCat NYUSH on production
+    Given I visit BobCat NYUSH
+    Then my browser should respond with a success for Primo
+    And my browser should resolve to BobCat
+    And the institution should render as "NYUSH"
+
+  @production @warning
+  Scenario: Visiting BobCat NYUAD on production
+    Given I visit BobCat NYUAD
+    Then my browser should respond with a success for Primo
+    And my browser should resolve to BobCat
+    And the institution should render as "NYUAD"
+
   @staging @major_outage
   Scenario: Visiting BobCat on staging
     Given I visit BobCat staging
