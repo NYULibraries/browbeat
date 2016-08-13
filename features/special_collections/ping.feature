@@ -10,12 +10,12 @@ Feature: Special Collections is running
     Then my browser should respond with a success for Special Collections
     And my browser should resolve to Special Collections
 
-  @production @degraded_performance
+  @production @degraded_performance @wip
   Scenario: Visiting Special Collections LB server 1 on production
     Given I visit Special Collections LB server 1
     Then my browser should redirect to Login authorization page
 
-  @production @degraded_performance
+  @production @degraded_performance @wip
   Scenario: Visiting Special Collections LB server 2 on production
     Given I visit Special Collections LB server 2
     Then my browser should redirect to Login authorization page
