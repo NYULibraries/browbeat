@@ -4,8 +4,8 @@ module Browbeat
       "/search/"
     end
 
-    def passive_login_path
-      '/login/passive'
+    def passive_login_url_regex
+      /https:\/\/shibboleth\.nyu\.edu\/idp\/profile\/SAML2\/Redirect\/SSO\?SAMLRequest=.+/
     end
 
     def finding_aid_base_url
