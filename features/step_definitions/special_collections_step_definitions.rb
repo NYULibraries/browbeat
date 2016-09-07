@@ -21,7 +21,7 @@ Then(/^my browser should resolve to (Special Collections.*)$/) do |special_colle
 end
 
 Then(/^my browser should redirect to Login authorization page$/) do
-  expect(page.current_path).to eq passive_login_path
+  expect(page.current_url).to match passive_login_url_regex
 end
 
 Then(/^my browser should open a new window with finding aid base URL$/) do
