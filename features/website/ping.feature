@@ -10,12 +10,6 @@ Feature: Website is running
     And my browser should resolve to Website
 
   @major_outage @staging
-  Scenario: Visiting Website on beta
-    Given I visit Website beta
-    Then my browser should respond with a success for website
-    And my browser should resolve to Website beta
-
-  @major_outage @staging
   Scenario: Visiting Website on staging
     Given I visit Website staging
     Then my browser should respond with a success for website
