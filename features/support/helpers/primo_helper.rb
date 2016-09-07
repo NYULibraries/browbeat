@@ -19,5 +19,9 @@ module Browbeat
     def first_result
       first('.results .result')
     end
+
+    def page_institution_text
+      page.evaluate_script("document.getElementsByClassName('institution')[0].textContent")
+    end
   end
 end

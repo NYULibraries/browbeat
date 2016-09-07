@@ -35,5 +35,5 @@ Then(/^I should see an EasyBib record "(.+)" in a new window$/) do |easybib_text
 end
 
 Then(/^the institution should render as "(.+)"$/) do |institution_text|
-  expect(page.find('.institution')).to have_text institution_text
+  expect(page_institution_text).to have_text institution_text
 end
