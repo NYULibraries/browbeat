@@ -1,0 +1,8 @@
+git clone git@github.com:NYULibraries/browbeat-screenshots.git
+cd browbeat-screenshots/
+git checkout -b "${BUILD_TAG// /_}"
+mv ../screenshot_* .
+git add -A
+git diff-index --quiet HEAD || (git commit -m "Screenshots for failed ${JOB_NAME} ${BUILD_NUMBER}" && git push origin "${BUILD_TAG// /_}")
+cd ..
+rm -rf browbeat-screenshots
