@@ -9,4 +9,4 @@ Feature: EZBorrow is running
     Given I login as an NYU user
     And I visit EZBorrow
     When I search EZBorrow for "digital divide"
-    Then I should see EZBorrow results
+    Then I should see EZBorrow results page
