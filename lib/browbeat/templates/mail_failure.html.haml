@@ -23,3 +23,6 @@
                   %ul
                     %li= scenario.exception_message
                     %li= scenario.backtrace_line
+- if jenkins_env?
+  %p Access failure screenshots:
+    %= screenshots_url
