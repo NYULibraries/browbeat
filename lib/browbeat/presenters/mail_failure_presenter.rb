@@ -44,7 +44,20 @@ module Browbeat
         scenarios_for_application(application).with_tags(environment, failure_type)
       end
 
+      def screenshots_url
+        "https://github.com/NYULibraries/browbeat-screenshots/tree/#{jenkins_build_tag.tr(' ','_')}" if jenkins_build_tag
+      end
+
+      def jenkins_env?
+        !!jenkins_build_tag
+      end
+      
+      def jenkins_build_tag
+        ENV['BUILD_TAG']
+      end
+
       private
+
       def scenario_symbols
         @scenario_symbols ||= scenario_collection.map(&:app_symbol).uniq
       end
