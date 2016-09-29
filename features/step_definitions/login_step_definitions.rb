@@ -13,10 +13,16 @@ When(/^I enter NYU staging credentials$/) do
   step "I enter username \"#{shibboleth_staging_username}\" with password \"#{shibboleth_staging_password}\""
 end
 
-When(/^I enter username "(.+)" with password "(.+)"/) do |username, password|
+When(/^I enter username "(.+)" with password "(.+)"$/) do |username, password|
   fill_in "netid", with: username
   fill_in "Password", with: password
   click_button "Login"
+end
+
+When(/^I click "(.+)" if prompted$/) do |button_text|
+  if page.has_button?(button_text) #|| page.has_link?(button_text)
+    click_on button_text
+  end
 end
 
 Then(/^I should be logged in$/) do
