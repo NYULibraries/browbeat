@@ -7,6 +7,7 @@ Given(/^I login as an NYU user$/) do
     Given I visit Login
     When I click on "NYU"
     And I enter NYU credentials
+    And I click "Continue" if prompted
   }
 end
 
@@ -15,6 +16,7 @@ Given(/^I login as an NYU user if prompted$/) do
     steps %Q{
       When I click on "NYU"
       And I enter NYU credentials
+      And I click "Continue" if prompted
     }
   end
 end
@@ -24,6 +26,7 @@ Given(/^I login as an NYU staging user$/) do
     Given I visit Login staging
     When I click on "NYU"
     And I enter NYU staging credentials
+    And I click "Continue" if prompted
   }
 end
 
@@ -32,6 +35,7 @@ Given(/^I login as an NYU staging user if prompted$/) do
     steps %Q{
       When I click on "NYU"
       And I enter NYU staging credentials
+      And I click "Continue" if prompted
     }
   end
 end

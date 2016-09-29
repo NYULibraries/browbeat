@@ -9,6 +9,7 @@ Feature: Login is running
     Given I visit Login
     When I click on "NYU"
     And I enter NYU credentials
+    And I click "Continue" if prompted
     Then I should be logged in
 
   @staging @major_outage
@@ -16,4 +17,5 @@ Feature: Login is running
     Given I visit Login staging
     When I click on "NYU"
     And I enter NYU staging credentials
+    And I click "Continue" if prompted
     Then I should be logged in

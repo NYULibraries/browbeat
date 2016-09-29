@@ -9,6 +9,7 @@ Feature: PDS is running
     Given I visit PDS
     When I click on "NYU"
     And I enter NYU credentials
+    And I click "Continue" if prompted
     Then I should be logged in
 
   @staging @partial_outage
@@ -16,4 +17,5 @@ Feature: PDS is running
     Given I visit PDS staging
     When I click on "NYU"
     And I enter NYU staging credentials
+    And I click "Continue" if prompted
     Then I should be logged in
