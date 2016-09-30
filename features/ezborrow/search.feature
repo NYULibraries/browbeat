@@ -4,9 +4,8 @@ Feature: EZBorrow is running
   I want to be able to get a book from EZBorrow even if Bobst doesn't have it
   So that I don't have to delay my research.
 
-  @major_outage @production @no_sauce
+  @major_outage @production @no_sauce @login_required
   Scenario: Visiting EZBorrow on production
-    Given I login as an NYU user
-    And I visit EZBorrow
+    Given I visit EZBorrow
     When I search EZBorrow for "digital divide"
     Then I should see EZBorrow results page

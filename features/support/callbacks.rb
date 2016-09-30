@@ -42,3 +42,11 @@ unless %w[false off].include?(ENV["FAILURE_TRACKER"])
     puts "Done"
   end
 end
+
+if ENV['LOGIN_MAX_WAIT']
+  Around('@login_required') do |scenario, block|
+    Capybara.using_wait_time(ENV['LOGIN_MAX_WAIT'].to_i) do
+      block.call
+    end
+  end
+end

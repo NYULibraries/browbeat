@@ -4,7 +4,7 @@ Feature: PDS is running
   I want to be able to login
   So that I can save queries, items, etc.
 
-  @production @partial_outage @no_sauce
+  @production @partial_outage @no_sauce @login_required
   Scenario: Logging in on production PDS
     Given I visit PDS
     When I click on "NYU"
@@ -12,7 +12,7 @@ Feature: PDS is running
     And I click "Continue" if prompted
     Then I should be logged in
 
-  @staging @partial_outage
+  @staging @partial_outage @login_required
   Scenario: Logging in on staging PDS
     Given I visit PDS staging
     When I click on "NYU"
