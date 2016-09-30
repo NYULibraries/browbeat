@@ -6,7 +6,6 @@ Feature: EZBorrow is running
 
   @major_outage @production @no_sauce
   Scenario: Visiting EZBorrow on production
-    Given I login as an NYU user
-    And I visit EZBorrow
+    Given I visit EZBorrow
     When I search EZBorrow for "digital divide"
     Then I should see EZBorrow results page
