@@ -4,7 +4,7 @@ Feature: GetIt is running
   I want to be able to locate a book in the library
   So I can get it and check it out.
 
-  @production @major_outage
+  @production @partial_outage
   Scenario: Searching for Online Access
     Given I visit BobCat
     When I search for "the new yorker"
@@ -12,7 +12,7 @@ Feature: GetIt is running
     Then my browser should open a GetIt page in a new window
     And I should see results under "Online Access" section in a new window
 
-  @staging @major_outage
+  @staging @partial_outage
   Scenario: Searching for Online Access on staging
     Given I visit BobCat staging
     When I search for "the new yorker"
