@@ -34,29 +34,20 @@ describe Browbeat::StatusMailer do
       subject { mailer.send_status_if_failed }
       before { allow(mailer).to receive(:send_mail).and_return true }
 
-      around do |example|
-        with_modified_env RECHECK: recheck do
-          example.run
-        end
-      end
+      context "with scenarios" do
+        let(:scenario_collection){ Browbeat::ScenarioCollection.new([double(Browbeat::Scenario)]) }
 
-      context "with RECHECK unspecified" do
-        let(:recheck){ nil }
-
-        context "with failures" do
-          before { allow(mailer).to receive(:any_failures?).and_return true }
-
-          it "should call send_mail" do
-            expect(mailer).to receive(:send_mail)
-            subject
+        around do |example|
+          with_modified_env RECHECK: recheck do
+            example.run
           end
         end
 
-        context "without failures" do
-          before { allow(mailer).to receive(:any_failures?).and_return false }
+        context "with RECHECK unspecified" do
+          let(:recheck){ nil }
 
-          context "with status page failures" do
-            before { allow(mailer).to receive(:status_page_failures?).and_return true }
+          context "with failures" do
+            before { allow(mailer).to receive(:any_failures?).and_return true }
 
             it "should call send_mail" do
               expect(mailer).to receive(:send_mail)
@@ -64,38 +55,60 @@ describe Browbeat::StatusMailer do
             end
           end
 
-          context "without status page failures" do
-            before { allow(mailer).to receive(:status_page_failures?).and_return false }
+          context "without failures" do
+            before { allow(mailer).to receive(:any_failures?).and_return false }
 
-            it "should call send_mail" do
+            context "with status page failures" do
+              before { allow(mailer).to receive(:status_page_failures?).and_return true }
+
+              it "should call send_mail" do
+                expect(mailer).to receive(:send_mail)
+                subject
+              end
+            end
+
+            context "without status page failures" do
+              before { allow(mailer).to receive(:status_page_failures?).and_return false }
+
+              it "should call send_mail" do
+                expect(mailer).to_not receive(:send_mail)
+                subject
+              end
+            end
+          end # end "without failures"
+        end # end "with RECHECK unspecified"
+
+        context "with RECHECK specified" do
+          let(:recheck){ 'true' }
+
+          context "with all applications failing" do
+            before { allow(mailer).to receive(:all_failures?).and_return true }
+
+            it "should not call send_mail" do
               expect(mailer).to_not receive(:send_mail)
               subject
             end
           end
-        end # end "without failures"
-      end # end "with RECHECK unspecified"
 
-      context "with RECHECK specified" do
-        let(:recheck){ 'true' }
+          context "with some applications failing" do
+            before { allow(mailer).to receive(:all_failures?).and_return false }
 
-        context "with all applications failing" do
-          before { allow(mailer).to receive(:all_failures?).and_return true }
-
-          it "should not call send_mail" do
-            expect(mailer).to_not receive(:send_mail)
-            subject
+            it "should call send_mail" do
+              expect(mailer).to receive(:send_mail)
+              subject
+            end
           end
-        end
+        end # end "with RECHECK specified"
+      end
 
-        context "with some applications failing" do
-          before { allow(mailer).to receive(:all_failures?).and_return false }
+      context "without scenarios" do
+        let(:scenario_collection){ Browbeat::ScenarioCollection.new([]) }
 
-          it "should call send_mail" do
-            expect(mailer).to receive(:send_mail)
-            subject
-          end
+        it "should not call send_mail" do
+          expect(mailer).to_not receive(:send_mail)
+          subject
         end
-      end # end "with RECHECK specified"
+      end
     end
 
     describe "send_mail" do

@@ -14,6 +14,7 @@ module Browbeat
     end
 
     def send_status_if_failed
+      return if scenario_collection.none?
       return if recheck? && all_failures?
       return if !recheck? && !any_failures? && !status_page_failures?
       send_mail
