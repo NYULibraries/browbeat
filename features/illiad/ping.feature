@@ -4,14 +4,10 @@ Feature: ILLiad is running
   I want to be able to get a book from Interlibrary Loan even if Bobst doesn't have it
   So that I don't have to delay my research.
 
-  @major_outage @production @wip
+  @major_outage @production
   Scenario: Visiting ILLiad on production
-    Given I visit ILLiad
-    Then my browser should respond with a success for Login
-    And my browser should resolve to Login
+    Then cURL visiting ILLiad should redirect to PDS
 
-  @major_outage @staging @wip
+  @major_outage @staging
   Scenario: Visiting ILLiad on staging
-    Given I visit ILLiad staging
-    Then my browser should respond with a success for Login
-    And my browser should resolve to Login staging
+    Then cURL visiting ILLiad staging should redirect to PDS staging
