@@ -4,7 +4,7 @@ Feature: e-Shelf is running
   I want to be able to save items to my e-Shelf
   So that I can come back later and have a record of my research items.
 
-  @production @major_outage
+  @production @partial_outage
   Scenario: Adding a record to e-Shelf on production
     Given I visit BobCat
     When I search for "monk"
@@ -13,7 +13,7 @@ Feature: e-Shelf is running
     When I click e-Shelf link
       Then I should see results matching "monk"
 
-  @staging @major_outage
+  @staging @partial_outage
   Scenario: Adding a record to e-Shelf on staging
     Given I visit BobCat staging
     When I search for "monk"
