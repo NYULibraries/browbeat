@@ -7,5 +7,6 @@ Feature: EZBorrow is running
   @major_outage @production @no_sauce @login_required
   Scenario: Visiting EZBorrow on production
     Given I visit EZBorrow
+    And I login as an Aleph user
     When I search EZBorrow for "digital divide"
     Then I should see EZBorrow results page
