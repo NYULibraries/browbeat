@@ -15,6 +15,14 @@ Then(/^my browser should open a (GetIt.*) page in a new window$/) do |getit_url_
   end
 end
 
+Then(/^I should see results under "(.+)" section$/) do |section_title|
+  expect(page).to have_content section_title
+  within first_umlaut_section_matching(section_title) do
+    expect(page).to have_css '.umlaut_section_content'
+    expect(page.first('.umlaut_section_content')).to have_content
+  end
+end
+
 Then(/^I should see results under "(.+)" section in a new window$/) do |section_title|
   within_new_window do
     expect(page).to have_content section_title
