@@ -1,3 +1,10 @@
+When(/^I search for "(.+)" journal title$/) do |text|
+  fill_in('journal_title', with: text)
+  within('#primary-search') do
+    click_on "Search"
+  end
+end
+
 When(/^I select the first "(.+)" record$/) do |type|
   capture_new_window do
     first_result_matching(type).find('.title a').click

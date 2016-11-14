@@ -6,15 +6,21 @@ Feature: GetIt is running
 
   @production @partial_outage
   Scenario: Searching for Online Access
-    Given I visit GetIt stable journal link
-    And I should see results under "Online Access" section
+    Given I visit GetIt
+    When I search for "the new yorker" journal title
+    And I select the first "Journal" record
+    Then I should see results under "Online Access" section in a new window
 
   @staging @partial_outage
   Scenario: Searching for Online Access on staging
-    Given I visit GetIt staging stable journal link
-    And I should see results under "Online Access" section
+    Given I visit GetIt staging
+    When I search for "the new yorker" journal title
+    And I select the first "Journal" record
+    Then I should see results under "Online Access" section in a new window
 
   @staging @partial_outage
   Scenario: Searching for Online Access on staging QA
-    Given I visit GetIt QA stable journal link
-    And I should see results under "Online Access" section
+    Given I visit GetIt QA
+    When I search for "the new yorker" journal title
+    And I select the first "Journal" record
+    Then I should see results under "Online Access" section in a new window
