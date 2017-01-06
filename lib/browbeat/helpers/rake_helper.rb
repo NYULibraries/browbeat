@@ -23,6 +23,7 @@ module Browbeat
         [
           ("--tags @#{specified_env}" if specified_env),
           ("--tags ~@no_sauce" if sauce_driver?),
+          ("--tags #{ENV['TAGS']}" if ENV['TAGS']),
         ].compact.join(" ")
       end
 

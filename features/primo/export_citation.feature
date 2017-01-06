@@ -7,7 +7,7 @@ Feature: Export citations is running
   @production @partial_outage
   Scenario: Exporting citations on production
     Given I visit BobCat
-    When I search for "the physics of sorrow"
+    When I search for "hamlet"
     And I select the first multi-version record
     And I select "EasyBIB" from the "Send/Share" psuedo-dropdown in the first result
     Then I should see an EasyBib record "The Physics of Sorrow" in a new window
@@ -15,7 +15,7 @@ Feature: Export citations is running
   @staging @partial_outage
   Scenario: Exporting citations on staging
     Given I visit BobCat staging
-    When I search for "the physics of sorrow"
+    When I search for "hamlet"
     And I select the first multi-version record
     And I select "EasyBIB" from the "Send/Share" psuedo-dropdown in the first result
     Then I should see an EasyBib record "The Physics of Sorrow" in a new window

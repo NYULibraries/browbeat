@@ -30,6 +30,7 @@ end
 
 Then(/^I should see an EasyBib record "(.+)" in a new window$/) do |easybib_text|
   within_new_window do
+    expect(page).to have_text easybib_text
     expect(page).to have_css('.citation', text: easybib_text)
   end
 end
