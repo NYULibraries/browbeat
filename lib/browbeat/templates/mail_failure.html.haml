@@ -1,8 +1,3 @@
-%p The following applications had no failures:
-%ul
-  - application_list.each do |application|
-    - next if scenarios_for_application?(application)
-    %li= application.name
 %p The following applications had failures:
 - application_list.each do |application|
   - next unless scenarios_for_application?(application)
