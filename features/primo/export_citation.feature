@@ -10,7 +10,7 @@ Feature: Export citations is running
     When I search for "hamlet"
     And I select the first multi-version record
     And I select "EasyBIB" from the "Send/Share" psuedo-dropdown in the first result
-    Then I should see an EasyBib record "The Physics of Sorrow" in a new window
+    Then I should see an EasyBib record "Hamlet" in a new window
 
   @staging @partial_outage
   Scenario: Exporting citations on staging
@@ -18,4 +18,4 @@ Feature: Export citations is running
     When I search for "hamlet"
     And I select the first multi-version record
     And I select "EasyBIB" from the "Send/Share" psuedo-dropdown in the first result
-    Then I should see an EasyBib record "The Physics of Sorrow" in a new window
+    Then I should see an EasyBib record "Hamlet" in a new window
