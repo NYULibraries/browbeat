@@ -6,16 +6,13 @@ group :test do
   gem 'capybara'
   gem 'capybara-screenshot'
 
-  gem 'cucumber', '< 2.0'
+  gem 'cucumber', '~> 2.4.0'
   gem 'selenium-webdriver'
   gem 'phantomjs'
   gem 'poltergeist'
   gem 'figs', '2.0.0'
   gem 'pry'
   gem 'rake'
-
-  gem 'sauce-cucumber'#, '~> 3.1.1'
-  gem 'sauce-connect'
 
   gem 'status_page-api', git: "https://github.com/NYULibraries/status_page-api"
   gem 'mailx_ruby', git: "https://github.com/NYULibraries/mailx_ruby"

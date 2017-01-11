@@ -9,13 +9,13 @@ describe Browbeat::FailureTracker do
   before do
     allow(Browbeat::ApplicationCollection).to receive(:new).and_return application_collection
   end
-  
+
   describe "initialize" do
     it "should call load_yml" do
       expect(application_collection).to receive(:load_yml)
       tracker
     end
-    
+
     it "should call load_components" do
       expect(partially_populated_application_collection).to receive(:load_components)
       tracker
@@ -23,7 +23,7 @@ describe Browbeat::FailureTracker do
   end
 
   describe "register_scenario" do
-    let(:scenario){ instance_double Cucumber::Ast::Scenario }
+    let(:scenario){ instance_double Cucumber::Core::Test::Case }
 
     context "initial call" do
       subject{ tracker.register_scenario scenario }
