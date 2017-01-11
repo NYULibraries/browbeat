@@ -1,8 +1,8 @@
 module Browbeat
   class Scenario
     extend Forwardable
-    delegate [:name, :steps, :file, :source_tag_names, :exception] => :cucumber_scenario
-    delegate [:backtrace_line] => :failed_step
+    delegate [:name, :exception, :tags, :status, :failed?, :passed?] => :cucumber_scenario
+    delegate [:backtrace] => :exception
 
     attr_accessor :cucumber_scenario
 
@@ -13,8 +13,21 @@ module Browbeat
       @cucumber_scenario = cucumber_scenario
     end
 
-    def failed?
-      !!failed_step
+    def tag_names
+      @tag_names ||= tags.map(&:name)
+    end
+
+    def backtrace_line
+      backtrace.last if exception
+    end
+
+    def file
+      return @file if @file
+      if match_data = cucumber_scenario.inspect.match(/(features\/.+):/)
+        @file = match_data[1]
+      else
+        raise("File path could not be found from regex")
+      end
     end
 
     # if scenario failing, returns failure type as indicated by tags
@@ -36,18 +49,13 @@ module Browbeat
       "#{exception.message} (#{exception})"
     end
 
-    # returns cucumber step at which failure occurred
-    def failed_step
-      @failed_step ||= steps.detect{|s| s.status == :failed }
-    end
-
     def has_tags?(*tags)
       tags.all?{|t| has_tag?(t) }
     end
 
     # returns true if has tag; accepts strings and symbols, with or without preceding '@'
     def has_tag?(tag)
-      source_tag_names.any?{|t| t.match(/^@?#{tag}$/i) }
+      tag_names.any?{|t| t.match(/^@?#{tag}$/i) }
     end
 
     private
