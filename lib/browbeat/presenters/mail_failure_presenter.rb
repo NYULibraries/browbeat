@@ -1,6 +1,7 @@
 module Browbeat
   module Presenters
     class MailFailurePresenter
+      include Helpers::ScrubFigsHelper
       attr_accessor :scenario_collection, :application_list, :environments
 
       TEMPLATE = "lib/browbeat/templates/mail_failure.html.haml"
