@@ -3,18 +3,70 @@ require 'browbeat'
 
 describe Browbeat::Scenario do
   describe "scenario methods" do
-    let(:cucumber_scenario){ instance_double Cucumber::Ast::Scenario }
-    let(:scenario){ described_class.new cucumber_scenario }
+    let(:cucumber_scenario){ instance_double Cucumber::Core::Test::Case }
+    let(:scenario){ described_class.new(cucumber_scenario) }
 
     describe "cucumber_scenario" do
       subject{ scenario.cucumber_scenario }
       it{ is_expected.to eq cucumber_scenario }
     end
 
+    describe "tag_names" do
+      subject{ scenario.tag_names }
+      let(:cucumber_scenario){ instance_double Cucumber::Core::Test::Case, tags: tags }
+
+      describe "with tags" do
+        let(:tags){ [tag1, tag2, tag3] }
+        let(:tag1){ instance_double Cucumber::Core::Ast::Tag, name: "@some_tag" }
+        let(:tag2){ instance_double Cucumber::Core::Ast::Tag, name: "@other_tag" }
+        let(:tag3){ instance_double Cucumber::Core::Ast::Tag, name: "@last_tag" }
+
+        it { is_expected.to match_array %w[@some_tag @other_tag @last_tag] }
+      end
+
+      describe "without tags" do
+        let(:tags){ [] }
+
+        it { is_expected.to eq [] }
+      end
+    end
+
+    describe "backtrace_line" do
+      subject{ scenario.backtrace_line }
+      describe "with an exception" do
+        let(:cucumber_scenario){ instance_double Cucumber::RunningTestCase::Scenario, exception: exception }
+        let(:exception){ instance_double RuntimeError, backtrace: backtrace }
+        let(:backtrace) do
+          ["/Users/Eric/.rbenv/versions/2.3.3/lib/ruby/gems/2.3.0/gems/poltergeist-1.10.0/lib/capybara/poltergeist/browser.rb:365:in `command'",
+           "/Users/Eric/.rbenv/versions/2.3.3/lib/ruby/gems/2.3.0/gems/poltergeist-1.10.0/lib/capybara/poltergeist/browser.rb:35:in `visit'",
+           "/Users/Eric/.rbenv/versions/2.3.3/lib/ruby/gems/2.3.0/gems/poltergeist-1.10.0/lib/capybara/poltergeist/driver.rb:97:in `visit'",
+           "/Users/Eric/.rbenv/versions/2.3.3/lib/ruby/gems/2.3.0/gems/capybara-2.7.1/lib/capybara/session.rb:233:in `visit'",
+           "/Users/Eric/.rbenv/versions/2.3.3/lib/ruby/gems/2.3.0/gems/capybara-2.7.1/lib/capybara/dsl.rb:52:in `block (2 levels) in <module:DSL>'",
+           "./features/step_definitions/shared_step_definitions.rb:2:in `/^I visit (.+)$/'",
+           "features/eshelf/ping.feature:9:in `Given I visit e-Shelf'"]
+        end
+
+        it { is_expected.to eq "features/eshelf/ping.feature:9:in `Given I visit e-Shelf'" }
+      end
+
+      describe "without an exception" do
+        let(:cucumber_scenario){ instance_double Cucumber::RunningTestCase::Scenario, exception: nil }
+
+        it { is_expected.to eq nil }
+      end
+    end
+
+    describe "file" do
+      subject{ scenario.file }
+      let(:cucumber_scenario){ instance_double Cucumber::Core::Test::Case, inspect: "#<Cucumber::Core::Test::Case: features/eshelf/ping.feature:8>" }
+
+      it { is_expected.to eq "features/eshelf/ping.feature" }
+    end
+
     describe "failure_type" do
       subject{ scenario.failure_type }
       before do
-        allow(scenario).to receive(:source_tag_names).and_return tags
+        allow(scenario).to receive(:tag_names).and_return tag_names
       end
 
       context "with failure" do
@@ -23,17 +75,17 @@ describe Browbeat::Scenario do
         end
 
         context "with major_outage tag" do
-          let(:tags){ ["@production", "@major_outage", "@ping", "@selenium"] }
+          let(:tag_names){ ["@production", "@major_outage", "@ping", "@selenium"] }
           it{ is_expected.to eq 'major_outage' }
         end
 
         context "with partial_outage tag" do
-          let(:tags){ ["@staging", "@functionality", "@selenium", "@partial_outage"] }
+          let(:tag_names){ ["@staging", "@functionality", "@selenium", "@partial_outage"] }
           it{ is_expected.to eq 'partial_outage' }
         end
 
         context "with degraded_performance tag" do
-          let(:tags){ ["@degraded_performance", "@staging", "@functionality", "@selenium"] }
+          let(:tag_names){ ["@degraded_performance", "@staging", "@functionality", "@selenium"] }
           it{ is_expected.to eq 'degraded_performance' }
         end
       end
@@ -44,17 +96,17 @@ describe Browbeat::Scenario do
         end
 
         context "with major_outage tag" do
-          let(:tags){ ["@production", "@major_outage", "@ping", "@selenium"] }
+          let(:tag_names){ ["@production", "@major_outage", "@ping", "@selenium"] }
           it{ is_expected.to eq nil }
         end
 
         context "with partial_outage tag" do
-          let(:tags){ ["@staging", "@functionality", "@selenium", "@partial_outage"] }
+          let(:tag_names){ ["@staging", "@functionality", "@selenium", "@partial_outage"] }
           it{ is_expected.to eq nil }
         end
 
         context "with degraded_performance tag" do
-          let(:tags){ ["@degraded_performance", "@staging", "@functionality", "@selenium"] }
+          let(:tag_names){ ["@degraded_performance", "@staging", "@functionality", "@selenium"] }
           it{ is_expected.to eq nil }
         end
       end
@@ -95,40 +147,10 @@ describe Browbeat::Scenario do
       end
     end
 
-    describe "failed_step" do
-      subject{ scenario.failed_step }
-      let(:step1){ instance_double Cucumber::Ast::StepInvocation }
-      let(:step2){ instance_double Cucumber::Ast::StepInvocation }
-      let(:step3){ instance_double Cucumber::Ast::StepInvocation }
-      before do
-        allow(scenario).to receive(:steps).and_return [step1, step2, step3]
-      end
-
-      context "second step failing" do
-        before do
-          allow(step1).to receive(:status).and_return :passed
-          allow(step2).to receive(:status).and_return :failed
-          allow(step3).to receive(:status).and_return :skipped
-        end
-
-        it{ is_expected.to eq step2 }
-      end
-
-      context "no steps failing" do
-        before do
-          allow(step1).to receive(:status).and_return :passed
-          allow(step2).to receive(:status).and_return :passed
-          allow(step3).to receive(:status).and_return :skipped
-        end
-
-        it{ is_expected.to eq nil }
-      end
-    end
-
     describe "has_tags?" do
-      let(:tags){ ["@production", "@major_outage", "@ping", "@selenium"] }
+      let(:tag_names){ ["@production", "@major_outage", "@ping", "@selenium"] }
       before do
-        allow(scenario).to receive(:source_tag_names).and_return tags
+        allow(scenario).to receive(:tag_names).and_return tag_names
       end
 
       it "should return true if all tags given match case-insensitively" do
@@ -145,9 +167,9 @@ describe Browbeat::Scenario do
     end
 
     describe "has_tag?" do
-      let(:tags){ ["@production", "@major_outage", "@ping", "@selenium"] }
+      let(:tag_names){ ["@production", "@major_outage", "@ping", "@selenium"] }
       before do
-        allow(scenario).to receive(:source_tag_names).and_return tags
+        allow(scenario).to receive(:tag_names).and_return tag_names
       end
 
       it "should return true if any tag matches case-insensitively with '@'" do

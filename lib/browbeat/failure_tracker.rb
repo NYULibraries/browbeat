@@ -8,8 +8,8 @@ module Browbeat
       @applications = ApplicationCollection.new.load_yml.load_components
     end
 
-    def register_scenario(scenario)
-      scenarios << Scenario.new(scenario)
+    def register_scenario(cucumber_scenario)
+      scenarios << Scenario.new(cucumber_scenario)
     end
 
     def sync_status_page
