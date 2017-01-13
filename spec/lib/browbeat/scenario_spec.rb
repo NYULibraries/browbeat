@@ -147,36 +147,6 @@ describe Browbeat::Scenario do
       end
     end
 
-    # describe "failed_step" do
-    #   subject{ scenario.failed_step }
-    #   let(:step1){ instance_double Cucumber::Ast::StepInvocation }
-    #   let(:step2){ instance_double Cucumber::Ast::StepInvocation }
-    #   let(:step3){ instance_double Cucumber::Ast::StepInvocation }
-    #   before do
-    #     allow(scenario).to receive(:steps).and_return [step1, step2, step3]
-    #   end
-    #
-    #   context "second step failing" do
-    #     before do
-    #       allow(step1).to receive(:status).and_return :passed
-    #       allow(step2).to receive(:status).and_return :failed
-    #       allow(step3).to receive(:status).and_return :skipped
-    #     end
-    #
-    #     it{ is_expected.to eq step2 }
-    #   end
-    #
-    #   context "no steps failing" do
-    #     before do
-    #       allow(step1).to receive(:status).and_return :passed
-    #       allow(step2).to receive(:status).and_return :passed
-    #       allow(step3).to receive(:status).and_return :skipped
-    #     end
-    #
-    #     it{ is_expected.to eq nil }
-    #   end
-    # end
-
     describe "has_tags?" do
       let(:tag_names){ ["@production", "@major_outage", "@ping", "@selenium"] }
       before do
