@@ -16,5 +16,5 @@
                   = scenario.name
                   %em= "(#{failure_type.tr('_', ' ')})"
                   %ul
-                    %li= scenario.exception_message
+                    %li= scrub_figs(scenario.exception_message)
                     %li= scenario.backtrace_line
