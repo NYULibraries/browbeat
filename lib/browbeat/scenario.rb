@@ -19,7 +19,7 @@ module Browbeat
     end
 
     def features_backtrace
-      backtrace.select{|trace| trace.match?(features_filepath_regex) }
+      backtrace.select{|trace| trace.match(features_filepath_regex) }
     end
 
     def file
