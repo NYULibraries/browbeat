@@ -2,7 +2,6 @@ module Browbeat
   module Helpers
     module ScrubFigsHelper
       def scrub_figs(text)
-        # binding.pry
         configula_data.inject(text) do |result, datum|
           result.gsub(datum, 'X' * 5)
         end
