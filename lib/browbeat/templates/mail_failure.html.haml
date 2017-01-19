@@ -1,20 +1,89 @@
-%p The following applications had failures:
-- application_list.each do |application|
-  - next unless scenarios_for_application?(application)
-  %div
-    %b= "#{application.name} (#{(scenarios_for_application(application).with_tags(:production).worst_failure_type || 'staging outage').tr('_', ' ')})"
-    %ul
-      - environments.each do |environment|
-        - next unless scenarios_for_application_environment?(application, environment)
-        %li
-          = environment
-          %ol
-            - failure_types.each do |failure_type|
-              - next unless scenarios_for_application_environment_failure_type(application, environment, failure_type).any?
-              - scenarios_for_application_environment_failure_type(application, environment, failure_type).each do |scenario|
-                %li
-                  = scenario.name
-                  %em= "(#{failure_type.tr('_', ' ')})"
-                  %ul
-                    %li= scrub_figs(scenario.exception_message)
-                    %li= scenario.backtrace_line
+%html
+  %head
+    :css
+      body {
+        font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+        background-color: #f6f6f6;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .application {
+        margin: 15px 5px;
+        background-color: white;
+      }
+      .failed-scenario td {
+        padding: 10px 0;
+      }
+      .failed-scenario td:first-child {
+        width: 30%;
+      }
+      .title {
+        margin-left: 10px;
+      }
+      .steps p {
+        margin: 0;
+      }
+      .steps p.error-message, p.backtrace {
+        color: red;
+        margin-left: 15px;
+      }
+      p.backtrace {
+        margin-left: 30px;
+      }
+      th {
+        color: white;
+        padding: 20px;
+      }
+      .major-outage th {
+        background-color: #e74c3c;
+      }
+      .partial-outage th {
+        background-color: #e67e22;
+      }
+      .degraded-performance th {
+        background-color: #f1c40f;
+      }
+      .operational th {
+        background-color: #2fcc66;
+      }
+      .passed {
+        color: #3c763d;
+      }
+      .failed {
+        color: #a94442;
+      }
+      .pending {
+        color: #8a6d3b;
+      }
+      .skipped {
+        color: #777;
+      }
+  %body
+    - application_list.each do |application|
+      - next unless scenarios_for_application?(application)
+      %div.application
+        %table{class: worst_application_failure(application).tr(' ', '-')}
+          %tr
+            %th{colspan: 2}
+              = "#{application.name} &mdash;"
+              %em= worst_application_failure(application).capitalize
+          - failure_types.each do |failure_type|
+            - scenarios_for_application_failure_type(application, failure_type).each do |scenario|
+              %tr.failed-scenario
+                %td
+                  %div.title
+                    = scenario.name
+                    %em= "(#{failure_type.tr('_', ' ')})"
+                %td
+                  %div.steps
+                    - scenario.step_events.each do |step_event|
+                      %p{class: step_event.status}= step_event.name
+                      - if step_event.failed?
+                        %p.error-message
+                          = scenario.exception_message
+                        - scenario.features_backtrace.each do |line|
+                          %p.backtrace
+                            %a{href: file_link(line)}
+                              %em= standardize_line(line)
