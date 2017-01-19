@@ -13,24 +13,31 @@ The purpose of this test suite is to provide comprehensive health checks that ru
 
 ### Run locally
 
-Run all tests:
+Run all tests on production:
 
 ```
-rake browbeat:check:all
+rake browbeat:check:production:all
 ```
 
-Run just tests for a specific application:
+or on staging:
 
 ```
-rake browbeat:check:primo
-rake browbeat:check:login
-rake browbeat:check:pds
+rake browbeat:check:staging:all
+```
+
+Run just tests for a specific application on specific environments:
+
+```
+rake browbeat:check:production:primo
+rake browbeat:check:staging:login
+rake browbeat:check:production:pds
 ```
 
 Run only tests for previously failing applications (per StatusPage):
 
 ```
-rake browbeat:recheck:failures
+rake browbeat:recheck:production:failures
+rake browbeat:recheck:staging:failures
 ```
 
 #### Environment-variable configuration
@@ -38,38 +45,38 @@ rake browbeat:recheck:failures
 Specify recipient of email notifications:
 
 ```
-rake browbeat:check:all FAILURE_EMAIL_RECIPIENT=example@nyu.edu
+rake browbeat:check:production:all FAILURE_EMAIL_RECIPIENT=example@nyu.edu
 ```
 
 Disable StatusPage integration and email notifications:
 
 ```
-rake browbeat:check:all FAILURE_TRACKER=false
+rake browbeat:check:production:all FAILURE_TRACKER=false
 ```
 
 Specify PhantomJS installation:
 
 ```
-rake browbeat:check:all PHANTOMJS=/full/path/to/phantomjs
+rake browbeat:check:production:all PHANTOMJS=/full/path/to/phantomjs
 ```
 
 Specify timeout and max wait:
 
 ```
-rake browbeat:check:all MAX_WAIT=30 TIMEOUT=6
+rake browbeat:check:production:all MAX_WAIT=30 TIMEOUT=6
 ```
 
 Run tests only for a specific app environment:
 
 ```
-rake browbeat:check:all BROWBEAT_ENV=production
-rake browbeat:check:all BROWBEAT_ENV=staging
+rake browbeat:check:production:all BROWBEAT_ENV=production
+rake browbeat:check:production:all BROWBEAT_ENV=staging
 ```
 
 Capture HTML and PNG screenshots on failures:
 
 ```
-rake browbeat:check:all SCREENSHOT_FAILURES=true
+rake browbeat:check:production:all SCREENSHOT_FAILURES=true
 ```
 
 All above configuration is also available to `browbeat:recheck:failures` task.
@@ -80,18 +87,24 @@ First, install docker and ensure your environment is configured per `DOCKER.md`.
 
 You will need to add a passwordless private key `id_rsa` to the project root. This key needs Github access to the [Configula repository](https://github.com/NYULibraries/configula) for this docker configuration to work with Figs and Configula.
 
-Run all tests:
+Run all tests on production:
 
 ```
-rake docker:browbeat:check:all
+rake docker:browbeat:check:production:all
+```
+
+or on staging:
+
+```
+rake docker:browbeat:check:staging:all
 ```
 
 Run just tests for a specific application:
 
 ```
-rake docker:browbeat:check:primo
-rake docker:browbeat:check:login
-rake docker:browbeat:check:pds
+rake docker:browbeat:check:production:primo
+rake docker:browbeat:check:staging:login
+rake docker:browbeat:check:production:pds
 ```
 
 ### Run on Selenium and SauceLabs
@@ -99,19 +112,19 @@ rake docker:browbeat:check:pds
 Using a configuration based on one described in [a post by dankohn](https://github.com/saucelabs/sauce_ruby/issues/261), we can trigger running on sauce with the `DRIVER` environment variable set to `"sauce"`, e.g.:
 
 ```
-DRIVER=sauce rake browbeat:check:all
+DRIVER=sauce rake browbeat:check:production:all
 ```
 
 Note that `DRIVER` may also be set as a browser name to run via selenium in that browser, e.g.:
 
 ```
-DRIVER=firefox rake browbeat:check:all
+DRIVER=firefox rake browbeat:check:production:all
 ```
 
 Without the `DRIVER` set, tests will be run via poltergeist:
 
 ```
-rake browbeat:check:all
+rake browbeat:check:production:all
 ```
 
 #### Dependencies

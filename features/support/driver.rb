@@ -1,8 +1,8 @@
 # Run specs in specific driver via DRIVER variable, e.g.:
-#  DRIVER=sauce rake browbeat:check:all
-#  DRIVER=chrome rake browbeat:check:all
+#  DRIVER=sauce rake browbeat:check:production:all
+#  DRIVER=chrome rake browbeat:check:production:all
 # Runs by default in poltergist:
-#  rake browbeat:check:all
+#  rake browbeat:check:production:all
 
 # configures to run in sauce, with needed requires
 # modified from https://github.com/saucelabs/sauce_ruby/issues/261

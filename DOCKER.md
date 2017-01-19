@@ -37,10 +37,10 @@ You may need to run `docker login` for access to pre-built images.
 
 ## Building and running Browbeat
 
-Build and run cucumber tests in a docker container:
+Build and run cucumber production tests in a docker container:
 
 ```
-rake docker:browbeat:check:all
+rake docker:browbeat:check:production:all
 ```
 
 ### Bundler
