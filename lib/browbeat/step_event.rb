@@ -9,7 +9,8 @@ module Browbeat
 
     def initialize(cucumber_event)
       @cucumber_event = cucumber_event
-      @cucumber_step = test_step.source.detect{|s| s.is_a? Cucumber::Core::Ast::Step } || raise("Step not found")
+      @cucumber_step = test_step.source.detect{|s| s.is_a? Cucumber::Core::Ast::Step }
+      raise("Nested step not found") if !cucumber_step && scenario_step?
     end
 
     def scenario_step?
