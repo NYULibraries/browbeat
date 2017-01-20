@@ -1,6 +1,7 @@
 module Browbeat
   module Presenters
     class MailSuccessPresenter
+      include Helpers::StatusPagePresenterHelper
       attr_reader :application_list, :environments
 
       TEMPLATE = "lib/browbeat/templates/mail_success.html.haml"
@@ -18,13 +19,7 @@ module Browbeat
         Haml::Engine.new(File.read(TEMPLATE)).render(self)
       end
 
-      def failing_on_production?(application)
-        application.status_page_production_component.failing? && environments.include?('production')
-      end
 
-      def failing_on_staging?(application)
-        application.status_page_staging_component.failing? && environments.include?('staging')
-      end
     end
   end
 end

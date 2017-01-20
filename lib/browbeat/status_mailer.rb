@@ -14,10 +14,7 @@ module Browbeat
     end
 
     def send_status_if_failed
-      return if scenario_collection.none?
-      return if recheck? && all_failures?
-      return if !recheck? && !any_failures? && !status_page_failures?
-      send_mail
+      send_mail? ? send_mail : puts("No email sent since no #{'updated ' if recheck?}failures detected")
     end
 
     def send_mail
@@ -78,6 +75,13 @@ module Browbeat
     end
 
     private
+
+    def send_mail?
+      return if scenario_collection.none?
+      return if recheck? && all_failures?
+      return if !recheck? && !any_failures? && !status_page_failures?
+      true
+    end
 
     def recheck?
       ENV['RECHECK']

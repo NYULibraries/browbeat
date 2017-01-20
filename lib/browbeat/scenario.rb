@@ -4,21 +4,22 @@ module Browbeat
     delegate [:name, :exception, :tags, :status, :failed?, :passed?] => :cucumber_scenario
     delegate [:backtrace] => :exception
 
-    attr_accessor :cucumber_scenario
+    attr_accessor :cucumber_scenario, :step_events
 
     ORDERED_FAILURE_TYPES = %w[major_outage partial_outage degraded_performance warning]
     ENVIRONMENTS = %w[production staging]
 
-    def initialize(cucumber_scenario)
+    def initialize(cucumber_scenario, step_events)
       @cucumber_scenario = cucumber_scenario
+      @step_events = step_events || raise(ArgumentError, "step_events may not be nil")
     end
 
     def tag_names
       @tag_names ||= tags.map(&:name)
     end
 
-    def backtrace_line
-      backtrace.last if exception
+    def features_backtrace
+      backtrace.select{|trace| trace.match(features_filepath_regex) }
     end
 
     def file
@@ -63,6 +64,10 @@ module Browbeat
       possible_matches.detect do |value|
         has_tag? value
       end
+    end
+
+    def features_filepath_regex
+      /#{Dir.glob("features/*").join("|")}/
     end
 
   end
