@@ -79,6 +79,25 @@ describe Browbeat::Presenters::MailFailurePresenter do
       it { is_expected.to eq %w[major_outage partial_outage degraded_performance warning] }
     end
 
+    describe "ordered_application_list" do
+      subject { presenter.ordered_application_list }
+      let(:scenario_collection){ Browbeat::ScenarioCollection.new [scenario1, scenario2, scenario3, scenario4, scenario5] }
+      let(:applications){ Browbeat::ApplicationCollection.new [application1, application2, application3] }
+      let(:scenario1){ instance_double Browbeat::Scenario, app_symbol: "abc", failure_severity: 2 }
+      let(:scenario2){ instance_double Browbeat::Scenario, app_symbol: "def", failure_severity: 2 }
+      let(:scenario3){ instance_double Browbeat::Scenario, app_symbol: "abc", failure_severity: 3 }
+      let(:scenario4){ instance_double Browbeat::Scenario, app_symbol: "ghi", failure_severity: 1 }
+      let(:scenario5){ instance_double Browbeat::Scenario, app_symbol: "def", failure_severity: 0 }
+      let(:application1){ instance_double Browbeat::Application, symbol: "abc" }
+      let(:application2){ instance_double Browbeat::Application, symbol: "def" }
+      let(:application3){ instance_double Browbeat::Application, symbol: "ghi" }
+
+      it { is_expected.to be_a Browbeat::ApplicationCollection }
+      it "should be ordered correctly" do
+        expect(subject.to_a).to eq [application2, application3, application1]
+      end
+    end
+
     describe "scenarios_for_application?" do
       subject { presenter.scenarios_for_application? application }
 
@@ -130,75 +149,84 @@ describe Browbeat::Presenters::MailFailurePresenter do
 
     end
 
-    describe "scenarios_for_application_environment?" do
-      subject { presenter.scenarios_for_application_environment? application, environment }
+    describe "worst_application_failure" do
+      subject{ presenter.worst_application_failure(application) }
       let(:application){ instance_double Browbeat::Application }
-      let(:environment){ "something" }
+      let(:scenario_collection){ instance_double Browbeat::ScenarioCollection, worst_failure_type: worst_failure_type }
+      before { allow(presenter).to receive(:scenarios_for_application).and_return scenario_collection }
 
-      context "with application scenarios" do
-        let(:subcollection){ Browbeat::ScenarioCollection.new [scenario1, scenario2, scenario3] }
-        before { allow(presenter).to receive(:scenarios_for_application).and_return subcollection }
+      context "with worst_failure_type" do
+        let(:worst_failure_type){ 'major_outage' }
 
-        context "with environment tag" do
-          let(:scenario1){ instance_double Browbeat::Scenario, has_tag?: false }
-          let(:scenario2){ instance_double Browbeat::Scenario, has_tag?: true }
-          let(:scenario3){ instance_double Browbeat::Scenario, has_tag?: false }
-
-          it { is_expected.to be_truthy }
-
-          it "should call has_tag? via any?" do
-            expect(presenter).to receive(:scenarios_for_application).with(application)
-            expect(scenario1).to receive(:has_tag?).with environment
-            expect(scenario2).to receive(:has_tag?).with environment
-            expect(scenario3).to_not receive(:has_tag?)
-            subject
-          end
-        end
-
-        context "without environment tag" do
-          let(:scenario1){ instance_double Browbeat::Scenario, has_tag?: false }
-          let(:scenario2){ instance_double Browbeat::Scenario, has_tag?: false }
-          let(:scenario3){ instance_double Browbeat::Scenario, has_tag?: false }
-
-          it { is_expected.to be_falsy }
-
-          it "should call has_tag? via any?" do
-            expect(presenter).to receive(:scenarios_for_application).with(application)
-            expect(scenario1).to receive(:has_tag?).with environment
-            expect(scenario2).to receive(:has_tag?).with environment
-            expect(scenario3).to receive(:has_tag?).with environment
-            subject
-          end
+        it { is_expected.to eq "major outage" }
+        it "should call scenarios_for_application properly" do
+          expect(presenter).to receive(:scenarios_for_application).with(application)
+          subject
         end
       end
 
-      context "without application scenarios" do
-        let(:subcollection){ Browbeat::ScenarioCollection.new [] }
-        before { allow(presenter).to receive(:scenarios_for_application).and_return subcollection }
+      context "without worst_failure_type" do
+        let(:worst_failure_type){ nil }
 
-        it { is_expected.to be_falsy }
+        it { is_expected.to eq nil }
+        it "should call scenarios_for_application properly" do
+          expect(presenter).to receive(:scenarios_for_application).with(application)
+          subject
+        end
       end
-    end # end scenarios_for_application_environment?
+    end
 
-    describe "scenarios_for_application_environment_failure_type" do
-      subject { presenter.scenarios_for_application_environment_failure_type application, environment, failure_type }
+    describe "scenarios_for_application_failure_type" do
+      subject{ presenter.scenarios_for_application_failure_type(application, failure_type) }
       let(:application){ instance_double Browbeat::Application }
-      let(:environment){ "something" }
-      let(:failure_type){ "catastrophic" }
+      let(:scenario_collection){ instance_double Browbeat::ScenarioCollection, with_tags: subcollection }
       let(:subcollection){ instance_double Browbeat::ScenarioCollection }
-      let(:subsubcollection){ instance_double Browbeat::ScenarioCollection }
-      before do
-        allow(presenter).to receive(:scenarios_for_application).and_return subcollection
-        allow(subcollection).to receive(:with_tags).and_return subsubcollection
-      end
+      let(:failure_type){ "catastrophic" }
+      before { allow(presenter).to receive(:scenarios_for_application).and_return scenario_collection }
 
-      it { is_expected.to eq subsubcollection }
+      it { is_expected.to eq subcollection }
 
       it "should call scenarios_for_application correctly" do
         expect(presenter).to receive(:scenarios_for_application).with(application)
-        expect(subcollection).to receive(:with_tags).with(environment, failure_type)
+        expect(scenario_collection).to receive(:with_tags).with(failure_type)
         subject
       end
-    end # end scenarios_for_application_environment_failure_type
+    end
+
+    describe "standardize_line" do
+      subject{ presenter.standardize_line(line) }
+
+      context "with valid line" do
+        let(:line){ "./features/step_definitions/shared_step_definitions.rb:49:in `/^I search for \"(.*?)\"$/'" }
+
+        it { is_expected.to eq "features/step_definitions/shared_step_definitions.rb:49:in `/^I search for \"(.*?)\"$/'" }
+      end
+
+      context "with invalid line" do
+        let(:line){ "/some/unknown/path:49" }
+
+        it "should raise error" do
+          expect{ subject }.to raise_error "Could not match line: '#{line}'"
+        end
+      end
+    end
+
+    describe "file_link" do
+      subject{ presenter.file_link(line) }
+
+      context "with valid line" do
+        let(:line){ "./features/step_definitions/shared_step_definitions.rb:49:in `/^I search for \"(.*?)\"$/'" }
+
+        it { is_expected.to eq "https://github.com/NYULibraries/browbeat/blob/master/features/step_definitions/shared_step_definitions.rb#L49" }
+      end
+
+      context "with invalid line" do
+        let(:line){ "/some/unknown/path:49" }
+
+        it "should raise error" do
+          expect{ subject }.to raise_error "Could not match line: '#{line}'"
+        end
+      end
+    end
   end
 end
