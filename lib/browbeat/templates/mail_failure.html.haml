@@ -62,28 +62,35 @@
       }
   %body
     - ordered_application_list.each do |application|
-      - next unless scenarios_for_application?(application)
+      - next unless scenarios_for_application?(application) || failing_on_status_page?(application)
       %div.application
-        %table{class: worst_application_failure(application).tr(' ', '-')}
-          %tr
-            %th{colspan: 2}
-              = "#{application.name} &mdash;"
-              %em= worst_application_failure(application).capitalize
-          - failure_types.each do |failure_type|
-            - scenarios_for_application_failure_type(application, failure_type).each do |scenario|
-              %tr.failed-scenario
-                %td
-                  %div.title
-                    = scenario.name
-                    %em= "(#{failure_type.tr('_', ' ')})"
-                %td
-                  %div.steps
-                    - scenario.step_events.each do |step_event|
-                      %p{class: step_event.status}= step_event.name
-                      - if step_event.failed?
-                        %p.error-message
-                          = scenario.exception_message
-                        - scenario.features_backtrace.each do |line|
-                          %p.backtrace
-                            %a{href: file_link(line)}
-                              %em= standardize_line(line)
+        - if !scenarios_for_application?(application)
+          %table.operational
+            %tr
+              %th{colspan: 2}
+                = "#{application.name} &mdash;"
+                %em= "Now operational"
+        - else
+          %table{class: worst_application_failure(application).tr(' ', '-')}
+            %tr
+              %th{colspan: 2}
+                = "#{application.name} &mdash;"
+                %em= worst_application_failure(application).capitalize
+            - failure_types.each do |failure_type|
+              - scenarios_for_application_failure_type(application, failure_type).each do |scenario|
+                %tr.failed-scenario
+                  %td
+                    %div.title
+                      = scenario.name
+                      %em= "(#{failure_type.tr('_', ' ')})"
+                  %td
+                    %div.steps
+                      - scenario.step_events.each do |step_event|
+                        %p{class: step_event.status}= step_event.name
+                        - if step_event.failed?
+                          %p.error-message
+                            = scenario.exception_message
+                          - scenario.features_backtrace.each do |line|
+                            %p.backtrace
+                              %a{href: file_link(line)}
+                                %em= standardize_line(line)

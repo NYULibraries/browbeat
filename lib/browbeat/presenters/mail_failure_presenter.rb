@@ -2,6 +2,7 @@ module Browbeat
   module Presenters
     class MailFailurePresenter
       include Helpers::ScrubFigsHelper
+      include Helpers::StatusPagePresenterHelper
       attr_accessor :scenario_collection, :application_list, :environments
 
       TEMPLATE = "lib/browbeat/templates/mail_failure.html.haml"
@@ -25,7 +26,7 @@ module Browbeat
       end
 
       def ordered_application_list
-        @application_list.sort_by{|app| application_severity_map[app.symbol] }
+        @application_list.sort_by{|app| application_severity_map[app.symbol] || 100 }
       end
 
       # returns true if any scenarios exist for application
