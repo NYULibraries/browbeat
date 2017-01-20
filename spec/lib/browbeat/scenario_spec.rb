@@ -4,7 +4,8 @@ require 'browbeat'
 describe Browbeat::Scenario do
   describe "scenario methods" do
     let(:cucumber_scenario){ instance_double Cucumber::Core::Test::Case }
-    let(:scenario){ described_class.new(cucumber_scenario) }
+    let(:step_events){ Array.new }
+    let(:scenario){ described_class.new(cucumber_scenario, step_events) }
 
     describe "cucumber_scenario" do
       subject{ scenario.cucumber_scenario }
@@ -31,11 +32,11 @@ describe Browbeat::Scenario do
       end
     end
 
-    describe "backtrace_line" do
-      subject{ scenario.backtrace_line }
-      describe "with an exception" do
-        let(:cucumber_scenario){ instance_double Cucumber::RunningTestCase::Scenario, exception: exception }
-        let(:exception){ instance_double RuntimeError, backtrace: backtrace }
+    describe "features_backtrace" do
+      subject{ scenario.features_backtrace }
+      before { allow(scenario).to receive(:backtrace).and_return backtrace }
+
+      context "with backtrace" do
         let(:backtrace) do
           ["/Users/Eric/.rbenv/versions/2.3.3/lib/ruby/gems/2.3.0/gems/poltergeist-1.10.0/lib/capybara/poltergeist/browser.rb:365:in `command'",
            "/Users/Eric/.rbenv/versions/2.3.3/lib/ruby/gems/2.3.0/gems/poltergeist-1.10.0/lib/capybara/poltergeist/browser.rb:35:in `visit'",
@@ -46,13 +47,10 @@ describe Browbeat::Scenario do
            "features/eshelf/ping.feature:9:in `Given I visit e-Shelf'"]
         end
 
-        it { is_expected.to eq "features/eshelf/ping.feature:9:in `Given I visit e-Shelf'" }
-      end
-
-      describe "without an exception" do
-        let(:cucumber_scenario){ instance_double Cucumber::RunningTestCase::Scenario, exception: nil }
-
-        it { is_expected.to eq nil }
+        it { is_expected.to eq [
+          "./features/step_definitions/shared_step_definitions.rb:2:in `/^I visit (.+)$/'",
+          "features/eshelf/ping.feature:9:in `Given I visit e-Shelf'"
+        ] }
       end
     end
 

@@ -32,7 +32,10 @@ describe Browbeat::StatusMailer do
 
     describe "send_status_if_failed" do
       subject { mailer.send_status_if_failed }
-      before { allow(mailer).to receive(:send_mail).and_return true }
+      before do
+        allow(mailer).to receive(:send_mail).and_return true
+        allow(mailer).to receive(:puts).and_return true
+      end
 
       context "with scenarios" do
         let(:scenario_collection){ Browbeat::ScenarioCollection.new([double(Browbeat::Scenario)]) }

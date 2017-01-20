@@ -33,6 +33,12 @@ unless %w[false off].include?(ENV["FAILURE_TRACKER"])
     tracker.register_scenario scenario
   end
 
+  AfterConfiguration do |config|
+    config.on_event :after_test_step do |event|
+      tracker.register_after_test_step event
+    end
+  end
+
   # after all, process failures
   at_exit do
     puts "Sending mail..."

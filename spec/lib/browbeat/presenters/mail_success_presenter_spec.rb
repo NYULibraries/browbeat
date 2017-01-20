@@ -66,50 +66,5 @@ describe Browbeat::Presenters::MailSuccessPresenter do
       subject { presenter.application_list }
       it { is_expected.to eq applications }
     end
-
-    describe "failing_on_production?" do
-      subject { presenter.failing_on_production?(application) }
-      let(:status_page_production_id){ "abcd" }
-      let(:application){ instance_double Browbeat::Application, status_page_production_component: component }
-      let(:component){ instance_double StatusPage::API::Component, failing?: true }
-
-      context "with all environments" do
-        it { is_expected.to eq true }
-
-        it "should call failing? correctly" do
-          expect(component).to receive(:failing?)
-          subject
-        end
-      end
-
-      context "with only staging environment" do
-        let(:environments){ %w[staging] }
-
-        it { is_expected.to eq false }
-      end
-    end
-
-    describe "failing_on_staging?" do
-      subject { presenter.failing_on_staging?(application) }
-      let(:status_page_staging_id){ "xyzw" }
-      let(:application){ instance_double Browbeat::Application, status_page_staging_component: component }
-      let(:component){ instance_double StatusPage::API::Component, failing?: true }
-
-      context "with all environments" do
-        it { is_expected.to eq true }
-
-        it "should call failing? correctly" do
-          expect(component).to receive(:failing?)
-          subject
-        end
-      end
-
-      context "with only production environment" do
-        let(:environments){ %w[production] }
-
-        it { is_expected.to eq false }
-      end
-    end
-
   end
 end

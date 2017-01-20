@@ -19,5 +19,9 @@ module Browbeat
         [key, self.class.new(array)]
       end.to_h
     end
+
+    def sort_by(&block)
+      self.class.new @members.sort_by(&block)
+    end
   end
 end
