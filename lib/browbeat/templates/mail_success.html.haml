@@ -1,12 +1,70 @@
-%p The following applications previously had failures but are now operational:
-%ul
-  - application_list.each do |application|
-    - next unless failing_on_production?(application) || failing_on_staging?(application)
-    %li
-      = application.name
-      = "(staging-only outage)" unless failing_on_production?(application)
-%p The following applications remained operational:
-%ul
-  - application_list.each do |application|
-    - next if failing_on_production?(application) || failing_on_staging?(application)
-    %li= application.name
+%html
+  %head
+    :css
+      body {
+        font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+        background-color: #f6f6f6;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .application {
+        margin: 15px 5px;
+        background-color: white;
+      }
+      .failed-scenario td {
+        padding: 10px 0;
+      }
+      .failed-scenario td:first-child {
+        width: 30%;
+      }
+      .title {
+        margin-left: 10px;
+      }
+      .steps p {
+        margin: 0;
+      }
+      .steps p.error-message, p.backtrace {
+        color: red;
+        margin-left: 15px;
+      }
+      p.backtrace {
+        margin-left: 30px;
+      }
+      th {
+        color: white;
+        padding: 20px;
+      }
+      .major-outage th {
+        background-color: #e74c3c;
+      }
+      .partial-outage th {
+        background-color: #e67e22;
+      }
+      .degraded-performance th {
+        background-color: #f1c40f;
+      }
+      .operational th {
+        background-color: #2fcc66;
+      }
+      .passed {
+        color: #3c763d;
+      }
+      .failed {
+        color: #a94442;
+      }
+      .pending {
+        color: #8a6d3b;
+      }
+      .skipped {
+        color: #777;
+      }
+  %body
+    - application_list.each do |application|
+      - next unless failing_on_status_page?(application)
+      %div.application
+        %table.operational
+          %tr
+            %th{colspan: 2}
+              = "#{application.name} &mdash; Now operational"
