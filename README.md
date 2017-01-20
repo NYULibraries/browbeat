@@ -16,13 +16,13 @@ The purpose of this test suite is to provide comprehensive health checks that ru
 Run all tests on production:
 
 ```
-rake browbeat:check:production:all
+rake browbeat:check:production
 ```
 
 or on staging:
 
 ```
-rake browbeat:check:staging:all
+rake browbeat:check:staging
 ```
 
 Run just tests for a specific application on specific environments:
@@ -45,41 +45,41 @@ rake browbeat:recheck:staging:failures
 Specify recipient of email notifications:
 
 ```
-rake browbeat:check:production:all FAILURE_EMAIL_RECIPIENT=example@nyu.edu
+rake browbeat:check:production FAILURE_EMAIL_RECIPIENT=example@nyu.edu
 ```
 
 Disable StatusPage integration and email notifications:
 
 ```
-rake browbeat:check:production:all FAILURE_TRACKER=false
+rake browbeat:check:production FAILURE_TRACKER=false
 ```
 
 Specify PhantomJS installation:
 
 ```
-rake browbeat:check:production:all PHANTOMJS=/full/path/to/phantomjs
+rake browbeat:check:production PHANTOMJS=/full/path/to/phantomjs
 ```
 
 Specify timeout and max wait:
 
 ```
-rake browbeat:check:production:all MAX_WAIT=30 TIMEOUT=6
+rake browbeat:check:production MAX_WAIT=30 TIMEOUT=6
 ```
 
 Run tests only for a specific app environment:
 
 ```
-rake browbeat:check:production:all BROWBEAT_ENV=production
-rake browbeat:check:production:all BROWBEAT_ENV=staging
+rake browbeat:check:production BROWBEAT_ENV=production
+rake browbeat:check:production BROWBEAT_ENV=staging
 ```
 
 Capture HTML and PNG screenshots on failures:
 
 ```
-rake browbeat:check:production:all SCREENSHOT_FAILURES=true
+rake browbeat:check:production SCREENSHOT_FAILURES=true
 ```
 
-All above configuration is also available to `browbeat:recheck:failures` task.
+All above configuration is also available to all other tasks.
 
 ### Run on Docker
 
@@ -90,13 +90,13 @@ You will need to add a passwordless private key `id_rsa` to the project root. Th
 Run all tests on production:
 
 ```
-rake docker:browbeat:check:production:all
+rake docker:browbeat:check:production
 ```
 
 or on staging:
 
 ```
-rake docker:browbeat:check:staging:all
+rake docker:browbeat:check:staging
 ```
 
 Run just tests for a specific application:
@@ -112,19 +112,19 @@ rake docker:browbeat:check:production:pds
 Using a configuration based on one described in [a post by dankohn](https://github.com/saucelabs/sauce_ruby/issues/261), we can trigger running on sauce with the `DRIVER` environment variable set to `"sauce"`, e.g.:
 
 ```
-DRIVER=sauce rake browbeat:check:production:all
+DRIVER=sauce rake browbeat:check:production
 ```
 
 Note that `DRIVER` may also be set as a browser name to run via selenium in that browser, e.g.:
 
 ```
-DRIVER=firefox rake browbeat:check:production:all
+DRIVER=firefox rake browbeat:check:production
 ```
 
 Without the `DRIVER` set, tests will be run via poltergeist:
 
 ```
-rake browbeat:check:production:all
+rake browbeat:check:production
 ```
 
 #### Dependencies

@@ -40,7 +40,7 @@ You may need to run `docker login` for access to pre-built images.
 Build and run cucumber production tests in a docker container:
 
 ```
-rake docker:browbeat:check:production:all
+rake docker:browbeat:check:production
 ```
 
 ### Bundler
