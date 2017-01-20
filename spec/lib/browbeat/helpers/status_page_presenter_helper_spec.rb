@@ -17,6 +17,44 @@ describe Browbeat::Helpers::StatusPagePresenterHelper do
   let(:helper){ helper_class.new environments }
   let(:environments){ %w[production staging] }
 
+  describe "failing_on_status_page?" do
+    subject { helper.failing_on_status_page?(application) }
+    let(:application){ instance_double Browbeat::Application }
+
+    context "failing on production" do
+      before { allow(helper).to receive(:failing_on_production?).with(application).and_return true }
+
+      context "failing on staging" do
+        before { allow(helper).to receive(:failing_on_staging?).with(application).and_return true }
+
+        it { is_expected.to be_truthy }
+      end
+
+      context "not failing on staging" do
+        before { allow(helper).to receive(:failing_on_staging?).with(application).and_return false }
+
+        it { is_expected.to be_truthy }
+      end
+    end
+
+    context "not failing on production" do
+      before { allow(helper).to receive(:failing_on_production?).with(application).and_return false }
+
+      context "failing on staging" do
+        before { allow(helper).to receive(:failing_on_staging?).with(application).and_return true }
+
+        it { is_expected.to be_truthy }
+      end
+
+      context "not failing on staging" do
+        before { allow(helper).to receive(:failing_on_staging?).with(application).and_return false }
+
+        it { is_expected.to be_falsy }
+      end
+    end
+
+  end
+
   describe "failing_on_production?" do
     subject { helper.failing_on_production?(application) }
     let(:status_page_production_id){ "abcd" }
