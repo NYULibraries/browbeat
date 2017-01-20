@@ -61,7 +61,7 @@
         color: #777;
       }
   %body
-    - application_list.each do |application|
+    - ordered_application_list.each do |application|
       - next unless scenarios_for_application?(application)
       %div.application
         %table{class: worst_application_failure(application).tr(' ', '-')}

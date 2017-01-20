@@ -24,6 +24,10 @@ module Browbeat
         Scenario::ORDERED_FAILURE_TYPES
       end
 
+      def ordered_application_list
+        @application_list.sort_by{|app| application_severity_map[app.symbol] }
+      end
+
       # returns true if any scenarios exist for application
       def scenarios_for_application?(application)
         scenario_symbols.any?{|symbol| symbol == application.symbol }
@@ -36,8 +40,7 @@ module Browbeat
 
       # returns scenario collection for given application; memoized, since we have redundant calls
       def scenarios_for_application(application)
-        return instance_variable_get(:"@scenarios_#{application.symbol}") if instance_variable_defined?(:"@scenarios_#{application.symbol}")
-        instance_variable_set :"@scenarios_#{application.symbol}", scenario_collection.select{|s| s.app_symbol == application.symbol }
+        app_symbol_grouped_scenarios[application.symbol] || ScenarioCollection.new
       end
 
       def scenarios_for_application_failure_type(application, failure_type)
@@ -54,8 +57,18 @@ module Browbeat
       end
 
       private
+      def app_symbol_grouped_scenarios
+        @app_symbol_grouped_scenarios ||= scenario_collection.group_by(&:app_symbol)
+      end
+
+      def application_severity_map
+        @application_severity_map ||= app_symbol_grouped_scenarios.map do |app_symbol, app_scenarios|
+          [app_symbol, app_scenarios.map(&:failure_severity).compact.min]
+        end.to_h
+      end
+
       def scenario_symbols
-        @scenario_symbols ||= scenario_collection.map(&:app_symbol).uniq
+        app_symbol_grouped_scenarios.keys
       end
 
       def line_match_data(line)

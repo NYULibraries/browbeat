@@ -12,9 +12,9 @@ describe Browbeat::ApplicationCollection do
     end
 
     it { is_expected.to match_array [subject[0], subject[1]] }
-    
+
     it { is_expected.to eq collection }
-    
+
     it "should have 2 items" do
       expect(subject.length).to eq 2
     end
@@ -28,16 +28,16 @@ describe Browbeat::ApplicationCollection do
       subject
     end
   end
-  
+
   describe "load_components" do
     subject{ collection.load_components }
-    
+
     context "with members having status page ids" do
       let(:collection){ described_class.new [application1, application2, application3] }
       let(:application1){ Browbeat::Application.new name: "App 1", symbol: "app1", status_page_production_id: "aaaa", status_page_staging_id: "zzzz" }
       let(:application2){ Browbeat::Application.new name: "App 2", symbol: "app2", status_page_production_id: "bbbb", status_page_staging_id: "yyyy" }
       let(:application3){ Browbeat::Application.new name: "App 3", symbol: "app3", status_page_production_id: "cccc", status_page_staging_id: "xxxx" }
-      
+
       context "with status page key and page IDs set" do
         let(:production_page_id){ "abcdefg" }
         let(:staging_page_id){ "tuvwxyz" }
@@ -46,7 +46,7 @@ describe Browbeat::ApplicationCollection do
             example.run
           end
         end
-        
+
         let(:production_component_list){ instance_double StatusPage::API::ComponentList, get: populated_production_component_list }
         let(:staging_component_list){ instance_double StatusPage::API::ComponentList, get: populated_staging_component_list }
         let(:populated_production_component_list){ instance_double StatusPage::API::ComponentList, to_a: production_components }
@@ -67,16 +67,16 @@ describe Browbeat::ApplicationCollection do
           populated_production_component_list.instance_variable_set("@components", production_components)
           populated_staging_component_list.instance_variable_set("@components", staging_components)
         end
-        
+
         it { is_expected.to eq collection }
-        
+
         it "should assign production components" do
           subject
           expect(application1.status_page_production_component).to eq production_component4
           expect(application2.status_page_production_component).to eq production_component1
           expect(application3.status_page_production_component).to eq production_component2
         end
-        
+
         it "should assign staging components" do
           subject
           expect(application1.status_page_staging_component).to eq staging_component4
@@ -107,6 +107,32 @@ describe Browbeat::ApplicationCollection do
 
         it { is_expected.to be_a described_class }
         it { is_expected.to match_array [] }
+      end
+    end
+  end
+
+  describe "sort_by" do
+    context "using symbol" do
+      subject{ collection.sort_by(&:symbol) }
+      let(:collection){ described_class.new applications }
+      let(:application1){ instance_double Browbeat::Application, symbol: "def" }
+      let(:application2){ instance_double Browbeat::Application, symbol: "ghi" }
+      let(:application3){ instance_double Browbeat::Application, symbol: "abc" }
+
+      context "with applications" do
+        let(:applications){ [application1, application2, application3] }
+
+        it{ is_expected.to be_a described_class }
+        it "should order correctly" do
+          expect(subject.to_a).to eq [application3, application1, application2]
+        end
+      end
+
+      context "without applications" do
+        let(:applications){ [] }
+
+        it{ is_expected.to be_a described_class }
+        it{ is_expected.to be_empty }
       end
     end
   end
