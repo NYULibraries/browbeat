@@ -66,13 +66,6 @@ Specify timeout and max wait:
 rake browbeat:check:production MAX_WAIT=30 TIMEOUT=6
 ```
 
-Run tests only for a specific app environment:
-
-```
-rake browbeat:check:production BROWBEAT_ENV=production
-rake browbeat:check:production BROWBEAT_ENV=staging
-```
-
 Capture HTML and PNG screenshots on failures:
 
 ```
