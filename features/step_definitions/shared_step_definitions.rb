@@ -53,7 +53,11 @@ When(/^I search for "(.*?)"$/) do |search_term|
 end
 
 Then(/^my browser should respond with a? ?success for (.+)$/) do |app_name|
-  expect(page).to have_text success_text_for(app_name)
+  if app_name == "JSTOR"
+    expect(["http://ezproxy.library.nyu.edu:2105/search", "http://ezproxydev.library.nyu.edu:2071/search"]).to include current_url 
+  else
+    expect(page).to have_text success_text_for(app_name)
+  end
 end
 
 Then(/^I should see results matching "(.+)"$/) do |content|
