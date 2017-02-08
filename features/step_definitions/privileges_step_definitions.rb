@@ -9,7 +9,7 @@ When(/^I select "(.+)" from the privileges dropdown$/) do |option_text|
 end
 
 When(/^I secretly visit Privileges WebSolr$/) do
-  visit privileges_web_solr_url
+  visit privileges_web_solr_query_url
 end
 
 Then(/^my browser should resolve to (Privileges.*)$/) do |privileges_url_name|
