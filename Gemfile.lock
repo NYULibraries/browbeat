@@ -77,7 +77,7 @@ GEM
     htmlentities (4.3.4)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
-    i18n (0.7.0)
+    i18n (0.8.0)
     json (2.0.3)
     launchy (2.4.3)
       addressable (~> 2.3)
@@ -159,7 +159,7 @@ PLATFORMS
 DEPENDENCIES
   capybara (~> 2.12)
   capybara-screenshot (~> 1.0.4)
-  climate_control
+  climate_control (= 0.0.3)
   coveralls (~> 0.8.17)
   cucumber (~> 2.4.0)
   factory_girl (~> 4.8)
