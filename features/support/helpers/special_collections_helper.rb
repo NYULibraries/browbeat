@@ -12,6 +12,12 @@ module Browbeat
       "http://dlib.nyu.edu/findingaids/html"
     end
 
+    def special_collections_web_solr_query_url
+      File.join(special_collections_web_solr_url, "select?q=test").to_s
+    end
+
+    private
+
     def special_collections_web_solr_url
       raise "Cannot access WebSolr URL while running tests in Sauce" if sauce_driver?
       Figs::ENV.production['SOLR_URL']
