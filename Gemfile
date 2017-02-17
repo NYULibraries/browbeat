@@ -7,7 +7,7 @@ group :test do
   gem 'capybara-screenshot', '~> 1.0.4'
 
   gem 'cucumber', '~> 2.4.0'
-  gem 'selenium-webdriver', '~> 2.53.4'
+  gem 'selenium-webdriver', '~> 3.1'
   gem 'phantomjs', '~> 2.1'
   gem 'poltergeist', '~> 1.13'
   gem 'figs', '2.0.0'
