@@ -18,7 +18,7 @@ group :test do
   gem 'status_page-api', git: "https://github.com/NYULibraries/status_page-api"
   gem 'mailx_ruby', git: "https://github.com/NYULibraries/mailx_ruby", branch: "feature/inline_css_conversion"
   gem 'haml'
-  gem 'climate_control', '= 0.0.3'
+  gem 'climate_control', '~> 0.1'
 
   gem 'coveralls', '~> 0.8.17', require: false
 end

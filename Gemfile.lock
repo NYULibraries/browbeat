@@ -37,8 +37,7 @@ GEM
       launchy
     childprocess (0.6.1)
       ffi (~> 1.0, >= 1.0.11)
-    climate_control (0.0.3)
-      activesupport (>= 3.0)
+    climate_control (0.1.0)
     cliver (0.3.2)
     coderay (1.1.1)
     concurrent-ruby (1.0.4)
@@ -159,7 +158,7 @@ PLATFORMS
 DEPENDENCIES
   capybara (~> 2.12)
   capybara-screenshot (~> 1.0.4)
-  climate_control (= 0.0.3)
+  climate_control (~> 0.1)
   coveralls (~> 0.8.17)
   cucumber (~> 2.4.0)
   factory_girl (~> 4.8)
