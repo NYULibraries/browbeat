@@ -12,8 +12,7 @@ if ENV['SCREENSHOT_FAILURES']
   require 'capybara-screenshot/cucumber'
 
   Capybara::Screenshot.register_filename_prefix_formatter(:cucumber) do |cucumber_scenario|
-    scenario = Browbeat::Scenario.new(cucumber_scenario)
-    "screenshot_#{scenario.name.downcase.gsub(' ', '_')}"
+    Browbeat::Scenario.new(cucumber_scenario).screenshot_filename_prefix
   end
 end
 

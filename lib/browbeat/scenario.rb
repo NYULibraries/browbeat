@@ -31,6 +31,14 @@ module Browbeat
       end
     end
 
+    def screenshot_filename(extension:)
+      Dir.glob("#{screenshot_filename_prefix}*.#{extension}").last
+    end
+
+    def screenshot_filename_prefix
+      "screenshot_#{name.downcase.gsub(' ', '-')}"
+    end
+
     # if scenario failing, returns failure type as indicated by tags
     def failure_type
       @failure_type ||= find_match_in_tags(ORDERED_FAILURE_TYPES) if failed?
