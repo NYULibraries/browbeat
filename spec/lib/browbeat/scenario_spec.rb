@@ -5,7 +5,7 @@ describe Browbeat::Scenario do
   describe "scenario methods" do
     let(:cucumber_scenario){ instance_double Cucumber::Core::Test::Case }
     let(:step_events){ Array.new }
-    let(:scenario){ described_class.new(cucumber_scenario, step_events) }
+    let(:scenario){ described_class.new(cucumber_scenario, step_events: step_events) }
 
     describe "cucumber_scenario" do
       subject{ scenario.cucumber_scenario }

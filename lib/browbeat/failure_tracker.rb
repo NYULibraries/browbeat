@@ -10,7 +10,7 @@ module Browbeat
     end
 
     def register_scenario(cucumber_scenario)
-      scenarios << Scenario.new(cucumber_scenario, step_events)
+      scenarios << Scenario.new(cucumber_scenario, step_events: step_events)
       @step_events = []
     end
 
