@@ -10,13 +10,13 @@ group :test do
   gem 'selenium-webdriver', '~> 3.1'
   gem 'phantomjs', '~> 2.1'
   gem 'poltergeist', '~> 1.13'
-  gem 'figs', '2.0.0'
+  gem 'figs', '~> 2.1.0', git: 'https://github.com/NYULibraries/figs'
   gem 'pry'
   gem 'rake', '~> 12.0'
   gem 'json', '>= 2'
 
   gem 'status_page-api', git: "https://github.com/NYULibraries/status_page-api"
-  gem 'mailx_ruby', git: "https://github.com/NYULibraries/mailx_ruby", branch: "feature/inline_css_conversion"
+  gem 'mailx_ruby', git: "https://github.com/NYULibraries/mailx_ruby"
   gem 'haml'
   gem 'climate_control', '~> 0.1'
 
