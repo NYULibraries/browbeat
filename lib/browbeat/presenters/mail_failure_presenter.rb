@@ -57,7 +57,17 @@ module Browbeat
         "https://github.com/NYULibraries/browbeat/blob/master/#{line_match_data(line).captures.join('#L')}"
       end
 
+      def github_screenshot_link(scenario, extension:)
+        return unless build_tag && local_path = scenario.screenshot_filename(extension: extension)
+        "https://github.com/NYULibraries/browbeat-screenshots/blob/#{build_tag}/#{local_path}"
+      end
+
+      def build_tag
+        ENV['BUILD_TAG'].tr(' ', '_') if ENV['BUILD_TAG']
+      end
+
       private
+
       def app_symbol_grouped_scenarios
         @app_symbol_grouped_scenarios ||= scenario_collection.group_by(&:app_symbol)
       end
