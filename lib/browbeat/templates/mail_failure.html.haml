@@ -83,6 +83,11 @@
                     %div.title
                       = scenario.name
                       %em= "(#{failure_type.tr('_', ' ')})"
+                    - if build_tag
+                      %div.title
+                        = "Screenshots:"
+                        %a{href: github_screenshot_link(scenario, extension: 'png')} PNG
+                        %a{href: github_screenshot_link(scenario, extension: 'html')} HTML
                   %td
                     %div.steps
                       - scenario.step_events.each do |step_event|

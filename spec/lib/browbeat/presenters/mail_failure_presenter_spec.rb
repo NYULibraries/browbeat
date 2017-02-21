@@ -228,5 +228,61 @@ describe Browbeat::Presenters::MailFailurePresenter do
         end
       end
     end
+
+    describe "github_screenshot_link" do
+      subject{ presenter.github_screenshot_link(scenario, extension: extension) }
+      let(:scenario){ instance_double Browbeat::Scenario }
+      let(:extension){ 'png' }
+      before { allow(presenter).to receive(:build_tag).and_return build_tag }
+
+      context "with build_tag" do
+        let(:build_tag){ "abcdef" }
+        before { allow(scenario).to receive(:screenshot_filename).and_return local_path }
+
+        context "with valid local path" do
+          let(:local_path){ "something_else.png" }
+
+          it { is_expected.to eq "https://github.com/NYULibraries/browbeat-screenshots/blob/abcdef/something_else.png" }
+
+          it "should call screenshot_filename correctly" do
+            expect(scenario).to receive(:screenshot_filename).with(extension: 'png')
+            subject
+          end
+        end
+
+        context "without local path" do
+          let(:local_path){ nil }
+
+          it { is_expected.to eq nil }
+        end
+      end
+
+      context "without build_tag" do
+        let(:build_tag){ nil }
+
+        it { is_expected.to eq nil }
+      end
+    end
+
+    describe "build_tag" do
+      subject{ presenter.build_tag }
+      around do |example|
+        with_modified_env BUILD_TAG: build_tag do
+          example.run
+        end
+      end
+
+      context "with build_tag not set" do
+        let(:build_tag){ nil }
+
+        it { is_expected.to eq nil }
+      end
+
+      context "with build_tag set" do
+        let(:build_tag){ "jenkins-Browbeat Production Check All-123" }
+
+        it { is_expected.to eq "jenkins-Browbeat_Production_Check_All-123" }
+      end
+    end
   end
 end

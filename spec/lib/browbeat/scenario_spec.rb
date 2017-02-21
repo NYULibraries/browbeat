@@ -5,7 +5,7 @@ describe Browbeat::Scenario do
   describe "scenario methods" do
     let(:cucumber_scenario){ instance_double Cucumber::Core::Test::Case }
     let(:step_events){ Array.new }
-    let(:scenario){ described_class.new(cucumber_scenario, step_events) }
+    let(:scenario){ described_class.new(cucumber_scenario, step_events: step_events) }
 
     describe "cucumber_scenario" do
       subject{ scenario.cucumber_scenario }
@@ -59,6 +59,55 @@ describe Browbeat::Scenario do
       let(:cucumber_scenario){ instance_double Cucumber::Core::Test::Case, inspect: "#<Cucumber::Core::Test::Case: features/eshelf/ping.feature:8>" }
 
       it { is_expected.to eq "features/eshelf/ping.feature" }
+    end
+
+    describe "screenshot_filename" do
+      subject{ scenario.screenshot_filename(extension: extension) }
+      let(:screenshot_filename_prefix){ "screenshot_lets-do-this" }
+      let(:extension){ "png" }
+      before do
+        allow(scenario).to receive(:screenshot_filename_prefix).and_return screenshot_filename_prefix
+        allow(Dir).to receive(:glob).and_return files
+      end
+
+      context "without matching files" do
+        let(:files){ [] }
+
+        it { is_expected.to eq nil }
+
+        it "should call Dir correctly" do
+          expect(Dir).to receive(:glob).with("screenshot_lets-do-this*.png")
+          subject
+        end
+
+        context "with different extension" do
+          let(:extension){ "html" }
+
+          it "should call Dir correctly" do
+            expect(Dir).to receive(:glob).with("screenshot_lets-do-this*.html")
+            subject
+          end
+        end
+      end
+
+      context "with matching files in directory" do
+        let(:files){ ["screenshot_lets-do-this-12345.png", "screenshot_lets-do-this-56789.png"] }
+
+        it { is_expected.to eq "screenshot_lets-do-this-56789.png" }
+
+        it "should call Dir correctly" do
+          expect(Dir).to receive(:glob).with("screenshot_lets-do-this*.png")
+          subject
+        end
+      end
+    end
+
+    describe "screenshot_filename_prefix" do
+      subject{ scenario.screenshot_filename_prefix }
+      before { allow(scenario).to receive(:name).and_return name }
+      let(:name){ "Some feature test we do" }
+
+      it { is_expected.to eq "screenshot_some-feature-test-we-do" }
     end
 
     describe "failure_type" do

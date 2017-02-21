@@ -9,7 +9,7 @@ module Browbeat
     ORDERED_FAILURE_TYPES = %w[major_outage partial_outage degraded_performance warning]
     ENVIRONMENTS = %w[production staging]
 
-    def initialize(cucumber_scenario, step_events)
+    def initialize(cucumber_scenario, step_events: [])
       @cucumber_scenario = cucumber_scenario
       @step_events = step_events || raise(ArgumentError, "step_events may not be nil")
     end
@@ -29,6 +29,14 @@ module Browbeat
       else
         raise("File path could not be found from regex")
       end
+    end
+
+    def screenshot_filename(extension:)
+      Dir.glob("#{screenshot_filename_prefix}*.#{extension}").last
+    end
+
+    def screenshot_filename_prefix
+      "screenshot_#{name.downcase.gsub(' ', '-')}"
     end
 
     # if scenario failing, returns failure type as indicated by tags

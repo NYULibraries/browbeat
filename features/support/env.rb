@@ -7,7 +7,14 @@ require 'rspec'
 require 'pry'
 require 'yaml'
 require 'browbeat'
-require 'capybara-screenshot/cucumber' if ENV['SCREENSHOT_FAILURES']
+
+if ENV['SCREENSHOT_FAILURES']
+  require 'capybara-screenshot/cucumber'
+
+  Capybara::Screenshot.register_filename_prefix_formatter(:cucumber) do |cucumber_scenario|
+    Browbeat::Scenario.new(cucumber_scenario).screenshot_filename_prefix
+  end
+end
 
 # add project directory to load path
 project_dir = File.expand_path(File.join(File.dirname(__FILE__), '../..'))

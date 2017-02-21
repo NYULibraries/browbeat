@@ -374,10 +374,8 @@ describe Browbeat::StatusMailer do
         let(:staging_page_id){ "wxyz" }
 
         around do |example|
-          with_modified_env STATUS_PAGE_PAGE_ID: production_page_id do
-            with_modified_env STATUS_PAGE_STAGING_PAGE_ID: staging_page_id do
-              example.run
-            end
+          with_modified_env STATUS_PAGE_PAGE_ID: production_page_id, STATUS_PAGE_STAGING_PAGE_ID: staging_page_id do
+            example.run
           end
         end
 
