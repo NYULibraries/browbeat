@@ -21,6 +21,15 @@ GIT
     status_page-api (0.0.1)
       rest-client (>= 1.0)
 
+GIT
+  remote: https://github.com/ericgriffis/capybara-screenshot
+  revision: 1238d6efc6e214296b36386b155dabef0d0450a0
+  branch: feature/add_s3_key_name_prefixes
+  specs:
+    capybara-screenshot (1.0.14)
+      capybara (>= 1.0, < 3)
+      launchy
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -31,6 +40,14 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.5.0)
       public_suffix (~> 2.0, >= 2.0.2)
+    aws-sdk (2.7.12)
+      aws-sdk-resources (= 2.7.12)
+    aws-sdk-core (2.7.12)
+      aws-sigv4 (~> 1.0)
+      jmespath (~> 1.0)
+    aws-sdk-resources (2.7.12)
+      aws-sdk-core (= 2.7.12)
+    aws-sigv4 (1.0.0)
     builder (3.2.3)
     capybara (2.12.1)
       addressable
@@ -39,9 +56,6 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
-    capybara-screenshot (1.0.14)
-      capybara (>= 1.0, < 3)
-      launchy
     childprocess (0.6.1)
       ffi (~> 1.0, >= 1.0.11)
     climate_control (0.1.0)
@@ -82,6 +96,7 @@ GEM
     http-cookie (1.0.3)
       domain_name (~> 0.5)
     i18n (0.8.0)
+    jmespath (1.3.1)
     json (2.0.3)
     launchy (2.4.3)
       addressable (~> 2.3)
@@ -163,8 +178,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  aws-sdk
+  aws-sdk-resources
   capybara (~> 2.12)
-  capybara-screenshot (~> 1.0.4)
+  capybara-screenshot!
   climate_control (~> 0.1)
   coveralls (~> 0.8.17)
   cucumber (~> 2.4.0)

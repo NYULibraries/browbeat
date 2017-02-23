@@ -18,6 +18,7 @@ if !poltergeist_driver?
   end
 end
 
+# using sauce driver, skip tests that output sensitive login info
 if ENV['DRIVER'] == 'sauce'
   Before do |scenario|
     if scenario.source_tag_names.include?("@no_sauce")
@@ -26,13 +27,25 @@ if ENV['DRIVER'] == 'sauce'
   end
 end
 
+# allow separate max wait time for scenarios requiring login
+if ENV['LOGIN_MAX_WAIT']
+  Around('@login_required') do |scenario, block|
+    Capybara.using_wait_time(ENV['LOGIN_MAX_WAIT'].to_i) do
+      block.call
+    end
+  end
+end
+
+# configure failure tracker emails and status page sync unless specified
 unless %w[false off].include?(ENV["FAILURE_TRACKER"])
   tracker ||= Browbeat::FailureTracker.new
 
+  # register each scenario
   After do |scenario|
     tracker.register_scenario scenario
   end
 
+  # register each step event
   AfterConfiguration do |config|
     config.on_event :after_test_step do |event|
       tracker.register_after_test_step event
@@ -49,10 +62,24 @@ unless %w[false off].include?(ENV["FAILURE_TRACKER"])
   end
 end
 
-if ENV['LOGIN_MAX_WAIT']
-  Around('@login_required') do |scenario, block|
-    Capybara.using_wait_time(ENV['LOGIN_MAX_WAIT'].to_i) do
-      block.call
-    end
+# automatically screenshots failures if specified
+if ENV['SCREENSHOT_FAILURES']
+  require 'capybara-screenshot/cucumber'
+
+  # customize filenames to include dasherized scenario name, e.g.:
+  #  screenshot_exporting-citations-on-production_****.png
+  Capybara::Screenshot.register_filename_prefix_formatter(:cucumber) do |cucumber_scenario|
+    Browbeat::Scenario.new(cucumber_scenario).screenshot_filename_prefix
   end
+
+  # upload screenshots to S3
+  Capybara::Screenshot.s3_configuration = {
+    s3_client_credentials: {
+      access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+      secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
+      region: "us-east-1",
+    },
+    bucket_name: "nyulibraries-lits-web-services",
+    key_prefix: "screenshots/#{Time.now.year}/#{Time.now.month}/#{Time.now.day}/"
+  }
 end
