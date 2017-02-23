@@ -4,9 +4,8 @@ end
 
 When(/^I select "(.+)" from the "(.+)" psuedo-dropdown in the first result$/) do |option_text, select_text|
   within(first_result) do
-    expect(page).to have_text select_text
+    expect(page).to have_text "Add to e-Shelf"
     click_on select_text
-    expect(page).to have_text option_text
     capture_new_window do
       click_on option_text
     end
