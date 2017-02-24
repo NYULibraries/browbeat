@@ -66,6 +66,9 @@ end
 if ENV['SCREENSHOT_FAILURES']
   require 'capybara-screenshot/cucumber'
 
+  # remove previous screenshots if any
+  FileUtils.rm Dir.glob("screenshot_*")
+
   # customize filenames to include dasherized scenario name, e.g.:
   #  screenshot_exporting-citations-on-production_****.png
   Capybara::Screenshot.register_filename_prefix_formatter(:cucumber) do |cucumber_scenario|
