@@ -82,7 +82,7 @@ if ENV['SCREENSHOT_FAILURES']
       secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
       region: "us-east-1",
     },
-    bucket_name: "nyulibraries-lits-web-services",
-    key_prefix: "screenshots/#{Time.now.year}/#{Time.now.month}/#{Time.now.day}/"
+    bucket_name: ENV['AWS_S3_BUCKET_NAME'],
+    key_prefix: Browbeat::AWS::S3::ScreenshotManager.key_prefix
   }
 end
