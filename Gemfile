@@ -23,4 +23,5 @@ group :test do
   gem 'climate_control', '~> 0.1'
 
   gem 'coveralls', '~> 0.8.17', require: false
+  gem 'guard-rspec', require: false
 end
