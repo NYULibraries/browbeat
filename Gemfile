@@ -17,7 +17,7 @@ group :test do
   gem 'rake', '~> 12.0'
   gem 'json', '>= 2'
 
-  gem 'status_page-api', git: "https://github.com/NYULibraries/status_page-api"
+  gem 'status_page-api'
   gem 'mailx_ruby', git: "https://github.com/NYULibraries/mailx_ruby"
   gem 'haml'
   gem 'climate_control', '~> 0.1'
