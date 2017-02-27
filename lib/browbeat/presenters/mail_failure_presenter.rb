@@ -3,6 +3,7 @@ module Browbeat
     class MailFailurePresenter
       include Helpers::ScrubFigsHelper
       include Helpers::StatusPagePresenterHelper
+
       attr_accessor :scenario_collection, :application_list, :environments
 
       TEMPLATE = "lib/browbeat/templates/mail_failure.html.haml"
@@ -57,9 +58,18 @@ module Browbeat
         "https://github.com/NYULibraries/browbeat/blob/master/#{line_match_data(line).captures.join('#L')}"
       end
 
+      def screenshots?
+        ENV['SCREENSHOT_FAILURES']
+      end
+
+      def s3_screenshot_link(scenario, extension:)
+        return unless local_path(scenario, extension)
+        "#{s3_base_public_url}#{local_path(scenario, extension)}"
+      end
+
       def github_screenshot_link(scenario, extension:)
-        return unless build_tag && local_path = scenario.screenshot_filename(extension: extension)
-        "https://github.com/NYULibraries/browbeat-screenshots/blob/#{build_tag}/#{local_path}"
+        return unless build_tag && local_path(scenario, extension)
+        "#{github_base_url}#{build_tag}/#{local_path(scenario, extension)}"
       end
 
       def build_tag
@@ -67,6 +77,18 @@ module Browbeat
       end
 
       private
+
+      def s3_base_public_url
+        AWS::S3::ScreenshotManager.base_public_url
+      end
+
+      def github_base_url
+        "https://github.com/NYULibraries/browbeat-screenshots/blob/"
+      end
+
+      def local_path(scenario, extension)
+        scenario.screenshot_filename(extension: extension)
+      end
 
       def app_symbol_grouped_scenarios
         @app_symbol_grouped_scenarios ||= scenario_collection.group_by(&:app_symbol)

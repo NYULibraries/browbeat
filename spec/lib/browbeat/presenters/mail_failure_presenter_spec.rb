@@ -229,6 +229,50 @@ describe Browbeat::Presenters::MailFailurePresenter do
       end
     end
 
+    describe "screenshots?" do
+      subject{ presenter.screenshots? }
+      around do |example|
+        with_modified_env SCREENSHOT_FAILURES: screenshot_failures do
+          example.run
+        end
+      end
+
+      context "with SCREENSHOT_FAILURES specified" do
+        let(:screenshot_failures){ "1" }
+
+        it { is_expected.to be_truthy }
+      end
+
+      context "with SCREENSHOT_FAILURES specified" do
+        let(:screenshot_failures){ "1" }
+
+        it { is_expected.to be_truthy }
+      end
+    end
+
+    describe "s3_screenshot_link" do
+      subject{ presenter.s3_screenshot_link(scenario, extension: extension) }
+      let(:scenario){ instance_double Browbeat::Scenario }
+      let(:extension){ 'png' }
+      let(:s3_base_public_url){ "https://example.com/screenshots/123/" }
+      before do
+        allow(Browbeat::AWS::S3::ScreenshotManager).to receive(:base_public_url).and_return s3_base_public_url
+        allow(scenario).to receive(:screenshot_filename).and_return local_path
+      end
+
+      context "with valid local path" do
+        let(:local_path){ "something_neat.png" }
+
+        it { is_expected.to eq "https://example.com/screenshots/123/something_neat.png" }
+      end
+
+      context "with no valid local path" do
+        let(:local_path){ nil }
+
+        it { is_expected.to eq nil }
+      end
+    end
+
     describe "github_screenshot_link" do
       subject{ presenter.github_screenshot_link(scenario, extension: extension) }
       let(:scenario){ instance_double Browbeat::Scenario }

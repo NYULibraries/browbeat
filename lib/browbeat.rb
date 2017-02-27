@@ -17,6 +17,7 @@ require 'browbeat/application'
 require 'browbeat/application_collection'
 require 'browbeat/status_sync'
 require 'browbeat/status_mailer'
+require 'browbeat/aws/s3/screenshot_manager'
 require 'browbeat/presenters/mail_failure_presenter'
 require 'browbeat/presenters/mail_success_presenter'
 
