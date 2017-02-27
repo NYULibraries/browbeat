@@ -18,7 +18,7 @@ group :test do
   gem 'json', '>= 2'
 
   gem 'status_page-api'
-  gem 'mailx_ruby', git: "https://github.com/NYULibraries/mailx_ruby"
+  gem 'mailx_ruby'
   gem 'haml'
   gem 'climate_control', '~> 0.1'
 
