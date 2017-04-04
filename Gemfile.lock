@@ -8,10 +8,9 @@ GIT
 
 GIT
   remote: https://github.com/ericgriffis/capybara-screenshot
-  revision: 6d949221bccf830a11eb2ea680bd930ce3d380ea
-  branch: feature/add_s3_key_name_prefixes
+  revision: 34ffff60bb7f3116282fcfabf56ae3c8c94734ae
   specs:
-    capybara-screenshot (1.0.15)
+    capybara-screenshot (1.0.14)
       capybara (>= 1.0, < 3)
       launchy
 
