@@ -8,10 +8,10 @@ Feature: EZProxy is running
   Scenario: Follow EZProxy link on production
     Given I visit EZProxy JSTOR link
     And I login as an NYU user if prompted
-    Then my browser should respond with a success for JSTOR
+    Then I should see a JSTOR page
 
   @staging @major_outage @login_required
   Scenario: Follow EZProxy link on staging
     Given I visit EZProxy staging JSTOR link
     And I login as an NYU staging user if prompted
-    Then my browser should respond with a success for JSTOR
+    Then I should see a JSTOR page

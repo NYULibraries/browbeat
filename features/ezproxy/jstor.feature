@@ -10,7 +10,7 @@ Feature: Arch is running
     When I click on "Login"
     And I login as an NYU user
     And I click on "JSTOR"
-    Then my browser should respond with a success for JSTOR
+    Then I should see a JSTOR page
 
   @staging @major_outage @login_required
   Scenario: Visiting JSTOR from Arch on staging
@@ -18,7 +18,7 @@ Feature: Arch is running
     When I click on "Login"
     And I login as an NYU staging user
     And I click on "JSTOR"
-    Then my browser should respond with a success for JSTOR
+    Then I should see a JSTOR page
 
   @staging @major_outage @login_required
   Scenario: Visiting JSTOR from Arch on staging QA
@@ -26,4 +26,4 @@ Feature: Arch is running
     When I click on "Login"
     And I login as an NYU staging user
     And I click on "JSTOR"
-    Then my browser should respond with a success for JSTOR
+    Then I should see a JSTOR page
