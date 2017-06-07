@@ -19,11 +19,3 @@ Feature: Privileges is running
       Then I should see a guide for "Friends of Bobst Library"
     When I select "NYU Bobst" from the privileges dropdown
       Then I should expect to see a privileges table
-
-  @staging @major_outage
-  Scenario: Searching for Friends privileges on staging QA
-    Given I visit Privileges QA
-    When I search privileges for "Friends"
-      Then I should see a guide for "Friends of Bobst Library"
-    When I select "NYU Bobst" from the privileges dropdown
-      Then I should expect to see a privileges table

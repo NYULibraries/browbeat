@@ -15,9 +15,3 @@ Feature: Privileges is running
     Given I visit Privileges staging
     Then my browser should respond with a success for Privileges
     And my browser should resolve to Privileges staging
-
-  @staging @major_outage
-  Scenario: Visiting Privileges on staging QA
-    Given I visit Privileges QA
-    Then my browser should respond with a success for Privileges
-    And my browser should resolve to Privileges QA
