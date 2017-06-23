@@ -17,7 +17,7 @@ module Browbeat
     end
 
     def first_result
-      first('.results .result')
+      find('.results .result', match: :first)
     end
 
     def page_institution_text
