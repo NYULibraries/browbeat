@@ -3,6 +3,7 @@ When(/^I select the first multi-version record$/) do
 end
 
 When(/^I select "(.+)" from the "(.+)" psuedo-dropdown in the first result$/) do |option_text, select_text|
+  expect(first_result).to be_visible
   within(first_result) do
     expect(page).to have_text "Add to e-Shelf"
     click_on select_text
