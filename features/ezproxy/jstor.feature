@@ -14,16 +14,14 @@ Feature: Arch is running
 
   @staging @major_outage @login_required
   Scenario: Visiting JSTOR from Arch on staging
-    Given I visit Arch staging
-    When I click on "Login"
-    And I login as an NYU staging user
-    And I click on "JSTOR"
+    Given I login as an NYU user
+    And I visit Arch staging
+    When I click on "JSTOR"
     Then I should see a JSTOR page
 
   @staging @major_outage @login_required
   Scenario: Visiting JSTOR from Arch on staging QA
-    Given I visit Arch QA
-    When I click on "Login"
-    And I login as an NYU staging user
-    And I click on "JSTOR"
+    Given I login as an NYU user
+    And I visit Arch QA
+    When I click on "JSTOR"
     Then I should see a JSTOR page
