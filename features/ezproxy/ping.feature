@@ -15,7 +15,7 @@ Feature: EZProxy is running
   @staging @major_outage @login_required
   Scenario: Visiting EZProxy on staging
     Given I visit EZProxy staging
-      Then my browser should resolve to Login staging
-    When I login as an NYU staging user
+      Then my browser should resolve to Login
+    When I login as an NYU user
       Then I should see a link with href containing "www.jstor.org"
       And my browser should resolve to EZProxy staging
