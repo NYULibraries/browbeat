@@ -11,7 +11,7 @@ Feature: Aleph is running
     And I select the first "Book" record
     Then I should see results under "Copies in Library" section in a new window
 
-  @staging @partial_outage
+  @staging @partial_outage @wip
   Scenario: Searching on staging
     Given I visit BobCat staging
     When I search for "The green grass tango"
