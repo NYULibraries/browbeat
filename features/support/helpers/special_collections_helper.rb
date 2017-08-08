@@ -1,7 +1,7 @@
 module Browbeat
   module SpecialCollectionsHelper
     def special_collections_default_path
-      "/search/"
+      "/search"
     end
 
     def passive_login_url_regex

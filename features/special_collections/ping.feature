@@ -13,12 +13,12 @@ Feature: Special Collections is running
   @production @degraded_performance
   Scenario: Visiting Special Collections LB server 1 on production
     Given I visit Special Collections LB server 1
-    Then my browser should redirect to Login authorization page
+    Then my browser should resolve to Special Collections LB server 1
 
   @production @degraded_performance
   Scenario: Visiting Special Collections LB server 2 on production
     Given I visit Special Collections LB server 2
-    Then my browser should redirect to Login authorization page
+    Then my browser should resolve to Special Collections LB server 2
 
   @staging @major_outage @wip
   Scenario: Visiting Special Collections on staging
