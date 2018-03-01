@@ -1,15 +1,19 @@
 version: '2'
 services:
-  web:
+  app:
     build: .
     command: "script/start"
     tty: true
-    volumes:
-      - .:/login
-    volumes_from:
-      - gembox
-
-  gembox:
-    image: busybox
-    volumes:
-      - /gembox
+    depends_on:
+      - phantomjs
+    environment:
+      # - PHANTOMJS_HOST=http://phantomjs
+      # - PHANTOMJS_PORT=8910
+      - FAILURE_TRACKER=false
+    command: rake browbeat:check:production PHANTOMJS_HOST=http://phantomjs PHANTOMJS_PORT=8910
+  #
+  # phantomjs:
+  #   image: wernight/phantomjs:2.1.1
+  #   expose:
+  #     - "8910"
+  #   command: phantomjs --webdriver 8910
