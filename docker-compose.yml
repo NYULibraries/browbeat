@@ -2,15 +2,13 @@ version: '2'
 services:
   app:
     build: .
-    command: "script/start"
     tty: true
-    depends_on:
-      - phantomjs
+    # depends_on:
+    #   - phantomjs
     environment:
       # - PHANTOMJS_HOST=http://phantomjs
       # - PHANTOMJS_PORT=8910
-      - FAILURE_TRACKER=false
-    command: rake browbeat:check:production PHANTOMJS_HOST=http://phantomjs PHANTOMJS_PORT=8910
+    command: rake browbeat:check:production
   #
   # phantomjs:
   #   image: wernight/phantomjs:2.1.1
