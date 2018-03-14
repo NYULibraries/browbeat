@@ -28,10 +28,6 @@ ENV USERNAME wsops
 RUN adduser $USERNAME --home /$USERNAME --shell /bin/bash --disabled-password --gecos ""
 RUN chown -R $USERNAME:$USERNAME $APP_HOME
 
-# # set bundle path to volume on separate container (configured in docker-compose)
-# ENV BUNDLE_PATH /gembox
-# ENV BUNDLE_APP_CONFIG /gembox/config
-
 # copy over private key, and set permissions
 RUN mkdir /$USERNAME/.ssh/
 ADD id_rsa /$USERNAME/.ssh/id_rsa
