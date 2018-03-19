@@ -10,7 +10,7 @@ Feature: EZProxy is running
       Then my browser should resolve to Login
     When I login as an NYU user
       Then I should see a link with href containing "www.jstor.org"
-      And my browser should resolve to EZProxy
+      And my browser should resolve to authenticated EZProxy
 
   @staging @warning @login_required
   Scenario: Visiting EZProxy on staging
@@ -18,4 +18,4 @@ Feature: EZProxy is running
       Then my browser should resolve to Login
     When I login as an NYU user
       Then I should see a link with href containing "www.jstor.org"
-      And my browser should resolve to EZProxy staging
+      And my browser should resolve to authenticated EZProxy staging
