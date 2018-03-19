@@ -4,7 +4,7 @@ Feature: Arch is running
   I want to be able to find  databases in curated categories
   So that I can conduct my research efficiently.
 
-  @production @major_outage @no_sauce @login_required
+  @production @warning @no_sauce @login_required
   Scenario: Visiting JSTOR from Arch on production
     Given I visit Arch
     When I click on "Login"
@@ -12,14 +12,14 @@ Feature: Arch is running
     And I click on "JSTOR"
     Then I should see a JSTOR page
 
-  @staging @major_outage @login_required
+  @staging @warning @login_required
   Scenario: Visiting JSTOR from Arch on staging
     Given I login as an NYU user
     And I visit Arch staging
     When I click on "JSTOR"
     Then I should see a JSTOR page
 
-  @staging @major_outage @login_required
+  @staging @warning @login_required
   Scenario: Visiting JSTOR from Arch on staging QA
     Given I login as an NYU user
     And I visit Arch QA
