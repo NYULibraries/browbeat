@@ -5,4 +5,5 @@ locations:
 - browbeat.yml
 - privileges.yml
 - findingaids.yml
+- rooms.yml
 method: git
