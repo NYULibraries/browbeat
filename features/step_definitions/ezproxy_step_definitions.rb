@@ -1,4 +1,4 @@
-Then(/^my browser should resolve to (EZProxy.*)$/) do |ezproxy_url_name|
+Then(/^my browser should resolve to (authenticated EZProxy.*)$/) do |ezproxy_url_name|
   expect(page.current_url).to eq combine_url(url_to(ezproxy_url_name), ezproxy_default_path)
 end
 
