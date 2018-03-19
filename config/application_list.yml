@@ -30,7 +30,7 @@ illiad:
   name: Interlibrary Loan (ILL)
   status_page_production_id: r7sjhcjpwc3h
   status_page_staging_id: rp5p3l5d977h
-room:
+rooms:
   name: Room Reservation System
   status_page_production_id: 04tq5pv1m4tw
   status_page_staging_id: hk1mzhg83h87
