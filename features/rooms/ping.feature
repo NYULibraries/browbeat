@@ -9,7 +9,7 @@ Feature: Rooms is running
       Then my browser should respond with a success for Rooms
       And my browser should resolve to Rooms
 
-  @production @major_outage
+  @staging @major_outage
   Scenario: Visiting Rooms on staging
     Given I visit Rooms staging
       Then my browser should resolve to Login staging
