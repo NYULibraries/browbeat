@@ -6,3 +6,5 @@ tmp
 coverage
 
 screenshot*
+
+config/urls.yml

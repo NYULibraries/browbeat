@@ -14,7 +14,7 @@ describe Browbeat::UrlHelper do
       end
 
       before do
-        allow(Figs::ENV).to receive(:[]).with('URLS').and_return urls
+        allow(File).to receive(:open).with("config/urls.yml").and_return urls.to_yaml 
       end
 
       it "should return the correct value for exact match" do

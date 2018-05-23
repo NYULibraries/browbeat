@@ -12,7 +12,11 @@ module Browbeat
 
     private
     def url_hash
-      Figs::ENV["URLS"] || {}
+      YAML.load(File.open(url_path){|f| f.read })
+    end
+
+    def url_path
+      "config/urls.yml"
     end
   end
 end
