@@ -6,24 +6,16 @@ Feature: Login is running
 
   @production @major_outage
   Scenario: Visiting Login on production
-    Given I visit Login
-    Then my browser should respond with a success for Login
-    And my browser should resolve to Login
+    Then cURL visiting Login should respond with success
 
   @production @degraded_performance
   Scenario: Visiting Login LB server 1 on production
-    Given I visit Login LB server 1
-    Then my browser should respond with a success for Login
-    And my browser should resolve to Login LB server 1
+    Then cURL visiting Login LB server 1 should redirect to Login LB server 1 secure
 
   @production @degraded_performance
   Scenario: Visiting Login LB server 2 on production
-    Given I visit Login LB server 2
-    Then my browser should respond with a success for Login
-    And my browser should resolve to Login LB server 2
+    Then cURL visiting Login LB server 2 should redirect to Login LB server 2 secure
 
   @staging @major_outage
   Scenario: Visiting Login on staging
-    Given I visit Login staging
-    Then my browser should respond with a success for Login
-    And my browser should resolve to Login staging
+    Then cURL visiting Login staging should respond with success

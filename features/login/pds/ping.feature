@@ -6,30 +6,24 @@ Feature: PDS is running
 
   @production @partial_outage
   Scenario: Visiting PDS on production
-    Given I visit PDS
-    Then my browser should resolve to Login
+    Then cURL visiting PDS should redirect to Login
 
   @production @degraded_performance
   Scenario: Visiting PDS LB server 1 on production
-    Given I visit PDS LB server 1
-    Then my browser should resolve to Login
+    Then cURL visiting PDS LB server 1 should redirect to Login
 
   @production @degraded_performance
   Scenario: Visiting PDS LB server 2 on production
-    Given I visit PDS LB server 2
-    Then my browser should resolve to Login
+    Then cURL visiting PDS LB server 2 should redirect to Login
 
   @staging @partial_outage
   Scenario: Visiting PDS on staging
-    Given I visit PDS staging
-    Then my browser should resolve to Login staging
+    Then cURL visiting PDS staging should redirect to Login staging
 
   @staging @degraded_performance
   Scenario: Visiting PDS LB server 1 on staging
-    Given I visit PDS staging LB server 1
-    Then my browser should resolve to Login staging
+    Then cURL visiting PDS staging LB server 1 should redirect to Login staging
 
   @staging @degraded_performance
   Scenario: Visiting PDS LB server 2 on staging
-    Given I visit PDS staging LB server 2
-    Then my browser should resolve to Login staging
+    Then cURL visiting PDS staging LB server 2 should redirect to Login staging

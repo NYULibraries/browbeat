@@ -6,16 +6,8 @@ Feature: EZProxy is running
 
   @production @warning @no_sauce @login_required
   Scenario: Visiting EZProxy on production
-    Given I visit EZProxy
-      Then my browser should resolve to Login
-    When I login as an NYU user
-      Then I should see a link with href containing "www.jstor.org"
-      And my browser should resolve to authenticated EZProxy
+    Then cURL visiting EZProxy should redirect to "https://login.library.nyu.edu/login"
 
   @staging @warning @login_required
   Scenario: Visiting EZProxy on staging
-    Given I visit EZProxy staging
-      Then my browser should resolve to Login
-    When I login as an NYU user
-      Then I should see a link with href containing "www.jstor.org"
-      And my browser should resolve to authenticated EZProxy staging
+    Then cURL visiting EZProxy staging should redirect to "https://login.library.nyu.edu/login"

@@ -6,7 +6,4 @@ Feature: EZBorrow is running
 
   @warning @production @no_sauce @login_required
   Scenario: Visiting EZBorrow on production
-    Given I visit EZBorrow
-    And I login as an Aleph user
-    Then my browser should respond with a success for EZBorrow
-    And my browser should resolve to EZBorrow
+    Then cURL visiting EZBorrow should respond with success

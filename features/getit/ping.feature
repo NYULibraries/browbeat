@@ -6,32 +6,20 @@ Feature: GetIt is running
 
   @production @major_outage
   Scenario: Visiting GetIt on production
-    Given I visit GetIt
-    Then my browser should respond with a success for GetIt
-    And my browser should resolve to GetIt
+    Then cURL visiting GetIt should respond with success
 
   @production @degraded_performance
   Scenario: Visiting GetIt LB server 1 on production
-    Given I visit GetIt LB server 1
-    And I visit GetIt LB server 1
-    Then my browser should respond with a success for GetIt
-    And my browser should resolve to GetIt LB server 1
+    Then cURL visiting GetIt LB server 1 should redirect to GetIt LB server 1 secure
 
   @production @degraded_performance
   Scenario: Visiting GetIt LB server 2 on production
-    Given I visit GetIt LB server 2
-    And I visit GetIt LB server 2
-    Then my browser should respond with a success for GetIt
-    And my browser should resolve to GetIt LB server 2
+    Then cURL visiting GetIt LB server 2 should redirect to GetIt LB server 2 secure
 
   @staging @major_outage
   Scenario: Visiting GetIt on staging
-    Given I visit GetIt staging
-    Then my browser should respond with a success for GetIt
-    And my browser should resolve to GetIt staging
+    Then cURL visiting GetIt staging should respond with success
 
   @staging @major_outage
   Scenario: Visiting GetIt on staging QA
-    Given I visit GetIt QA
-    Then my browser should respond with a success for GetIt
-    And my browser should resolve to GetIt QA
+    Then cURL visiting GetIt QA should respond with success

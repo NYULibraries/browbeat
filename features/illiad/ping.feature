@@ -6,8 +6,8 @@ Feature: ILLiad is running
 
   @major_outage @production
   Scenario: Visiting ILLiad on production
-    Then cURL visiting ILLiad should redirect to PDS
+    Then cURL visiting ILLiad should redirect to Login
 
   @major_outage @staging
   Scenario: Visiting ILLiad on staging
-    Then cURL visiting ILLiad staging should redirect to PDS staging
+    Then cURL visiting ILLiad staging should redirect to Login staging
