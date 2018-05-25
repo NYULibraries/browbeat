@@ -6,50 +6,33 @@ Feature: Primo is running
 
   @production @major_outage
   Scenario: Visiting BobCat on production
-    Given I visit BobCat
-    Then my browser should respond with a success for Primo
-    And my browser should resolve to BobCat
+    Then cURL visiting BobCat should respond with success
 
   @production @degraded_performance
   Scenario: Visiting BobCat LB server 1 on production
-    Given I visit BobCat LB server 1
-    Then my browser should respond with a success for Primo
-    And my browser should resolve to BobCat
+    Then cURL insecurely visiting BobCat LB server 1 should respond with success
 
   @production @degraded_performance
   Scenario: Visiting BobCat LB server 2 on production
-    Given I visit BobCat LB server 2
-    Then my browser should respond with a success for Primo
-    And my browser should resolve to BobCat
+    Then cURL insecurely visiting BobCat LB server 2 should respond with success
 
   @production @warning
   Scenario: Visiting BobCat NYUSH on production
-    Given I visit BobCat NYUSH
-    Then my browser should respond with a success for Primo
-    And my browser should resolve to BobCat
-    And the institution should render as "NYUSH"
+    Then cURL visiting BobCat NYUSH should respond with success
 
   @production @warning
   Scenario: Visiting BobCat NYUAD on production
-    Given I visit BobCat NYUAD
-    Then my browser should respond with a success for Primo
-    And my browser should resolve to BobCat
-    And the institution should render as "NYUAD"
+    Then cURL visiting BobCat NYUAD should respond with success
 
   @staging @major_outage
   Scenario: Visiting BobCat on staging
-    Given I visit BobCat staging
-    Then my browser should respond with a success for Primo
-    And my browser should resolve to BobCat
+    Then cURL visiting BobCat staging should respond with success
 
   @staging @degraded_performance
   Scenario: Visiting BobCat LB server 1 on staging
-    Given I visit BobCat staging LB server 1
-    Then my browser should respond with a success for Primo
-    And my browser should resolve to BobCat
+    Then cURL insecurely visiting BobCat staging LB server 1 should respond with success
+
 
   @staging @degraded_performance
   Scenario: Visiting BobCat LB server 2 on staging
-    Given I visit BobCat staging LB server 2
-    Then my browser should respond with a success for Primo
-    And my browser should resolve to BobCat
+    Then cURL insecurely visiting BobCat staging LB server 2 should respond with success

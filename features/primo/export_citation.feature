@@ -1,4 +1,4 @@
-@ping @selenium
+@functionality @selenium
 Feature: Export citations is running
   As a researcher,
   I want to be able to export my citation from the catalog directly into a citation management tool

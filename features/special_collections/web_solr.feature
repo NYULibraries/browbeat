@@ -6,5 +6,4 @@ Feature: Special Collections is running
 
   @production @warning @no_sauce
   Scenario: WebSolr on production
-    Given I secretly visit Special Collections WebSolr
-    Then my browser should respond with a success for WebSolr
+    Then cURL secretly visiting Rooms ElasticSearch should respond with success

@@ -6,22 +6,16 @@ Feature: Special Collections is running
 
   @production @major_outage
   Scenario: Visiting Special Collections on production
-    Given I visit Special Collections
-    Then my browser should respond with a success for Special Collections
-    And my browser should resolve to Special Collections
+    Then cURL visiting Special Collections should respond with success
 
   @production @degraded_performance
   Scenario: Visiting Special Collections LB server 1 on production
-    Given I visit Special Collections LB server 1
-    Then my browser should resolve to Special Collections LB server 1
+    Then cURL insecurely visiting Special Collections LB server 1 should respond with success
 
   @production @degraded_performance
   Scenario: Visiting Special Collections LB server 2 on production
-    Given I visit Special Collections LB server 2
-    Then my browser should resolve to Special Collections LB server 2
+    Then cURL insecurely visiting Special Collections LB server 2 should respond with success
 
   @staging @major_outage @wip
   Scenario: Visiting Special Collections on staging
-    Given I visit Special Collections staging
-    Then my browser should respond with a success for Special Collections
-    And my browser should resolve to Special Collections staging
+    Then cURL visiting Special Collections staging should respond with success
