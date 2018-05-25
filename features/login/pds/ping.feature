@@ -6,24 +6,24 @@ Feature: PDS is running
 
   @production @partial_outage
   Scenario: Visiting PDS on production
-    Then cURL visiting PDS should redirect to Login
+    Then cURL visiting PDS should respond with success
 
   @production @degraded_performance
   Scenario: Visiting PDS LB server 1 on production
-    Then cURL visiting PDS LB server 1 should redirect to Login
+    Then cURL insecurely visiting PDS LB server 1 should respond with success
 
   @production @degraded_performance
   Scenario: Visiting PDS LB server 2 on production
-    Then cURL visiting PDS LB server 2 should redirect to Login
+    Then cURL insecurely visiting PDS LB server 2 should respond with success
 
   @staging @partial_outage
   Scenario: Visiting PDS on staging
-    Then cURL visiting PDS staging should redirect to Login staging
+    Then cURL visiting PDS staging should respond with success
 
   @staging @degraded_performance
   Scenario: Visiting PDS LB server 1 on staging
-    Then cURL visiting PDS staging LB server 1 should redirect to Login staging
+    Then cURL insecurely visiting PDS staging LB server 1 should respond with success
 
   @staging @degraded_performance
   Scenario: Visiting PDS LB server 2 on staging
-    Then cURL visiting PDS staging LB server 2 should redirect to Login staging
+    Then cURL insecurely visiting PDS staging LB server 2 should respond with success
