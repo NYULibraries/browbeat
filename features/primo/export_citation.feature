@@ -15,5 +15,6 @@ Feature: Export citations is running
   Scenario: Exporting citations on staging
     Given I visit BobCat staging
     When I search for "hamlet"
-    And I select the first multi-version record
-    And I select "EasyBIB" from the "Send/Share" psuedo-dropdown in the first result
+    And I select the first NUI multi-version record
+    And I select the first NUI record
+    And I click on "BIBTEX"

@@ -14,4 +14,4 @@ Feature: Primo is running
   Scenario: Searching on staging
     Given I visit BobCat staging
     When I search for "catcher in the rye"
-    Then I should see results matching "catcher in the rye"
+    Then I should see NUI results matching "catcher in the rye"
