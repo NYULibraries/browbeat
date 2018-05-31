@@ -32,16 +32,10 @@ if ENV['LOGIN_MAX_WAIT']
   end
 end
 
+# selenium only clears session of last visited domain; quit browser to clear all sessions
 if selenium_chrome_driver?
   After('@login_required') do |scenario|
-    puts "Quit selenium"
-    # Capybara.reset_sessions!
-    # page.driver.browser.close
     Capybara.current_session.driver.quit
-    # configure_selenium
-    # Capybara.default_driver = :selenium
-    # Capybara.javascript_driver = :selenium
-    # Capybara.current_driver = :selenium
   end
 end
 
