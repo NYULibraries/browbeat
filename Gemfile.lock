@@ -1,12 +1,4 @@
 GIT
-  remote: https://github.com/NYULibraries/figs
-  revision: c9803dbeaafd8c4085a18d6a559c1172ff210479
-  specs:
-    figs (2.1.0)
-      git (~> 1.2.6)
-      rake (>= 10.1)
-
-GIT
   remote: https://github.com/ericgriffis/capybara-screenshot
   revision: 34ffff60bb7f3116282fcfabf56ae3c8c94734ae
   specs:
@@ -74,12 +66,12 @@ GEM
     docile (1.1.5)
     domain_name (0.5.20170223)
       unf (>= 0.0.5, < 1.0.0)
+    dotenv (2.4.0)
     factory_girl (4.8.0)
       activesupport (>= 3.0.0)
     ffi (1.9.18)
     formatador (0.2.5)
     gherkin (4.1.1)
-    git (1.2.9.1)
     guard (2.14.1)
       formatador (>= 0.2.4)
       listen (>= 2.7, < 4.0)
@@ -210,8 +202,8 @@ DEPENDENCIES
   climate_control (~> 0.1)
   coveralls (~> 0.8.17)
   cucumber (~> 2.4.0)
+  dotenv
   factory_girl (~> 4.8)
-  figs (~> 2.1.0)!
   guard-rspec
   haml
   json (>= 2)

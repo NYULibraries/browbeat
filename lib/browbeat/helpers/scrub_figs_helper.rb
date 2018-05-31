@@ -1,22 +1,13 @@
 module Browbeat
   module Helpers
     module ScrubFigsHelper
+      KEYS_TO_SCRUB = %w[SHIBBOLETH_USERNAME SHIBBOLETH_PASSWORD SHIBBOLETH_STAGING_USERNAME SHIBBOLETH_STAGING_PASSWORD ALEPH_USERNAME ALEPH_PASSWORD SAUCE_USERNAME SAUCE_ACCESS_KEY STATUS_PAGE_API_KEY STATUS_PAGE_PAGE_ID STATUS_PAGE_STAGING_PAGE_ID SELENIUM_DOWNLOAD_DIRECTORY AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_S3_BUCKET_NAME]
+
       def scrub_figs(text)
-        configula_data.inject(text) do |result, datum|
-          result.gsub(datum, 'X' * 5)
+        KEYS_TO_SCRUB.each do |key|
+          text = text.gsub(ENV[key], 'X' * 5) if ENV[key]
         end
-      end
-
-      private
-
-      def configula_data
-        ((Figs::ENV["URLS"]&.values || []) + [
-          Figs::ENV.websolr&.fetch('SOLR_URL'),
-          Figs::ENV.production&.fetch('SOLR_URL'),
-          Figs::ENV.nyu&.fetch('marli')&.fetch('password'),
-          Figs::ENV.nyu&.fetch('staff')&.fetch('password'),
-          Figs::ENV.nyu&.fetch('production_masters_student')&.fetch('password')
-        ]).compact
+        text
       end
     end
   end

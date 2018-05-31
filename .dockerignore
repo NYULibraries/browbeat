@@ -3,5 +3,6 @@ log/
 tmp/
 coverage/
 *.sql
+.env
 
 config/urls.yml

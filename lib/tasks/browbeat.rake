@@ -1,4 +1,4 @@
-require 'figs'; Figs.load()
+require 'dotenv/load'
 require 'rubygems'
 require 'cucumber'
 require 'cucumber/rake/task'
