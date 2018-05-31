@@ -1,7 +1,3 @@
-def poltergeist_driver?
-  ENV['DRIVER'].nil?
-end
-
 # disable capybara overriding @selenium-tagged tests (required to run in sauce)
 # with capybara; our default driver is selenium
 # modified from https://github.com/saucelabs/sauce_ruby/issues/261
@@ -19,7 +15,7 @@ if !poltergeist_driver?
 end
 
 # using sauce driver, skip tests that output sensitive login info
-if ENV['DRIVER'] == 'sauce'
+if sauce_driver?
   Before do |scenario|
     if scenario.source_tag_names.include?("@no_sauce")
       scenario.skip_invoke!
@@ -33,6 +29,19 @@ if ENV['LOGIN_MAX_WAIT']
     Capybara.using_wait_time(ENV['LOGIN_MAX_WAIT'].to_i) do
       block.call
     end
+  end
+end
+
+if selenium_chrome_driver?
+  After('@login_required') do |scenario|
+    puts "Quit selenium"
+    # Capybara.reset_sessions!
+    # page.driver.browser.close
+    Capybara.current_session.driver.quit
+    # configure_selenium
+    # Capybara.default_driver = :selenium
+    # Capybara.javascript_driver = :selenium
+    # Capybara.current_driver = :selenium
   end
 end
 

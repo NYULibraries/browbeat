@@ -52,19 +52,6 @@ end
 
 SELENIUM_DOWNLOAD_FILETYPES = 'application/x-url' unless defined?(SELENIUM_DOWNLOAD_FILETYPES)
 
-# configure selenium to download to local directory
-# def configure_selenium
-#   Capybara.register_driver :selenium do |app|
-#     capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-#       chromeOptions: {
-#         args: %w[ no-sandbox headless disable-gpu window-size=1280,1024]
-#       }
-#     )
-#
-#     Capybara::Selenium::Driver.new(app, browser: :chrome, desired_capabilities: capabilities)
-#   end
-# end
-
 def configure_selenium
   Capybara.register_driver :selenium do |app|
     options = Selenium::WebDriver::Chrome::Options.new
@@ -99,36 +86,21 @@ def configure_selenium
   end
 end
 
-# def configure_selenium(browser)
-#   Capybara.register_driver :selenium do |app|
-#     profile = Kernel.const_get("Selenium::WebDriver::#{browser.to_s.capitalize}::Profile").new
-#     profile["browser.download.dir"] = File.join(FileUtils.pwd, ENV['SELENIUM_DOWNLOAD_DIRECTORY'])
-#     profile["browser.download.folderList"] = 2
-#     profile["browser.helperApps.neverAsk.saveToDisk"] = SELENIUM_DOWNLOAD_FILETYPES
-#     Capybara::Selenium::Driver.new(
-#       app,
-#       browser: browser.to_sym,
-#       profile: profile,
-#     )
-#   end
-# end
-
 # if driver set to sauce, set and configure
-case ENV['DRIVER']
-when 'sauce'
+if sauce_driver?
   configure_sauce
   Capybara.default_driver = :sauce
   Capybara.javascript_driver = :selenium
   Capybara.default_max_wait_time = (ENV['MAX_WAIT'] || 15).to_i
 # if driver not set, default to poltergeist
-when nil
+elsif poltergeist_driver?
   configure_poltergeist
   Capybara.default_driver = :poltergeist
   Capybara.javascript_driver = :poltergeist
   Capybara.current_driver = :poltergeist
   Capybara.default_max_wait_time = (ENV['MAX_WAIT'] || 6).to_i
 # otherwise, run driver as a browser via selenium
-when 'chrome'
+elsif selenium_chrome_driver?
   configure_selenium
   Capybara.default_driver = :selenium
   Capybara.javascript_driver = :selenium

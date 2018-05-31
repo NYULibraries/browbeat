@@ -5,7 +5,7 @@ end
 Given(/^I login as an NYU user$/) do
   steps %Q{
     Given I visit Login
-    When I click on "NYU"
+    When I click on NYU Shibboleth link
     And I enter NYU credentials
     And I click "Continue" if prompted
   }
@@ -14,7 +14,7 @@ end
 Given(/^I login as an NYU user if prompted$/) do
   if page.has_text? "Select your affiliation to login"
     steps %Q{
-      When I click on "NYU"
+      When I click on NYU Shibboleth link
       And I enter NYU credentials
       And I click "Continue" if prompted
     }
