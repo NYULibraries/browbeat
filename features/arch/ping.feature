@@ -6,4 +6,4 @@ Feature: Arch is running
 
   @production @major_outage
   Scenario: Visiting LibGuides
-    Then cURL visiting Arch should respond with success
+    Then cURL insecurely visiting Arch should respond with success

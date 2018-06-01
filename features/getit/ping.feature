@@ -10,11 +10,11 @@ Feature: GetIt is running
 
   @production @degraded_performance
   Scenario: Visiting GetIt LB server 1 on production
-    Then cURL visiting GetIt LB server 1 should redirect to GetIt LB server 1 secure
+    Then cURL insecurely visiting GetIt LB server 1 should respond with success
 
   @production @degraded_performance
   Scenario: Visiting GetIt LB server 2 on production
-    Then cURL visiting GetIt LB server 2 should redirect to GetIt LB server 2 secure
+    Then cURL insecurely visiting GetIt LB server 2 should respond with success
 
   @staging @major_outage
   Scenario: Visiting GetIt on staging

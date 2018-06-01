@@ -6,10 +6,8 @@ Feature: Export citations is running
 
   @production @partial_outage
   Scenario: Exporting citations on production
-    Given I visit BobCat export citation link
-    Then I should download an ".openurl" file
+    Then cURL visiting BobCat export citation link should indicate a file download named "export.openurl"
 
   @staging @partial_outage
   Scenario: Exporting citations on staging
-    Given I visit BobCat staging export citation link
-    Then I should download an ".openurl" file
+    Then cURL visiting BobCat staging export citation link should indicate a file download named "export.openurl"

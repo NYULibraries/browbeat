@@ -24,3 +24,7 @@ Then(/^cURL visiting (.+) should redirect to "(.+)"$/) do |url_name, dest_url|
   redirect_locations = redirect_locations(url_to(url_name))
   expect(redirect_locations).to include dest_url
 end
+
+Then(/^cURL visiting (.+) should indicate a file download named "(.+)"$/) do |url_name, filename|
+  expect(file_downloaded(url_to(url_name))).to eq filename
+end

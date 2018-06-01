@@ -67,20 +67,20 @@ def configure_selenium
       prompt_for_download: false,
       default_directory: ENV['SELENIUM_DOWNLOAD_DIRECTORY'])
 
-    options.add_preference(:browser, set_download_behavior: { behavior: 'allow' })
+    # options.add_preference(:browser, set_download_behavior: { behavior: 'allow' })
 
     driver = Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 
-    bridge = driver.browser.send(:bridge)
-
-    path = '/session/:session_id/chromium/send_command'
-    path[':session_id'] = bridge.session_id
-
-    bridge.http.call(:post, path, cmd: 'Page.setDownloadBehavior',
-                                  params: {
-                                    behavior: 'allow',
-                                    downloadPath: ENV['SELENIUM_DOWNLOAD_DIRECTORY']
-                              })
+    # bridge = driver.browser.send(:bridge)
+    #
+    # path = '/session/:session_id/chromium/send_command'
+    # path[':session_id'] = bridge.session_id
+    #
+    # bridge.http.call(:post, path, cmd: 'Page.setDownloadBehavior',
+    #                               params: {
+    #                                 behavior: 'allow',
+    #                                 downloadPath: ENV['SELENIUM_DOWNLOAD_DIRECTORY']
+    #                           })
 
     driver
   end

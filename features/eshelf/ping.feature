@@ -10,11 +10,11 @@ Feature: e-Shelf is running
 
   @production @degraded_performance
   Scenario: Visiting e-Shelf LB server 1 on production
-    Then cURL visiting e-Shelf LB server 1 should redirect to e-Shelf LB server 1 secure
+    Then cURL insecurely visiting e-Shelf LB server 1 should respond with success
 
   @production @degraded_performance
   Scenario: Visiting e-Shelf LB server 2 on production
-    Then cURL visiting e-Shelf LB server 2 should redirect to e-Shelf LB server 2 secure
+    Then cURL insecurely visiting e-Shelf LB server 2 should respond with success
 
   @staging @major_outage
   Scenario: Visiting e-Shelf on staging
