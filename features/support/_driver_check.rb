@@ -1,5 +1,5 @@
 def poltergeist_driver?
-  ENV['DRIVER'].nil?
+  ENV['DRIVER'] == 'poltergeist' || ENV['DRIVER'] == 'phantomjs'
 end
 
 def sauce_driver?
@@ -7,5 +7,5 @@ def sauce_driver?
 end
 
 def selenium_chrome_driver?
-  ENV['DRIVER'] == 'chrome'
+  ENV['DRIVER'].nil? || ENV['DRIVER'] == 'chrome'
 end
