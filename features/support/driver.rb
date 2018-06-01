@@ -45,7 +45,7 @@ def configure_poltergeist
       timeout: (ENV['TIMEOUT'] || 30).to_i,
       js_errors: false,
       phantomjs_logger: StringIO.new,
-      url_blacklist: Figs::ENV['BLACKLIST_URLS']
+      url_blacklist: ENV['BLACKLIST_URLS']
     )
   end
 end
