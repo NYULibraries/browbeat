@@ -20,11 +20,12 @@ module Browbeat
         rooms: "Rooms",
       }
 
-      def tag_filtering
+      def tag_filtering(tag = nil)
         [
           ("--tags @#{specified_env}" if specified_env),
           ("--tags ~@no_sauce" if sauce_driver?),
           ("--tags #{ENV['TAGS']}" if ENV['TAGS']),
+          ("--tags @#{tag}" if tag),
         ].compact.join(" ")
       end
 
