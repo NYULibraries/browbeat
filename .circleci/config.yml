@@ -1,10 +1,12 @@
-# https://circleci.com/blog/how-to-build-a-docker-image-on-circleci-2-0/
+docker-defaults: &docker-defaults
+  docker:
+    - image: docker:18.05.0-ce-git
+  working_directory: ~/app
+
 version: 2
 jobs:
-  build:
-    docker:
-      - image: docker:18.05.0-ce-git
-    working_directory: ~/app
+  test:
+    <<: *docker-defaults
     steps:
       - checkout
       - setup_remote_docker
@@ -21,3 +23,11 @@ jobs:
             touch secrets.env
             docker-compose build
             docker-compose run app rake
+      - run:
+          name: Build and push image
+          command: |
+            docker build . -t nyulibraries/browbeat:${CIRCLE_BRANCH//\//_}
+            docker tag nyulibraries/browbeat:${CIRCLE_BRANCH//\//_} nyulibraries/browbeat:${CIRCLE_BRANCH//\//_}-${CIRCLE_SHA1}
+            docker login -u "$DOCKER_USERNAME" --password "$DOCKER_PASSWORD"
+            docker push nyulibraries/browbeat:${CIRCLE_BRANCH//\//_}
+            docker push nyulibraries/browbeat:${CIRCLE_BRANCH//\//_}-${CIRCLE_SHA1}
