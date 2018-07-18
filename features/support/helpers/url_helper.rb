@@ -16,7 +16,7 @@ module Browbeat
     end
 
     def url_path
-      "config/urls.yml"
+      "config/private/urls.yml"
     end
   end
 end
