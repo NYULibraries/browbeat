@@ -13,4 +13,4 @@ docker-compose.yml
 Dockerfile
 *.md
 
-config/urls.yml
+config/private/
