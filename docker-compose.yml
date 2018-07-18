@@ -20,6 +20,7 @@ services:
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
       - AWS_S3_BUCKET_NAME
-    command: bundle exec rake browbeat:check:production
+      - AWS_SES_REGION
+    command: bundle exec rake browbeat:check:staging
     volumes:
       - ./config:/browbeat/config
