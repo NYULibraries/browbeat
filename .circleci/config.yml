@@ -5,7 +5,7 @@ docker-defaults: &docker-defaults
 
 version: 2
 jobs:
-  test:
+  build:
     <<: *docker-defaults
     steps:
       - checkout
