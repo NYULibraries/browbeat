@@ -118,9 +118,12 @@ describe Browbeat::StatusMailer do
       subject { mailer.send_mail }
       let(:mail_subject){ "Hello world" }
       let(:body){ "<div>Hello world</div>" }
+      let(:ses){ instance_double Aws::SES::Client }
       before do
         allow(mailer).to receive(:subject).and_return mail_subject
         allow(mailer).to receive(:body).and_return body
+        allow(mailer).to receive(:puts)
+        allow(Aws::SES::Client).to receive(:new).and_return ses
       end
 
       context "with FAILURE_EMAIL_RECIPIENT set" do
@@ -130,8 +133,28 @@ describe Browbeat::StatusMailer do
           end
         end
 
-        it "should call MailxRuby" do
-          expect(MailxRuby).to receive(:send_mail).with(body: body, subject: mail_subject, to: 'joe@example.com', html: true)
+        it "should send mail via Aws::SES::Client" do
+          expect(mailer).to receive(:puts).with("Email sent!")
+          expect(ses).to receive(:send_email).with({
+            destination: {
+              to_addresses: [
+                'joe@example.com',
+              ],
+            },
+            message: {
+              body: {
+                html: {
+                  charset: "UTF-8",
+                  data: body,
+                },
+              },
+              subject: {
+                charset: "UTF-8",
+                data: mail_subject,
+              },
+            },
+            source: 'joe@example.com',
+            })
           subject
         end
       end
@@ -145,7 +168,7 @@ describe Browbeat::StatusMailer do
 
         it "should print a warning" do
           expect(mailer).to receive(:puts).with("WARNING: No email sent since FAILURE_EMAIL_RECIPIENT is not specified")
-          expect(MailxRuby).to_not receive(:send_mail)
+          expect(ses).to_not receive(:send_email)
           subject
         end
       end

@@ -6,16 +6,8 @@ Feature: MaRLi is running
 
   @major_outage @production @login_required
   Scenario: Visiting MaRLi on production
-    Given I visit MaRLi
-      Then my browser should resolve to Login
-    When I login as an Aleph user
-      Then my browser should respond with a success for MaRLi
-      And my browser should resolve to MaRLi
+    Then cURL visiting MaRLi should respond with success
 
   @major_outage @staging @login_required
   Scenario: Visiting MaRLi on staging
-    Given I visit MaRLi staging
-      Then my browser should resolve to Login
-    When I login as an Aleph user
-      Then my browser should respond with a success for MaRLi
-      And my browser should resolve to MaRLi staging
+    Then cURL visiting MaRLi staging should respond with success

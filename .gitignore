@@ -1,7 +1,9 @@
-id_rsa
-# Ignore application configuration
 application.yml
+.env
 
 tmp
 coverage
 
+screenshot*
+
+config/urls.yml

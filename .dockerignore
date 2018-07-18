@@ -1,0 +1,16 @@
+.git*
+log/
+tmp/
+coverage/
+*.sql
+.env
+
+screenshot*
+Guardfile
+.ruby-version
+.circleci/
+docker-compose.yml
+Dockerfile
+*.md
+
+config/urls.yml

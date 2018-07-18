@@ -1,6 +1,6 @@
 require 'forwardable'
 require 'status_page/api'
-require 'mailx_ruby'
+require 'aws-sdk'
 require 'cucumber'
 require 'haml'
 require 'browbeat/helpers/api_page_ids_helper'

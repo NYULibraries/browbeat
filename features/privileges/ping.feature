@@ -6,12 +6,9 @@ Feature: Privileges is running
 
   @production @major_outage
   Scenario: Visiting Privileges on production
-    Given I visit Privileges
-    Then my browser should respond with a success for Privileges
-    And my browser should resolve to Privileges
+    Then cURL visiting Privileges should respond with success
+
 
   @staging @major_outage
   Scenario: Visiting Privileges on staging
-    Given I visit Privileges staging
-    Then my browser should respond with a success for Privileges
-    And my browser should resolve to Privileges staging
+    Then cURL visiting Privileges staging should respond with success

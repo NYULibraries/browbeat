@@ -19,7 +19,7 @@ module Browbeat
       end
 
       def render
-        Haml::Engine.new(File.read(TEMPLATE)).render(self)
+        scrub_figs Haml::Engine.new(File.read(TEMPLATE)).render(self)
       end
 
       def failure_types

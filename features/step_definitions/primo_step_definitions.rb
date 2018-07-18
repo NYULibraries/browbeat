@@ -1,5 +1,14 @@
+# will be replaced by NUI version
 When(/^I select the first multi-version record$/) do
   first_result.find('.title a').click
+end
+
+When(/^I select the first NUI multi-version record$/) do
+  nui_first_result("multiple versions").click
+end
+
+When(/^I select the first NUI record$/) do
+  nui_first_result.click
 end
 
 When(/^I select "(.+)" from the "(.+)" psuedo-dropdown in the first result$/) do |option_text, select_text|

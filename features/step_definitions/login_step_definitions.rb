@@ -3,6 +3,10 @@ Then(/^my browser should resolve to (Login.*)$/) do |login_url_name|
   expect(page.current_url).to eql combine_url(url_to(login_url_name), login_default_path)
 end
 
+When(/^I click on NYU Shibboleth link$/) do
+  find('#nyu_shibboleth-login').click
+end
+
 When(/^I enter NYU credentials$/) do
   expect(page).to have_content "NYU Login"
   step "I enter username \"#{shibboleth_username}\" with password \"#{shibboleth_password}\""

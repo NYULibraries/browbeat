@@ -1,9 +1,0 @@
---- !ruby/object:Figs::Figsfile
-repo: git@github.com:NYULibraries/configula.git
-locations:
-- test_users.yml
-- browbeat.yml
-- rooms.yml
-- privileges.yml
-- findingaids.yml
-method: git

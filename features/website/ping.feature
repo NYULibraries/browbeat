@@ -5,12 +5,8 @@ Feature: Website is running
 
   @major_outage @production
   Scenario: Visiting Website on production
-    Given I visit Website
-    Then my browser should respond with a success for website
-    And my browser should resolve to Website
+    Then cURL visiting Website should respond with success
 
   @major_outage @staging
   Scenario: Visiting Website on staging
-    Given I visit Website staging
-    Then my browser should respond with a success for website
-    And my browser should resolve to Website staging
+    Then cURL visiting Website staging should respond with success

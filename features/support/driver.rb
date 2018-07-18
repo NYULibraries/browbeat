@@ -45,46 +45,69 @@ def configure_poltergeist
       timeout: (ENV['TIMEOUT'] || 30).to_i,
       js_errors: false,
       phantomjs_logger: StringIO.new,
-      url_blacklist: Figs::ENV['BLACKLIST_URLS']
+      url_blacklist: ENV['BLACKLIST_URLS']
     )
   end
 end
 
 SELENIUM_DOWNLOAD_FILETYPES = 'application/x-url' unless defined?(SELENIUM_DOWNLOAD_FILETYPES)
 
-# configure selenium to download to local directory
-def configure_selenium(browser)
+def configure_selenium
   Capybara.register_driver :selenium do |app|
-    profile = Kernel.const_get("Selenium::WebDriver::#{browser.to_s.capitalize}::Profile").new
-    profile["browser.download.dir"] = File.join(FileUtils.pwd, ENV['SELENIUM_DOWNLOAD_DIRECTORY'])
-    profile["browser.download.folderList"] = 2
-    profile["browser.helperApps.neverAsk.saveToDisk"] = SELENIUM_DOWNLOAD_FILETYPES
-    Capybara::Selenium::Driver.new(
-      app,
-      browser: browser.to_sym,
-      profile: profile,
-    )
+    options = Selenium::WebDriver::Chrome::Options.new
+
+    options.add_argument('--headless')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-gpu')
+    # options.add_argument('--disable-popup-blocking')
+    options.add_argument('--window-size=1280,1024')
+
+    options.add_preference(:download,
+      directory_upgrade: true,
+      prompt_for_download: false,
+      default_directory: ENV['SELENIUM_DOWNLOAD_DIRECTORY'])
+
+    # options.add_preference(:browser, set_download_behavior: { behavior: 'allow' })
+
+    driver = Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+
+    # bridge = driver.browser.send(:bridge)
+    #
+    # path = '/session/:session_id/chromium/send_command'
+    # path[':session_id'] = bridge.session_id
+    #
+    # bridge.http.call(:post, path, cmd: 'Page.setDownloadBehavior',
+    #                               params: {
+    #                                 behavior: 'allow',
+    #                                 downloadPath: ENV['SELENIUM_DOWNLOAD_DIRECTORY']
+    #                           })
+
+    driver
   end
 end
 
 # if driver set to sauce, set and configure
-case ENV['DRIVER']
-when 'sauce'
+if sauce_driver?
+  puts "Running in Sauce"
   configure_sauce
   Capybara.default_driver = :sauce
   Capybara.javascript_driver = :selenium
   Capybara.default_max_wait_time = (ENV['MAX_WAIT'] || 15).to_i
 # if driver not set, default to poltergeist
-when nil
+elsif poltergeist_driver?
+  puts "Running in Poltergeist/PhantomJS"
   configure_poltergeist
   Capybara.default_driver = :poltergeist
   Capybara.javascript_driver = :poltergeist
   Capybara.current_driver = :poltergeist
   Capybara.default_max_wait_time = (ENV['MAX_WAIT'] || 6).to_i
 # otherwise, run driver as a browser via selenium
-else
-  configure_selenium(ENV['DRIVER'])
+elsif selenium_chrome_driver?
+  puts "Running in Selenium Chrome"
+  configure_selenium
   Capybara.default_driver = :selenium
   Capybara.javascript_driver = :selenium
   Capybara.default_max_wait_time = (ENV['MAX_WAIT'] || 15).to_i
+else
+  raise "Unrecognized driver '#{ENV['DRIVER']}'"
 end

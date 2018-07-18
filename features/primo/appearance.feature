@@ -10,7 +10,7 @@ Feature: Primo is running
     Then I should see the tabbed interface
     And I should see the Libraries' logo
 
-  @staging @major_outage
+  @staging @major_outage @wip
   Scenario: Viewing BobCat interface on staging
     Given I visit BobCat staging
     Then I should see the tabbed interface

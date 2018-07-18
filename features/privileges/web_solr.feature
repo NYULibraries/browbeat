@@ -6,5 +6,4 @@ Feature: Privileges is running
 
   @production @warning @no_sauce
   Scenario: WebSolr on production
-    Given I secretly visit Privileges WebSolr
-    Then my browser should respond with a success for WebSolr
+    Then cURL secretly visiting Privileges WebSolr should respond with success

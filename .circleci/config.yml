@@ -1,0 +1,33 @@
+docker-defaults: &docker-defaults
+  docker:
+    - image: docker:18.05.0-ce-git
+  working_directory: ~/app
+
+version: 2
+jobs:
+  build:
+    <<: *docker-defaults
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --no-cache \
+              py-pip
+            pip install \
+              docker-compose==1.16.1
+      - run:
+          name: Run tests
+          command: |
+            touch secrets.env
+            docker-compose build
+            docker-compose run app rake
+      - run:
+          name: Build and push image
+          command: |
+            docker build . -t nyulibraries/browbeat:${CIRCLE_BRANCH//\//_}
+            docker tag nyulibraries/browbeat:${CIRCLE_BRANCH//\//_} nyulibraries/browbeat:${CIRCLE_BRANCH//\//_}-${CIRCLE_SHA1}
+            docker login -u "$DOCKER_USERNAME" --password "$DOCKER_PASSWORD"
+            docker push nyulibraries/browbeat:${CIRCLE_BRANCH//\//_}
+            docker push nyulibraries/browbeat:${CIRCLE_BRANCH//\//_}-${CIRCLE_SHA1}

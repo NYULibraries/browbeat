@@ -1,4 +1,4 @@
-require 'figs'; Figs.load()
+require 'dotenv/load'
 require 'rubygems'
 require 'cucumber'
 require 'cucumber/rake/task'
@@ -7,6 +7,16 @@ require 'browbeat'
 include Browbeat::Helpers::RakeHelper
 
 namespace :browbeat do
+  namespace :ping do
+    all_environments.each do |environment|
+      desc "Run all cucumber ping features for #{environment}"
+      task environment do
+        set_environment(environment)
+        sh "bundle exec cucumber #{tag_filtering('ping')} features/"
+      end
+    end
+  end
+
   namespace :check do
     all_environments.each do |environment|
       desc "Run all cucumber features for #{environment} (ping.feature files first)"

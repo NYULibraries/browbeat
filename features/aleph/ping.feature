@@ -6,12 +6,8 @@ Feature: Aleph is running
 
   @production @major_outage
   Scenario: Visiting Aleph on production
-    Given I visit Aleph
-    Then my browser should respond with a success for Aleph
-    And my browser should resolve to Aleph
+    Then cURL visiting Aleph should respond with success
 
   @staging @major_outage
   Scenario: Visiting Aleph on staging
-    Given I visit Aleph staging
-    Then my browser should respond with a success for Aleph
-    And my browser should resolve to Aleph staging
+    Then cURL visiting Aleph staging should respond with success

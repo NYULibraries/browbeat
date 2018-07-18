@@ -18,12 +18,24 @@ describe Browbeat::Helpers::RakeHelper do
         let(:sauce_driver?){ true }
 
         it { is_expected.to eq "--tags @something --tags ~@no_sauce" }
+
+        context "with specified tag" do
+          subject { helper.tag_filtering('some_tag') }
+
+          it { is_expected.to eq "--tags @something --tags ~@no_sauce --tags @some_tag" }
+        end
       end
 
       context "without sauce driver" do
         let(:sauce_driver?){ false }
 
         it { is_expected.to eq "--tags @something" }
+
+        context "with specified tag" do
+          subject { helper.tag_filtering('some_tag') }
+
+          it { is_expected.to eq "--tags @something --tags @some_tag" }
+        end
       end
     end
 
@@ -34,12 +46,24 @@ describe Browbeat::Helpers::RakeHelper do
         let(:sauce_driver?){ true }
 
         it { is_expected.to eq "--tags ~@no_sauce" }
+
+        context "with specified tag" do
+          subject { helper.tag_filtering('some_tag') }
+
+          it { is_expected.to eq "--tags ~@no_sauce --tags @some_tag" }
+        end
       end
 
       context "without sauce driver" do
         let(:sauce_driver?){ false }
 
         it { is_expected.to eq "" }
+
+        context "with specified tag" do
+          subject { helper.tag_filtering('some_tag') }
+
+          it { is_expected.to eq "--tags @some_tag" }
+        end
       end
     end
   end

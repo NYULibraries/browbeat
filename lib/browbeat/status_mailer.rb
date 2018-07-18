@@ -18,10 +18,34 @@ module Browbeat
     end
 
     def send_mail
-      if ENV['FAILURE_EMAIL_RECIPIENT']
-        MailxRuby.send_mail(body: body, subject: subject, to: ENV['FAILURE_EMAIL_RECIPIENT'], html: true)
-      else
+      if !ENV['FAILURE_EMAIL_RECIPIENT']
         puts "WARNING: No email sent since FAILURE_EMAIL_RECIPIENT is not specified"
+        return
+      end
+      begin
+        resp = ses.send_email({
+          destination: {
+            to_addresses: [
+              ENV['FAILURE_EMAIL_RECIPIENT'],
+            ],
+          },
+          message: {
+            body: {
+              html: {
+                charset: encoding,
+                data: body,
+              },
+            },
+            subject: {
+              charset: encoding,
+              data: subject,
+            },
+          },
+          source: ENV['FAILURE_EMAIL_RECIPIENT'],
+        })
+        puts "Email sent!"
+      rescue Aws::SES::Errors::ServiceError => error
+        puts "Email not sent. Error message: #{error}"
       end
     end
 
@@ -111,6 +135,14 @@ module Browbeat
 
     def overall_worst_failure_type
       (failed_scenarios.with_tags(:production).worst_failure_type || 'staging outage').gsub('_',' ')
+    end
+
+    def ses
+      @ses ||= Aws::SES::Client.new(region: ENV['AWS_SES_REGION'])
+    end
+
+    def encoding
+      "UTF-8"
     end
 
   end

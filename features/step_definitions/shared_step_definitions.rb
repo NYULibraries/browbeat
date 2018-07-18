@@ -5,7 +5,7 @@ end
 Given(/^I login as an NYU user$/) do
   steps %Q{
     Given I visit Login
-    When I click on "NYU"
+    When I click on NYU Shibboleth link
     And I enter NYU credentials
     And I click "Continue" if prompted
   }
@@ -14,7 +14,7 @@ end
 Given(/^I login as an NYU user if prompted$/) do
   if page.has_text? "Select your affiliation to login"
     steps %Q{
-      When I click on "NYU"
+      When I click on NYU Shibboleth link
       And I enter NYU credentials
       And I click "Continue" if prompted
     }
@@ -42,7 +42,14 @@ end
 
 When(/^I click on "(.+)"$/) do |link_name|
   expect(page).to have_text link_name
-  click_on link_name
+  find(:link_or_button, text: link_name, match: :first).click
+end
+
+When(/^I click on "(.+)" to open a new window$/) do |link_name|
+  expect(page).to have_text link_name
+  capture_new_window do
+    find(:link_or_button, text: link_name, match: :first).click
+  end
 end
 
 When(/^I search for "(.*?)"$/) do |search_term|
@@ -56,6 +63,17 @@ Then(/^my browser should respond with a? ?success for (.+)$/) do |app_name|
   expect(page.status_code).to eq 200
 end
 
+# will be replaced by NUI version
 Then(/^I should see results matching "(.+)"$/) do |content|
   expect(page_results).to have_content /#{content}/i
+end
+
+Then(/^I should see results matching "(.+)" in a new window$/) do |content|
+  within_new_window do
+    expect(page_results).to have_content /#{content}/i
+  end
+end
+
+Then(/^I should see NUI results matching "(.+)"$/) do |content|
+  expect(nui_page_results).to have_content /#{content}/i
 end

@@ -9,10 +9,11 @@ group :test do
   gem 'aws-sdk-resources'
 
   gem 'cucumber', '~> 2.4.0'
-  gem 'selenium-webdriver', '~> 3.1.0'
+  gem 'selenium-webdriver', '~> 3.6'
+  gem 'chromedriver-helper', '~> 1.1'
   gem 'phantomjs', '~> 2.1'
   gem 'poltergeist', '~> 1.13'
-  gem 'figs', '~> 2.1.0', git: 'https://github.com/NYULibraries/figs'
+  gem 'dotenv'
   gem 'pry'
   gem 'rake', '~> 12.0'
   gem 'json', '>= 2'

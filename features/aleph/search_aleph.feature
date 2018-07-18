@@ -1,4 +1,4 @@
-@ping @selenium
+@functionality @selenium
 Feature: Aleph is running
   As a research scholar,
   I want to be able to see the item's holdings page
