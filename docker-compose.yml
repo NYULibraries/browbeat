@@ -23,4 +23,4 @@ services:
       - AWS_SES_REGION
     command: bundle exec rake browbeat:check:staging
     volumes:
-      - ./config:/browbeat/config
+      - ./config/private:/browbeat/config/private
