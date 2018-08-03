@@ -59,6 +59,12 @@ When(/^I search for "(.*?)"$/) do |search_term|
   end
 end
 
+When(/^I search for "(.*?)" in the NUI$/) do |search_term|
+  within('form[name=search-form]') do
+    fill_in("searchBar", with: "#{search_term}\n")
+  end
+end
+
 Then(/^my browser should respond with a? ?success for (.+)$/) do |app_name|
   expect(page.status_code).to eq 200
 end

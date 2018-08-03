@@ -7,13 +7,15 @@ Feature: Aleph is running
   @production @partial_outage
   Scenario: Searching on production
     Given I visit BobCat
-    When I search for "The green grass tango"
-    And I select the first "Book" record
+    When I search for "The green grass tango" in the NUI
+    And I select the first NUI record
+    And I click on "Check Availability" to open a new window
     Then I should see results under "Copies in Library" section in a new window
 
-  @staging @partial_outage @wip
+  @staging @partial_outage
   Scenario: Searching on staging
     Given I visit BobCat staging
-    When I search for "The green grass tango"
-    And I select the first "Book" record
+    When I search for "The green grass tango" in the NUI
+    And I select the first NUI record
+    And I click on "Check Availability" to open a new window
     Then I should see results under "Copies in Library" section in a new window
