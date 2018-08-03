@@ -10,9 +10,9 @@ Feature: PDS is running
     When I click on NYU Shibboleth link
     And I enter NYU credentials
     And I click "Continue" if prompted
-    Then I should be logged in
+    Then I should be logged in on BobCat NUI
 
-  @staging @partial_outage @login_required
+  @staging @partial_outage @login_required @wip
   Scenario: Logging in on staging PDS
     Given I visit BobCat staging
     When I click on "Guest"
@@ -20,4 +20,4 @@ Feature: PDS is running
     When I click on NYU Shibboleth link
     And I enter NYU staging credentials
     And I click "Continue" if prompted
-    Then I should be logged in
+    Then I should be logged in on BobCat NUI
