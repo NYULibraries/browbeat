@@ -10,4 +10,4 @@ Feature: EZProxy is running
 
   @staging @warning @login_required
   Scenario: Visiting EZProxy on staging
-    Then cURL visiting EZProxy staging should redirect to "https://login.library.nyu.edu/login"
+    Then cURL visiting EZProxy staging should redirect to "https://login.proxydev.library.nyu.edu/login"
