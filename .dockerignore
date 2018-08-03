@@ -4,6 +4,7 @@ tmp/
 coverage/
 *.sql
 .env
+application.yml
 
 screenshot*
 Guardfile
