@@ -4,7 +4,7 @@ Feature: Primo is running
   In order to know whether or not I can do my research today
   I want to be informed about the application's status.
 
-  @production @major_outage
+  @production @major_outage @wip
   Scenario: Viewing BobCat interface on production
     Given I visit BobCat
     Then I should see the tabbed interface

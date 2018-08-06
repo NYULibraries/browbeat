@@ -33,6 +33,10 @@ Then(/^I should be logged in$/) do
   expect(page).to have_link "Log-out"
 end
 
+Then(/^I should be logged in on BobCat NUI$/) do
+  expect(page).to have_css "button[aria-label=\"Click to sign out, change language and access library card\"]"
+end
+
 Then(/^I should see valid XML without "(.+)" node$/) do |node_name|
   expect(xml_body.children).to_not be_empty
   expect(xml_body.xpath(".//#{node_name}")).to be_empty
