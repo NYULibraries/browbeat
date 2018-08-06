@@ -40,6 +40,15 @@ Given(/^I login as an NYU staging user if prompted$/) do
   end
 end
 
+Given(/^I login as an NYU staging user if prompted on Shibboleth$/) do
+  if page.has_text? "Before entering your NetID and password"
+    steps %Q{
+      And I enter NYU staging credentials
+      And I click "Continue" if prompted
+    }
+  end
+end
+
 When(/^I click on "(.+)"$/) do |link_name|
   expect(page).to have_text link_name
   find(:link_or_button, text: link_name, match: :first).click
