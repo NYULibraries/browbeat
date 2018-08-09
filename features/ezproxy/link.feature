@@ -10,7 +10,7 @@ Feature: EZProxy is running
     And I login as an NYU user if prompted
     Then I should see a JSTOR page
 
-  @staging @warning @login_required
+  @staging @warning @login_required @wip
   Scenario: Follow EZProxy link on staging
     Given I visit EZProxy staging JSTOR link
     And I login as an NYU staging user if prompted on Shibboleth
