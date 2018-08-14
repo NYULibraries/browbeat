@@ -18,16 +18,20 @@ jobs:
             pip install \
               docker-compose==1.16.1
       - run:
+          name: Pull docker images
+          command: |
+            script/pull_docker.sh
+      - run:
           name: Run tests
           command: |
             touch secrets.env
             docker-compose build
             docker-compose run app rake
       - run:
-          name: Build and push image
+          name: Docker login
           command: |
-            docker build . -t nyulibraries/browbeat:${CIRCLE_BRANCH//\//_}
-            docker tag nyulibraries/browbeat:${CIRCLE_BRANCH//\//_} nyulibraries/browbeat:${CIRCLE_BRANCH//\//_}-${CIRCLE_SHA1}
             docker login -u "$DOCKER_USERNAME" --password "$DOCKER_PASSWORD"
-            docker push nyulibraries/browbeat:${CIRCLE_BRANCH//\//_}
-            docker push nyulibraries/browbeat:${CIRCLE_BRANCH//\//_}-${CIRCLE_SHA1}
+      - run:
+          name: Push docker images
+          command: |
+            script/push_docker.sh
