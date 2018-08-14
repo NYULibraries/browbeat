@@ -33,9 +33,8 @@ end
 Then(/^I should see results under "(.+)" section in a new window$/) do |section_title|
   within_new_window do
     expect(page).to have_content section_title
-    within first_umlaut_section_matching(section_title) do
-      expect(page).to have_css '.umlaut_section_content'
-      expect(page.first('.umlaut_section_content')).to have_content
-    end
+    expect(page).to have_css '.umlaut-section'
+    expect(first_umlaut_section_matching(section_title)).to have_css '.umlaut_section_content'
+    expect(first_umlaut_section_matching(section_title).first('.umlaut_section_content')).to have_content
   end
 end
