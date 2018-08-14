@@ -6,7 +6,7 @@ services:
       context: .
       cache_from:
         - nyulibraries/selenium_chrome_headless_ruby:2.5-slim
-        - browbeat_app
+        - browbeat
         - nyulibraries/browbeat:latest
         - nyulibraries/browbeat:$BRANCH_NO_SLASH
     tty: true
