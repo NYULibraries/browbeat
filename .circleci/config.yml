@@ -22,10 +22,14 @@ jobs:
           command: |
             script/pull_docker.sh
       - run:
-          name: Run tests
+          name: Build
+          command: |
+            export BRANCH_NO_SLASH=${CIRCLE_BRANCH//\//_}
+            docker-compose build
+      - run:
+          name: Test
           command: |
             touch secrets.env
-            docker-compose build
             docker-compose run app rake
       - run:
           name: Docker login
