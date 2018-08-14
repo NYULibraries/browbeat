@@ -1,7 +1,14 @@
-version: '3'
+version: '3.2'
 services:
   app:
-    build: .
+    image: browbeat
+    build:
+      context: .
+      cache_from:
+        - nyulibraries/selenium_chrome_headless_ruby:2.5-slim
+        - browbeat_app
+        - nyulibraries/browbeat:latest
+        - nyulibraries/browbeat:$BRANCH_NO_SLASH
     tty: true
     environment:
       - FAILURE_TRACKER=off
