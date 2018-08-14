@@ -1,4 +1,0 @@
-#!/bin/bash
-
-# install gems if necessary
-bundle check || bundle install
