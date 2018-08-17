@@ -31,7 +31,6 @@ Then(/^I should see results under "(.+)" section$/) do |section_title|
 end
 
 Then(/^I should see results under "(.+)" section in a new window$/) do |section_title|
-  sleep 1
   within_new_window do
     expect(page).to have_content section_title
     expect(page).to have_css '.umlaut-section'
