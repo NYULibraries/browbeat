@@ -4,7 +4,7 @@ Feature: Aleph is running
   I want to be able to see the item's holdings page
   So that I can see additional bibliographical information.
 
-  @production @partial_outage
+  @production @partial_outage @wip
   Scenario: Searching on production
     Given I visit BobCat
     When I search for "The green grass tango" in the NUI
@@ -12,7 +12,7 @@ Feature: Aleph is running
     And I click on "Check Availability" to open a new window
     Then I should see results under "Copies in Library" section in a new window
 
-  @staging @partial_outage
+  @staging @partial_outage @wip
   Scenario: Searching on staging
     Given I visit BobCat staging
     When I search for "The green grass tango" in the NUI
