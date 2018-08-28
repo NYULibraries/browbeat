@@ -6,8 +6,8 @@ Feature: ILLiad is running
 
   @major_outage @production
   Scenario: Visiting ILLiad on production
-    Then cURL visiting ILLiad should redirect to Login
+    Then cURL visiting ILLiad should redirect to "https://login.library.nyu.edu"
 
   @major_outage @staging
   Scenario: Visiting ILLiad on staging
-    Then cURL visiting ILLiad staging should redirect to Login staging
+    Then cURL visiting ILLiad staging should redirect to "https://dev.login.library.nyu.edu"
