@@ -6,7 +6,7 @@ Feature: EZProxy is running
 
   @production @warning @no_sauce @login_required
   Scenario: Visiting EZProxy on production
-    Then cURL visiting EZProxy should redirect to "https://login.library.nyu.edu/login"
+    Then cURL visiting EZProxy should redirect to "https://login.proxy.library.nyu.edu/login"
 
   @staging @warning @login_required
   Scenario: Visiting EZProxy on staging
