@@ -1,5 +1,6 @@
 version: '3.2'
 services:
+  
   app:
     image: browbeat
     build:
@@ -31,3 +32,14 @@ services:
     command: bundle exec rake browbeat:check:staging
     volumes:
       - ./config/private:/app/config/private
+
+  test:
+    image: browbeat
+    build:
+      context: .
+      cache_from:
+        - nyulibraries/selenium_chrome_headless_ruby:2.5-slim
+        - browbeat
+        - nyulibraries/browbeat:latest
+        - nyulibraries/browbeat:$BRANCH_NO_SLASH
+    command: bundle exec rake

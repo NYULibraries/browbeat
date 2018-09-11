@@ -30,7 +30,7 @@ jobs:
           name: Test
           command: |
             touch secrets.env
-            docker-compose run app rake
+            docker-compose run test
       - run:
           name: Docker login
           command: |
