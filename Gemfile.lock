@@ -69,7 +69,7 @@ GEM
     dotenv (2.4.0)
     factory_girl (4.8.0)
       activesupport (>= 3.0.0)
-    ffi (1.9.18)
+    ffi (1.9.25)
     formatador (0.2.5)
     gherkin (4.1.1)
     guard (2.14.1)
