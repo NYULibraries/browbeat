@@ -1,12 +1,12 @@
 version: '3.2'
 services:
-  
+
   app:
     image: browbeat
     build:
       context: .
       cache_from:
-        - nyulibraries/selenium_chrome_headless_ruby:2.5-slim
+        - nyulibraries/selenium_chrome_headless_ruby:2.5.1-slim
         - browbeat
         - nyulibraries/browbeat:latest
         - nyulibraries/browbeat:$BRANCH_NO_SLASH
@@ -38,7 +38,7 @@ services:
     build:
       context: .
       cache_from:
-        - nyulibraries/selenium_chrome_headless_ruby:2.5-slim
+        - nyulibraries/selenium_chrome_headless_ruby:2.5.1-slim
         - browbeat
         - nyulibraries/browbeat:latest
         - nyulibraries/browbeat:$BRANCH_NO_SLASH
