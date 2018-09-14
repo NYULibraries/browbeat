@@ -1,4 +1,4 @@
-FROM nyulibraries/selenium_chrome_headless_ruby:2.5-slim
+FROM nyulibraries/selenium_chrome_headless_ruby:2.5.1-slim
 
 ENV INSTALL_PATH /app
 WORKDIR $INSTALL_PATH
