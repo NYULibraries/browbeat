@@ -19,11 +19,21 @@ namespace :browbeat do
 
   namespace :check do
     all_environments.each do |environment|
-      desc "Run all cucumber features for #{environment} (ping.feature files first)"
+      desc "Run all cucumber ping features for #{environment}"
       task environment do
         set_environment(environment)
-        sh "bundle exec cucumber #{tag_filtering} features/**/ping.feature features/"
+        sh "bundle exec cucumber #{tag_filtering('ping')} features/"
       end
+    end
+  end
+
+  namespace :check do
+    all_environments.each do |environment|
+      # desc "Run all cucumber features for #{environment} (ping.feature files first)"
+      # task environment do
+      #   set_environment(environment)
+      #   sh "bundle exec cucumber #{tag_filtering} features/**/ping.feature features/"
+      # end
 
       namespace environment do
         FEATURE_GROUPS.each do |directory, application_name|
