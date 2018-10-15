@@ -7,7 +7,7 @@ Feature: EZProxy is running
   @production @warning @no_sauce @login_required
   Scenario: Follow EZProxy link on production
     Given I visit EZProxy JSTOR link
-    And I login as an NYU user if prompted
+    And I login as an NYU user if prompted on Shibboleth
     Then I should see a JSTOR page
 
   @staging @warning @login_required @wip
