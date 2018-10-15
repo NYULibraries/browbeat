@@ -21,6 +21,15 @@ Given(/^I login as an NYU user if prompted$/) do
   end
 end
 
+Given(/^I login as an NYU user if prompted on Shibboleth$/) do
+  if page.has_text? "Before entering your NetID and password"
+    steps %Q{
+      And I enter NYU credentials
+      And I click "Continue" if prompted
+    }
+  end
+end
+
 Given(/^I login as an NYU staging user$/) do
   steps %Q{
     Given I visit Login staging
