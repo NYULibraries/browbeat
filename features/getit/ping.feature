@@ -23,3 +23,8 @@ Feature: GetIt is running
   @staging @major_outage
   Scenario: Visiting GetIt on staging QA
     Then cURL visiting GetIt QA should respond with success
+
+  @production @major_outage
+  Scenario: Visiting SFX on production 
+    Then cURL visiting SFX should respond with success
+ 
