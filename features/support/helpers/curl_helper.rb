@@ -32,6 +32,17 @@ module Browbeat
       end
     end
 
+    def header_value(url, header_name, **options)
+      last_headers = curl_headers(url).last
+      if last_headers.grep(/\A#{header_name}:/).empty?
+        raise "No #{header_name} header found in #{last_headers}"
+      end
+      last_headers.detect do |header|
+        match_data = header.match(/\A#{header_name}: (.+)\z/)
+        break match_data[1] if match_data
+      end
+    end
+
     private
 
     # curls the given URL, following any redirects; returns an array corresponding

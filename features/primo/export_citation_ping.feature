@@ -6,8 +6,8 @@ Feature: Export citations is running
 
   @production @partial_outage
   Scenario: Exporting citations on production
-    Then cURL visiting BobCat export citation link should indicate a file download named "export.openurl"
+    Then cURL visiting BobCat staging export citation link should respond with a "Content-Type" header containing the value "application/json"
 
   @staging @partial_outage
   Scenario: Exporting citations on staging
-    Then cURL visiting BobCat staging export citation link should indicate a file download named "export.openurl"
+    Then cURL visiting BobCat staging export citation link should respond with a "Content-Type" header containing the value "application/json"

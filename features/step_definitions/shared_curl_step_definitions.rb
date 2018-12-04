@@ -28,3 +28,7 @@ end
 Then(/^cURL visiting (.+) should indicate a file download named "(.+)"$/) do |url_name, filename|
   expect(file_downloaded(url_to(url_name))).to eq filename
 end
+
+Then(/^cURL visiting (.+) should respond with a "(.+)" header containing the value "(.+)"$/) do |url_name, header_name, header_value|
+  expect(header_value(url_to(url_name), header_name)).to eq header_value
+end
