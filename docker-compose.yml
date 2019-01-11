@@ -5,6 +5,8 @@ services:
     image: browbeat
     build:
       context: .
+      args:
+        - AQUA_MICROSCANNER_TOKEN
       cache_from:
         - nyulibraries/selenium_chrome_headless_ruby:2.5.1-slim
         - browbeat
