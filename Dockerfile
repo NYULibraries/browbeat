@@ -24,6 +24,14 @@ RUN mkdir coverage && chown -R docker:docker coverage
 
 COPY --chown=docker:docker . ./
 
+# run microscanner
+USER root
+ARG AQUA_MICROSCANNER_TOKEN
+RUN wget -O /microscanner https://get.aquasec.com/microscanner && \
+  chmod +x /microscanner && \
+  /microscanner ${AQUA_MICROSCANNER_TOKEN} || true && \
+  rm -rf /microscanner
+  
 USER docker
 
 CMD FAILURE_TRACKER=off rake browbeat:check:production
