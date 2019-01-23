@@ -8,10 +8,10 @@ services:
       args:
         - AQUA_MICROSCANNER_TOKEN
       cache_from:
-        - nyulibraries/selenium_chrome_headless_ruby:2.5.1-slim
+        - quay.io/nyulibraries/selenium_chrome_headless_ruby:2.5.1-slim
         - browbeat
-        - nyulibraries/browbeat:latest
-        - nyulibraries/browbeat:$BRANCH_NO_SLASH
+        - quay.io/nyulibraries/browbeat:latest
+        - quay.io/nyulibraries/browbeat:$BRANCH_NO_SLASH
     tty: true
     environment:
       - FAILURE_TRACKER=off
@@ -40,8 +40,8 @@ services:
     build:
       context: .
       cache_from:
-        - nyulibraries/selenium_chrome_headless_ruby:2.5.1-slim
+        - quay.io/nyulibraries/selenium_chrome_headless_ruby:2.5.1-slim
         - browbeat
-        - nyulibraries/browbeat:latest
-        - nyulibraries/browbeat:$BRANCH_NO_SLASH
+        - quay.io/nyulibraries/browbeat:latest
+        - quay.io/nyulibraries/browbeat:$BRANCH_NO_SLASH
     command: bundle exec rake
