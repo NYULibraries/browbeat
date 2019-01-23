@@ -1,6 +1,6 @@
 docker-defaults: &docker-defaults
   docker:
-    - image: nyulibraries/circleci_docker:18.06.1-ce-git
+    - image: quay.io/nyulibraries/circleci_docker:18.06.1-dc-1.23.2-0
   working_directory: ~/app
 
 version: 2
@@ -27,7 +27,7 @@ jobs:
       - run:
           name: Docker login
           command: |
-            docker login -u "$DOCKER_USERNAME" --password "$DOCKER_PASSWORD"
+            docker login -u "$QUAY_USERNAME" --password "$QUAY_PASSWORD" quay.io
       - run:
           name: Push docker images
           command: |
