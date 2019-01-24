@@ -14,13 +14,15 @@ module Browbeat
     end
 
     def send_status_if_failed
-      send_mail? ? send_mail : puts("No email sent since no #{'updated ' if recheck?}failures detected")
+      return send_mail if send_mail?
+      puts("No email sent since no #{'updated ' if recheck?}failures detected")
+      return true 
     end
 
     def send_mail
       if !ENV['FAILURE_EMAIL_RECIPIENT']
         puts "WARNING: No email sent since FAILURE_EMAIL_RECIPIENT is not specified"
-        return
+        return false 
       end
       begin
         resp = ses.send_email({
@@ -44,8 +46,10 @@ module Browbeat
           source: ENV['FAILURE_EMAIL_RECIPIENT'],
         })
         puts "Email sent!"
+        return true
       rescue Aws::SES::Errors::ServiceError => error
         puts "Email not sent. Error message: #{error}"
+        return false
       end
     end
 

@@ -8,9 +8,10 @@ describe Browbeat::StatusMailer do
       let(:mailer){ instance_double described_class }
       let(:scenario_collection){ instance_double Browbeat::ScenarioCollection }
       let(:application_collection){ instance_double Browbeat::ApplicationCollection }
+      let(:return_val) { "fake val" }
       before do
         allow(described_class).to receive(:new).and_return mailer
-        allow(mailer).to receive(:send_status_if_failed).and_return true
+        allow(mailer).to receive(:send_status_if_failed).and_return return_val 
       end
 
       it "should instantiate instance correctly" do
@@ -22,6 +23,8 @@ describe Browbeat::StatusMailer do
         expect(mailer).to receive(:send_status_if_failed)
         subject
       end
+
+      it { is_expected.to eq return_val }
     end
   end
 
@@ -32,8 +35,9 @@ describe Browbeat::StatusMailer do
 
     describe "send_status_if_failed" do
       subject { mailer.send_status_if_failed }
+      let(:return_val){ "some val" }
       before do
-        allow(mailer).to receive(:send_mail).and_return true
+        allow(mailer).to receive(:send_mail).and_return return_val 
         allow(mailer).to receive(:puts).and_return true
       end
 
@@ -56,6 +60,8 @@ describe Browbeat::StatusMailer do
               expect(mailer).to receive(:send_mail)
               subject
             end
+
+            it { is_expected.to eq return_val }
           end
 
           context "without failures" do
@@ -68,15 +74,19 @@ describe Browbeat::StatusMailer do
                 expect(mailer).to receive(:send_mail)
                 subject
               end
+
+              it { is_expected.to eq return_val }
             end
 
             context "without status page failures" do
               before { allow(mailer).to receive(:status_page_failures?).and_return false }
 
-              it "should call send_mail" do
+              it "should not call send_mail" do
                 expect(mailer).to_not receive(:send_mail)
                 subject
               end
+
+              it { is_expected.to eq true }
             end
           end # end "without failures"
         end # end "with RECHECK unspecified"
@@ -91,6 +101,8 @@ describe Browbeat::StatusMailer do
               expect(mailer).to_not receive(:send_mail)
               subject
             end
+            
+            it { is_expected.to eq true }
           end
 
           context "with some applications failing" do
@@ -100,6 +112,8 @@ describe Browbeat::StatusMailer do
               expect(mailer).to receive(:send_mail)
               subject
             end
+            
+            it { is_expected.to eq return_val }
           end
         end # end "with RECHECK specified"
       end
@@ -132,6 +146,9 @@ describe Browbeat::StatusMailer do
             example.run
           end
         end
+        before do
+          allow(ses).to receive(:send_email).and_return true
+        end
 
         it "should send mail via Aws::SES::Client" do
           expect(mailer).to receive(:puts).with("Email sent!")
@@ -157,6 +174,8 @@ describe Browbeat::StatusMailer do
             })
           subject
         end
+
+        it { is_expected.to eq true }
       end
 
       context "with FAILURE_EMAIL_RECIPIENT not set" do
@@ -171,6 +190,8 @@ describe Browbeat::StatusMailer do
           expect(ses).to_not receive(:send_email)
           subject
         end
+
+        it { is_expected.to eq false }
       end
 
     end
