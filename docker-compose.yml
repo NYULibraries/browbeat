@@ -1,6 +1,31 @@
 version: '3.2'
 services:
 
+  master:
+    image: quay.io/nyulibraries/browbeat:master
+    tty: true
+    environment:
+      - FAILURE_TRACKER=off
+      - SHIBBOLETH_USERNAME
+      - SHIBBOLETH_PASSWORD
+      - SHIBBOLETH_STAGING_USERNAME
+      - SHIBBOLETH_STAGING_PASSWORD
+      - ALEPH_USERNAME
+      - ALEPH_PASSWORD
+      - SAUCE_USERNAME
+      - SAUCE_ACCESS_KEY
+      - STATUS_PAGE_API_KEY
+      - STATUS_PAGE_PAGE_ID
+      - STATUS_PAGE_STAGING_PAGE_ID
+      - SELENIUM_DOWNLOAD_DIRECTORY
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_S3_BUCKET_NAME
+      - AWS_SES_REGION
+    command: bundle exec rake browbeat:check:staging
+    volumes:
+      - ./config/private:/app/config/private
+
   app:
     image: browbeat
     build:
