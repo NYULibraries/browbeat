@@ -1,4 +1,4 @@
-FROM quay.io/nyulibraries/selenium_chrome_headless_ruby:2.5.3-slim-chrome_71
+FROM quay.io/nyulibraries/selenium_chrome_headless_ruby:2.5.3-slim-chrome_72
 
 ENV INSTALL_PATH /app
 WORKDIR $INSTALL_PATH
