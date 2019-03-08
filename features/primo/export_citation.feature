@@ -12,7 +12,7 @@ Feature: Export citations is running
     And I select the first NUI record
     And I click on "BIBTEX"
 
-  @staging @partial_outage
+  @staging @partial_outage @wip
   Scenario: Exporting citations on staging
     Given I visit BobCat staging
     When I search for "hamlet" in the NUI
