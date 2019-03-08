@@ -4,7 +4,7 @@ Feature: Export citations is running
   I want to be able to export my citation from the catalog directly into a citation management tool
   So that I can keep my bibliography in order.
 
-  @production @partial_outage
+  @production @partial_outage @wip
   Scenario: Exporting citations on production
     Given I visit BobCat
     When I search for "hamlet" in the NUI
