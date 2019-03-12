@@ -10,7 +10,6 @@ group :test do
 
   gem 'cucumber', '~> 2.4.0'
   gem 'selenium-webdriver', '~> 3.6'
-  gem 'chromedriver-helper', '~> 1.1'
   gem 'phantomjs', '~> 2.1'
   gem 'poltergeist', '~> 1.13'
   gem 'dotenv'
