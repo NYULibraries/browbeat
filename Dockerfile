@@ -18,6 +18,7 @@ RUN apt-get update && apt-get -y --no-install-recommends install $BUILD_PACKAGES
   && rm -rf /usr/local/bundle/cache \
   && apt-get --purge -y autoremove $BUILD_PACKAGES \
   && apt-get clean && rm -rf /var/lib/apt/lists/* \
+  && rm /usr/local/bundle/bin/chromedriver \
   && chown -R docker:docker /usr/local/bundle
 
 RUN mkdir coverage && chown -R docker:docker coverage
