@@ -8,14 +8,6 @@ Feature: Special Collections is running
   Scenario: Visiting Special Collections on production
     Then cURL visiting Special Collections should respond with success
 
-  @production @degraded_performance
-  Scenario: Visiting Special Collections LB server 1 on production
-    Then cURL insecurely visiting Special Collections LB server 1 should respond with success
-
-  @production @degraded_performance
-  Scenario: Visiting Special Collections LB server 2 on production
-    Then cURL insecurely visiting Special Collections LB server 2 should respond with success
-
   @staging @major_outage @wip
   Scenario: Visiting Special Collections on staging
     Then cURL visiting Special Collections staging should respond with success
