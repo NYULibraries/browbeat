@@ -82,8 +82,8 @@ if ENV['SCREENSHOT_FAILURES']
   # upload screenshots to S3
   Capybara::Screenshot.s3_configuration = {
     s3_client_credentials: {
-      access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-      secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
+      access_key_id: (ENV['S3_AWS_ACCESS_KEY_ID'] || ENV['AWS_ACCESS_KEY_ID']),
+      secret_access_key: (ENV['S3_AWS_SECRET_ACCESS_KEY'] || ENV['AWS_SECRET_ACCESS_KEY']),
       region: "us-east-1",
     },
     bucket_name: ENV['AWS_S3_BUCKET_NAME'],
