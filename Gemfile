@@ -4,9 +4,9 @@ group :test do
   gem 'rspec'
   gem 'factory_girl', '~> 4.8'
   gem 'capybara', '~> 2.13'
-  gem 'capybara-screenshot', git: "https://github.com/ericgriffis/capybara-screenshot"
-  gem 'aws-sdk'
-  gem 'aws-sdk-resources'
+  gem 'capybara-screenshot'
+  gem 'aws-sdk-s3'
+  gem 'aws-sdk-ses'
 
   gem 'cucumber', '~> 2.4.0'
   gem 'selenium-webdriver', '~> 3.6'
