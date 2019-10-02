@@ -1,6 +1,6 @@
 require 'forwardable'
 require 'status_page/api'
-require 'aws-sdk'
+require 'aws-sdk-ses'
 require 'cucumber'
 require 'haml'
 require 'browbeat/helpers/api_page_ids_helper'
