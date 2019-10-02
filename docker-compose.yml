@@ -20,8 +20,11 @@ services:
       - SELENIUM_DOWNLOAD_DIRECTORY
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
+      - S3_AWS_ACCESS_KEY_ID
+      - S3_AWS_SECRET_ACCESS_KEY
       - AWS_S3_BUCKET_NAME
       - AWS_SES_REGION
+      - FAILURE_EMAIL_RECIPIENT
     command: bundle exec rake browbeat:check:staging
     volumes:
       - ./config/private:/app/config/private
@@ -54,8 +57,11 @@ services:
       - SELENIUM_DOWNLOAD_DIRECTORY
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
+      - S3_AWS_ACCESS_KEY_ID
+      - S3_AWS_SECRET_ACCESS_KEY
       - AWS_S3_BUCKET_NAME
       - AWS_SES_REGION
+      - FAILURE_EMAIL_RECIPIENT
     command: bundle exec rake browbeat:check:staging
     volumes:
       - ./config/private:/app/config/private
