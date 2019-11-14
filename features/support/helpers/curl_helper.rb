@@ -1,8 +1,10 @@
 module Browbeat
   module CurlHelper
+    REDIRECT_HEADERS = ["HTTP/1.1 302 Moved temporarily", 'HTTP/1.1 302 Moved Temporarily', "HTTP/1.1 302 Found", "HTTP/1.1 301 Moved Permanently", "HTTP/1.1 302 Redirect"]
+
     def redirect_locations(url)
       curl_headers(url).select do |headers|
-        (headers & ["HTTP/1.1 302 Moved temporarily", "HTTP/1.1 302 Found", "HTTP/1.1 301 Moved Permanently"]).any?
+        (headers & REDIRECT_HEADERS).any?
         # %w[301 302].include?(get_status(headers))
       end.map do |headers|
         headers.detect{|h| h.match(/\ALocation\:/) }.gsub(/\ALocation\:/,'').gsub(/\/\z/,'').strip
