@@ -13,7 +13,7 @@ Then(/^my browser should resolve to (Privileges.*)$/) do |privileges_url_name|
 end
 
 Then(/^I should see a guide for "(.+)"$/) do |guide_text|
-  expect(page).to have_text "You are a #{guide_text}"
+  expect(page).to have_text(/You are a\s+#{guide_text}/)
 end
 
 Then(/^I should expect to see a privileges table$/) do

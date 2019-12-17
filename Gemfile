@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 group :test do
   gem 'rspec'
   gem 'factory_girl', '~> 4.8'
-  gem 'capybara', '~> 2.13'
+  gem 'capybara', '~> 3.18'
   gem 'capybara-screenshot'
   gem 'aws-sdk-s3'
   gem 'aws-sdk-ses'
@@ -25,3 +25,4 @@ group :test do
   gem 'coveralls', '~> 0.8.17', require: false
   gem 'guard-rspec', require: false
 end
+

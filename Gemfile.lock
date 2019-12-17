@@ -29,13 +29,14 @@ GEM
     aws-sigv4 (1.1.0)
       aws-eventstream (~> 1.0, >= 1.0.2)
     builder (3.2.3)
-    capybara (2.18.0)
+    capybara (3.29.0)
       addressable
       mini_mime (>= 0.1.3)
-      nokogiri (>= 1.3.3)
-      rack (>= 1.0.0)
-      rack-test (>= 0.5.4)
-      xpath (>= 2.0, < 4.0)
+      nokogiri (~> 1.8)
+      rack (>= 1.6.0)
+      rack-test (>= 0.6.3)
+      regexp_parser (~> 1.5)
+      xpath (~> 3.2)
     capybara-screenshot (1.0.23)
       capybara (>= 1.0, < 4)
       launchy
@@ -119,7 +120,7 @@ GEM
     multi_test (0.1.2)
     nenv (0.3.0)
     netrc (0.11.0)
-    nokogiri (1.10.4)
+    nokogiri (1.10.7)
       mini_portile2 (~> 2.4.0)
     notiffany (0.1.3)
       nenv (~> 0.1)
@@ -144,6 +145,7 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.0)
       ffi (~> 1.0)
+    regexp_parser (1.6.0)
     rest-client (2.1.0)
       http-accept (>= 1.7.0, < 2.0)
       http-cookie (>= 1.0.2, < 2.0)
@@ -200,7 +202,7 @@ PLATFORMS
 DEPENDENCIES
   aws-sdk-s3
   aws-sdk-ses
-  capybara (~> 2.13)
+  capybara (~> 3.18)
   capybara-screenshot
   climate_control (~> 0.1)
   coveralls (~> 0.8.17)
@@ -220,5 +222,4 @@ DEPENDENCIES
   status_page-api
 
 BUNDLED WITH
-   1.17.2
-
+   1.17.3
