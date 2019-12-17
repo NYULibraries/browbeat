@@ -25,4 +25,4 @@ RUN mkdir coverage && chown -R docker:docker coverage
 USER docker
 COPY --chown=docker:docker . ./
 
-CMD FAILURE_TRACKER=off rake browbeat:check:production
+CMD ["FAILURE_TRACKER=off", "rake", "browbeat:check:production"]
