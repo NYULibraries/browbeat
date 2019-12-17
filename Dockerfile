@@ -1,11 +1,11 @@
-FROM quay.io/nyulibraries/selenium_chrome_headless_ruby:2.5.3-slim-chrome_72
+FROM quay.io/nyulibraries/selenium_chrome_headless_ruby:2.5.7-slim-chrome_79-chore_run_as_non_root 
+
+# disable security level to avoid error when connecting to shibboleth; temporary please remove when fixed by shibboleth
+USER root
+RUN sed -i "s|CipherString = DEFAULT@SECLEVEL=2|#CipherString = DEFAULT@SECLEVEL=2|g" /etc/ssl/openssl.cnf
 
 ENV INSTALL_PATH /app
 WORKDIR $INSTALL_PATH
-
-RUN groupadd -g 2000 docker -r \
-  && useradd -u 1000 -r --no-log-init -m -d $INSTALL_PATH -g docker docker \
-  && chown -R docker:docker .
 
 ARG BUILD_PACKAGES='git build-essential zlib1g-dev'
 ARG RUN_PACKAGES='curl'
@@ -22,6 +22,7 @@ RUN apt-get update && apt-get -y --no-install-recommends install $BUILD_PACKAGES
 
 RUN mkdir coverage && chown -R docker:docker coverage
 
+USER docker
 COPY --chown=docker:docker . ./
 
-CMD FAILURE_TRACKER=off rake browbeat:check:production
+CMD ["FAILURE_TRACKER=off", "rake", "browbeat:check:production"]
