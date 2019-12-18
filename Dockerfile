@@ -1,4 +1,4 @@
-FROM quay.io/nyulibraries/selenium_chrome_headless_ruby:2.5.7-slim-chrome_79-chore_run_as_non_root 
+FROM quay.io/nyulibraries/selenium_chrome_headless_ruby:2.5.7-slim-chrome_79
 
 # disable security level to avoid error when connecting to shibboleth; temporary please remove when fixed by shibboleth
 USER root
