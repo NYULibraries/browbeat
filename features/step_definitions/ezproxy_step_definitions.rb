@@ -3,7 +3,7 @@ Then(/^my browser should resolve to (authenticated EZProxy.*)$/) do |ezproxy_url
 end
 
 Then(/^I should see a JSTOR page/) do
-  expect(page).to have_text "©2000-2019 ITHAKA"
+  expect(page).to have_text "©2000-#{Time.now.year} ITHAKA"
 end
 
 Then(/^I should see a link with href containing "(.+)"$/) do |href_text|
