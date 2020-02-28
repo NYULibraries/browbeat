@@ -8,13 +8,13 @@ Feature: Login is running
   Scenario: Visiting Login on production
     Then cURL visiting Login should respond with success
 
-  @production @degraded_performance
-  Scenario: Visiting Login LB server 1 on production
-    Then cURL insecurely visiting Login LB server 1 should respond with success
+  #@production @degraded_performance
+  #Scenario: Visiting Login LB server 1 on production
+  #  Then cURL insecurely visiting Login LB server 1 should respond with success
 
-  @production @degraded_performance
-  Scenario: Visiting Login LB server 2 on production
-    Then cURL insecurely visiting Login LB server 2 should respond with success
+  #@production @degraded_performance
+  #Scenario: Visiting Login LB server 2 on production
+  #  Then cURL insecurely visiting Login LB server 2 should respond with success
 
   @staging @major_outage
   Scenario: Visiting Login on staging
