@@ -61,6 +61,8 @@ def configure_selenium
     options.add_argument('--disable-gpu')
     # options.add_argument('--disable-popup-blocking')
     options.add_argument('--window-size=1280,1024')
+    options.add_argument('--host-resolver-rules=MAP cdn-dev.library.nyu.edu 127.0.0.1')
+    options.add_argument('--host-resolver-rules=MAP cdn.library.nyu.edu 127.0.0.1')
 
     options.add_preference(:download,
       directory_upgrade: true,
