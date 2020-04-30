@@ -10,7 +10,7 @@ When(/^I select the first result matching "(.+)"$/) do |result_text|
   # ensure results page has loaded before clicking
   expect(page).to have_content "Results for Titles"
   within first_aleph_result_matching(result_text) do
-    find('.holdinglink a').click
+    first('.holdinglink a').click
   end
 end
 
