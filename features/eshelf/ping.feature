@@ -19,7 +19,3 @@ Feature: e-Shelf is running
   @staging @major_outage
   Scenario: Visiting e-Shelf on staging
     Then cURL visiting e-Shelf staging should respond with success
-
-  @staging @major_outage
-  Scenario: Visiting e-Shelf on staging QA
-    Then cURL visiting e-Shelf staging should respond with success
