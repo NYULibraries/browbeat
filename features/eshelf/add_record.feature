@@ -10,7 +10,7 @@ Feature: e-Shelf is running
     When I search for "monk" in the NUI
       And I add the first NUI record to e-Shelf
       Then the first NUI record should show as "In guest e-Shelf"
-    When I click on "E-SHELF" to open a new window
+    When I click e-Shelf link to open a new window
       Then I should see results matching "monk" in a new window
 
   @staging @partial_outage
@@ -19,5 +19,5 @@ Feature: e-Shelf is running
     When I search for "monk" in the NUI
       And I add the first NUI record to e-Shelf
       Then the first NUI record should show as "In guest e-Shelf"
-    When I click on "E-SHELF" to open a new window
+    When I click e-Shelf link to open a new window
       Then I should see results matching "monk" in a new window

@@ -6,13 +6,23 @@ When(/^I add the first record to e-Shelf$/) do
 end
 
 When(/^I add the first NUI record to e-Shelf$/) do
+  #page.execute_script("document.querySelector('.md-scroll-mask').remove()")
   within nui_first_result do
-    check "Add to e-Shelf"
+    expect(page).to have_text "Add to e-Shelf"
   end
+  page.execute_script("document.querySelector('nyu-eshelf input').click()")
+  #within nui_first_result do
+  #  check "Add to e-Shelf"
+  #end
 end
 
-When(/^I click e-Shelf link$/) do
-  click_link_or_button 'Guest e-shelf'
+When(/^I click e-Shelf link to open a new window$/) do
+  #click_link_or_button 'Guest e-shelf'
+  capture_new_window do
+        page.execute_script("document.querySelector('nyu-eshelf-toolbar button').click()")
+
+    #find(:link_or_button, text: , match: :first).click
+  end
 end
 
 Then(/^my browser should resolve to (e-Shelf.*)$/) do |eshelf_url|
