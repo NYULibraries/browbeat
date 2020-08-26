@@ -5,14 +5,19 @@ When(/^I add the first record to e-Shelf$/) do
   end
 end
 
+# need to execute script instead of using "check" due to "click intercepted" error by <div class="md-scroll-mask"">
 When(/^I add the first NUI record to e-Shelf$/) do
   within nui_first_result do
-    check "Add to e-Shelf"
+    expect(page).to have_text "Add to e-Shelf"
   end
+  page.execute_script("document.querySelector('nyu-eshelf input').click()")
 end
 
-When(/^I click e-Shelf link$/) do
-  click_link_or_button 'Guest e-shelf'
+# need to execute script instead of using "check" due to "click intercepted" error by <div class="md-scroll-mask"">
+When(/^I click e-Shelf link to open a new window$/) do
+  capture_new_window do
+    page.execute_script("document.querySelector('nyu-eshelf-toolbar button').click()")
+  end
 end
 
 Then(/^my browser should resolve to (e-Shelf.*)$/) do |eshelf_url|
