@@ -1,4 +1,4 @@
-FROM quay.io/nyulibraries/selenium_chrome_headless_ruby:2.5.7-slim-chrome_79
+FROM quay.io/nyulibraries/selenium_chrome_headless_ruby:2.6.6-slim-chrome_85
 
 # disable security level to avoid error when connecting to shibboleth; temporary please remove when fixed by shibboleth
 USER root
