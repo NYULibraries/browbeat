@@ -4,7 +4,7 @@ Feature: Privileges is running
   I want to be able to search for my privileges
   So that I know what I can do with various services.
 
-  @production @major_outage
+  @production @major_outage @wip
   Scenario: Searching for Friends privileges on production
     Given I visit Privileges
     When I search privileges for "Friends"
@@ -12,7 +12,7 @@ Feature: Privileges is running
     When I select "NYU Bobst" from the privileges dropdown
       Then I should expect to see a privileges table
 
-  @staging @major_outage
+  @staging @major_outage @wip
   Scenario: Searching for Friends privileges on staging
     Given I visit Privileges staging
     When I search privileges for "Friends"

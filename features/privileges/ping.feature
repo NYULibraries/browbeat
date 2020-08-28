@@ -4,11 +4,11 @@ Feature: Privileges is running
   I want to be able to search for my privileges
   So that I know what I can do with various services.
 
-  @production @major_outage
+  @production @major_outage @wip
   Scenario: Visiting Privileges on production
     Then cURL visiting Privileges should respond with success
 
 
-  @staging @major_outage
+  @staging @major_outage @wip
   Scenario: Visiting Privileges on staging
     Then cURL visiting Privileges staging should respond with success
