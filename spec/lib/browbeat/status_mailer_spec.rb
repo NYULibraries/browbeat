@@ -154,7 +154,7 @@ describe Browbeat::StatusMailer do
         end
 
         it "should send mail via Aws::SES::Client" do
-          expect(mailer).to receive(:puts).with("Email sent! (#{message_id})")
+          expect(mailer).to receive(:puts).with("Email sent to joe@example.com! (#{message_id})")
           expect(ses).to receive(:send_email).with({
             destination: {
               to_addresses: [
