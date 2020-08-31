@@ -45,7 +45,7 @@ module Browbeat
           },
           source: ENV['FAILURE_EMAIL_RECIPIENT'],
         })
-        puts "Email sent!"
+        puts "Email sent! (#{resp.message_id})"
         return true
       rescue Aws::SES::Errors::ServiceError => error
         puts "Email not sent. Error message: #{error}"
