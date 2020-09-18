@@ -152,10 +152,8 @@ describe Browbeat::StatusMailer do
         before do
           allow(ses).to receive(:send_email).and_return resp
         end
-
-        it "should send mail via Aws::SES::Client" do
-          expect(mailer).to receive(:puts).with("Email sent to joe@example.com! (#{message_id})")
-          expect(ses).to receive(:send_email).with({
+        let(:email_metadata) do
+          {
             destination: {
               to_addresses: [
                 'joe@example.com',
@@ -174,7 +172,32 @@ describe Browbeat::StatusMailer do
               },
             },
             source: 'joe@example.com',
-            })
+          }
+        end
+
+        it "should send mail via Aws::SES::Client" do
+          expect(mailer).to receive(:puts).with("Email sent to joe@example.com! (#{message_id})\nEmail metadata:\n#{email_metadata}")
+          expect(ses).to receive(:send_email).with(email_metadata)
+          #expect(ses).to receive(:send_email).with({
+          #  destination: {
+          #    to_addresses: [
+          #      'joe@example.com',
+          #    ],
+          #  },
+          #  message: {
+          #    body: {
+          #      html: {
+          #        charset: "UTF-8",
+          #        data: body,
+          #      },
+          #    },
+          #    subject: {
+          #      charset: "UTF-8",
+          #      data: mail_subject,
+          #    },
+          #  },
+          #  source: 'joe@example.com',
+          #  })
           subject
         end
 

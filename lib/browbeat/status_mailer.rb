@@ -25,7 +25,7 @@ module Browbeat
         return false 
       end
       begin
-        resp = ses.send_email({
+        email_metadata = {
           destination: {
             to_addresses: [
               failure_email_recipient,
@@ -44,8 +44,9 @@ module Browbeat
             },
           },
           source: failure_email_recipient,
-        })
-        puts "Email sent to #{failure_email_recipient}! (#{resp.message_id})"
+        }
+        resp = ses.send_email(email_metadata)
+        puts "Email sent to #{failure_email_recipient}! (#{resp.message_id})\nEmail metadata:\n#{email_metadata.inspect}"
         return true
       rescue Aws::SES::Errors::ServiceError => error
         puts "Email not sent. Error message: #{error}"
