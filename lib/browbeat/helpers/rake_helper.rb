@@ -24,6 +24,7 @@ module Browbeat
         [
           ("--tags @#{specified_env}" if specified_env),
           ("--tags ~@no_sauce" if sauce_driver?),
+          ("--tags ~@login_required" if ENV['SKIP_LOGIN_REQUIRED']),
           ("--tags #{ENV['TAGS']}" if ENV['TAGS']),
           ("--tags @#{tag}" if tag),
         ].compact.join(" ")
