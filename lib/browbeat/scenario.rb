@@ -55,7 +55,7 @@ module Browbeat
     end
 
     def exception_message
-      "#{exception.message} (#{exception})"
+      "#{exception.message[0..200]} (#{exception})"
     end
 
     def has_tags?(*tags)
