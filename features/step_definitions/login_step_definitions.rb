@@ -18,9 +18,9 @@ When(/^I enter NYU staging credentials$/) do
 end
 
 When(/^I enter username "(.+)" with password "(.+)"$/) do |username, password|
-  fill_in "netid", with: username
+  fill_in "NetID", with: username
   fill_in "Password", with: password
-  click_button "Login"
+  click_button "LOG IN"
 end
 
 When(/^I click "(.+)" if prompted$/) do |button_text|
