@@ -53,7 +53,12 @@ module Browbeat
     # for the first response, and curl_headers(url).last gives an array of headers
     # for the last response
     def curl_headers(url, insecure: false)
-      `curl -sSL#{'k' if insecure} -o /dev/null -D - #{url} 2>&1`.split("\r\n\r\n").map{|x| x.split("\r\n") }
+      puts "#{cmd = curl_command(url, insecure: insecure)}"
+      `#{cmd}`.split("\r\n\r\n").map{|x| x.split("\r\n") }
+    end
+
+    def curl_command(url, insecure: false)
+      "curl -sSL#{'k' if insecure} -o /dev/null -D - #{url} 2>&1"
     end
 
     def get_status(headers)
