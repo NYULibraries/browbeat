@@ -20,15 +20,15 @@ module Browbeat
     end
 
     def send_mail
-      if !ENV['FAILURE_EMAIL_RECIPIENT']
+      if !failure_email_recipient
         puts "WARNING: No email sent since FAILURE_EMAIL_RECIPIENT is not specified"
         return false 
       end
       begin
-        resp = ses.send_email({
+        email_metadata = {
           destination: {
             to_addresses: [
-              ENV['FAILURE_EMAIL_RECIPIENT'],
+              failure_email_recipient,
             ],
           },
           message: {
@@ -43,9 +43,10 @@ module Browbeat
               data: subject,
             },
           },
-          source: ENV['FAILURE_EMAIL_RECIPIENT'],
-        })
-        puts "Email sent!"
+          source: failure_email_recipient,
+        }
+        resp = ses.send_email(email_metadata)
+        puts "Email sent to #{failure_email_recipient}! (#{resp.message_id})\nEmail metadata:\n#{email_metadata.inspect}"
         return true
       rescue Aws::SES::Errors::ServiceError => error
         puts "Email not sent. Error message: #{error}"
@@ -147,6 +148,10 @@ module Browbeat
 
     def encoding
       "UTF-8"
+    end
+    
+    def failure_email_recipient
+      ENV['FAILURE_EMAIL_RECIPIENT']
     end
 
   end

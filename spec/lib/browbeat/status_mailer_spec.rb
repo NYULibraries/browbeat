@@ -133,11 +133,14 @@ describe Browbeat::StatusMailer do
       let(:mail_subject){ "Hello world" }
       let(:body){ "<div>Hello world</div>" }
       let(:ses){ instance_double Aws::SES::Client }
+      let(:resp){ instance_double Aws::SES::Types::SendEmailResponse }
+      let(:message_id){ "abcd1234" }
       before do
         allow(mailer).to receive(:subject).and_return mail_subject
         allow(mailer).to receive(:body).and_return body
         allow(mailer).to receive(:puts)
         allow(Aws::SES::Client).to receive(:new).and_return ses
+        allow(resp).to receive(:message_id).and_return message_id
       end
 
       context "with FAILURE_EMAIL_RECIPIENT set" do
@@ -147,12 +150,10 @@ describe Browbeat::StatusMailer do
           end
         end
         before do
-          allow(ses).to receive(:send_email).and_return true
+          allow(ses).to receive(:send_email).and_return resp
         end
-
-        it "should send mail via Aws::SES::Client" do
-          expect(mailer).to receive(:puts).with("Email sent!")
-          expect(ses).to receive(:send_email).with({
+        let(:email_metadata) do
+          {
             destination: {
               to_addresses: [
                 'joe@example.com',
@@ -171,7 +172,32 @@ describe Browbeat::StatusMailer do
               },
             },
             source: 'joe@example.com',
-            })
+          }
+        end
+
+        it "should send mail via Aws::SES::Client" do
+          expect(mailer).to receive(:puts).with("Email sent to joe@example.com! (#{message_id})\nEmail metadata:\n#{email_metadata}")
+          expect(ses).to receive(:send_email).with(email_metadata)
+          #expect(ses).to receive(:send_email).with({
+          #  destination: {
+          #    to_addresses: [
+          #      'joe@example.com',
+          #    ],
+          #  },
+          #  message: {
+          #    body: {
+          #      html: {
+          #        charset: "UTF-8",
+          #        data: body,
+          #      },
+          #    },
+          #    subject: {
+          #      charset: "UTF-8",
+          #      data: mail_subject,
+          #    },
+          #  },
+          #  source: 'joe@example.com',
+          #  })
           subject
         end
 
