@@ -17,7 +17,6 @@ module Browbeat
         illiad: "ILLiad",
         ezborrow: "EZBorrow",
         ezproxy: "EZProxy",
-        rooms: "Rooms",
       }
 
       def tag_filtering(tag = nil)
