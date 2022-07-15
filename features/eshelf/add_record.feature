@@ -9,7 +9,7 @@ Feature: e-Shelf is running
     Given I visit BobCat
     When I search for "monk" in the NUI
       And I add the first NUI record to e-Shelf
-      Then the first NUI record should show as "In guest e-Shelf"
+      Then the first NUI record should show as "In guest Saved Items"
     When I click e-Shelf link to open a new window
       Then I should see results matching "monk" in a new window
 
@@ -18,6 +18,6 @@ Feature: e-Shelf is running
     Given I visit BobCat staging
     When I search for "monk" in the NUI
       And I add the first NUI record to e-Shelf
-      Then the first NUI record should show as "In guest e-Shelf"
+      Then the first NUI record should show as "In guest Saved Items"
     When I click e-Shelf link to open a new window
       Then I should see results matching "monk" in a new window
