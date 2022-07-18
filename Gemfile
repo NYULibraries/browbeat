@@ -10,8 +10,8 @@ group :test do
 
   gem 'cucumber', '~> 2.4.0'
   gem 'selenium-webdriver', '~> 3.6'
-  gem 'phantomjs', '~> 2.1'
-  gem 'poltergeist', '~> 1.13'
+  #gem 'phantomjs', '~> 2.1'
+  #gem 'poltergeist', '~> 1.13'
   gem 'dotenv'
   gem 'pry'
   gem 'rake', '~> 12.0'
