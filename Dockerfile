@@ -1,4 +1,4 @@
-FROM quay.io/nyulibraries/selenium_chrome_headless_ruby:2.7.6-chrome_103-chore_upgrade
+FROM quay.io/nyulibraries/selenium_chrome_headless_ruby:2.7.6-chrome_103
 
 # disable security level to avoid error when connecting to shibboleth; temporary please remove when fixed by shibboleth
 USER root
