@@ -9,7 +9,7 @@ group :test do
   gem 'aws-sdk-ses'
 
   gem 'cucumber', '~> 2.4.0'
-  gem 'selenium-webdriver', '~> 3.6'
+  gem 'selenium-webdriver', '~> 4.3'
   #gem 'phantomjs', '~> 2.1'
   #gem 'poltergeist', '~> 1.13'
   gem 'dotenv'

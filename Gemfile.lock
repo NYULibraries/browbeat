@@ -40,7 +40,7 @@ GEM
     capybara-screenshot (1.0.23)
       capybara (>= 1.0, < 4)
       launchy
-    childprocess (3.0.0)
+    childprocess (4.1.0)
     climate_control (0.2.0)
     coderay (1.1.2)
     concurrent-ruby (1.1.7)
@@ -146,6 +146,7 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
+    rexml (3.2.5)
     rspec (3.8.0)
       rspec-core (~> 3.8.0)
       rspec-expectations (~> 3.8.0)
@@ -160,9 +161,11 @@ GEM
       rspec-support (~> 3.8.0)
     rspec-support (3.8.3)
     rubyzip (2.3.2)
-    selenium-webdriver (3.142.7)
-      childprocess (>= 0.5, < 4.0)
-      rubyzip (>= 1.2.2)
+    selenium-webdriver (4.3.0)
+      childprocess (>= 0.5, < 5.0)
+      rexml (~> 3.2, >= 3.2.5)
+      rubyzip (>= 1.2.2, < 3.0)
+      websocket (~> 1.0)
     shellany (0.0.1)
     simplecov (0.16.1)
       docile (~> 1.1)
@@ -184,6 +187,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.6)
+    websocket (1.2.9)
     xpath (3.2.0)
       nokogiri (~> 1.8)
     zeitwerk (2.4.0)
@@ -208,7 +212,7 @@ DEPENDENCIES
   pry
   rake (~> 12.0)
   rspec
-  selenium-webdriver (~> 3.6)
+  selenium-webdriver (~> 4.3)
   status_page-api
 
 BUNDLED WITH
