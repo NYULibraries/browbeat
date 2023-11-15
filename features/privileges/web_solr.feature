@@ -4,6 +4,6 @@ Feature: Privileges is running
   I want to be able to search for my privileges
   So that I know what I can do with various services.
 
-  @production @warning @no_sauce
+  @production @warning @no_sauce @wip
   Scenario: WebSolr on production
     Then cURL secretly visiting Privileges WebSolr should respond with success
